@@ -1,0 +1,293 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #071411;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse at 15% 10%, #124b383e, transparent 38%),
+    radial-gradient(ellipse at 90% 90%, #075b4938, transparent 35%),
+    linear-gradient(135deg, #071411, #0a191b 55%, #081310);
+}
+
+/* Background glow */
+.page::before,
+.page::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.page::before {
+  top: -150px;
+  left: -100px;
+  background: #10b981;
+  opacity: 0.13;
+}
+
+.page::after {
+  right: -120px;
+  bottom: -160px;
+  background: #0e7490;
+  opacity: 0.16;
+}
+
+/* Login card */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 410px;
+  padding: 38px 34px 25px;
+  overflow: hidden;
+  border: 1px solid #29463d;
+  border-radius: 25px;
+  background: linear-gradient(
+    145deg,
+    rgba(22, 42, 36, 0.98),
+    rgba(12, 27, 26, 0.98)
+  );
+  box-shadow:
+    0 30px 80px #00000066,
+    0 10px 30px #00000030,
+    inset 0 1px 1px #ffffff0d;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: #376b55;
+}
+
+/* MediStock branding */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 11px;
+}
+
+.logo-icon {
+  display: grid;
+  place-items: center;
+  width: 49px;
+  height: 49px;
+  border: 1px solid #57e6a67a;
+  border-radius: 16px;
+  color: #f1fff7;
+  font-size: 29px;
+  background: linear-gradient(145deg, #20c997, #08734f);
+  box-shadow:
+    0 8px 25px #10b98135,
+    inset 0 2px 3px #ffffff55,
+    inset 0 -3px 5px #003f2d70;
+}
+
+.logo h1 {
+  margin: 0;
+  color: #f0faf4;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.logo h1 span {
+  color: #35d99a;
+}
+
+.subtitle {
+  margin: 10px 0 31px;
+  text-align: center;
+  color: #8da69a;
+  font-size: 12px;
+  letter-spacing: 0.2px;
+}
+
+/* Heading */
+.card h2 {
+  margin: 0;
+  color: #f0f8f3;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.description {
+  margin: 8px 0 25px;
+  color: #8da49a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Inputs */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form input,
+form select {
+  width: 100%;
+  height: 49px;
+  padding: 0 15px;
+  outline: none;
+  border: 1px solid #304a40;
+  border-radius: 12px;
+  background: #101f1c;
+  color: #e5f7ed;
+  font-size: 13px;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+form input::placeholder {
+  color: #70867b;
+}
+
+form input:focus,
+form select:focus {
+  border-color: #31d99a;
+  background: #122722;
+  box-shadow:
+    0 0 0 3px #20c99720,
+    0 5px 18px #00000012;
+}
+
+form select {
+  cursor: pointer;
+}
+
+form select option {
+  background: #12221d;
+  color: #e5f7ed;
+}
+
+/* Primary button */
+.main-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 51px;
+  margin-top: 5px;
+  border: 1px solid #44e4a5;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #07875d, #10b981, #35d99a);
+  box-shadow:
+    0 8px 25px #10b98135,
+    inset 0 1px 2px #ffffff55,
+    inset 0 -2px 4px #00573b45;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+
+.main-button span {
+  font-size: 19px;
+}
+
+.main-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 30px #10b9814a,
+    inset 0 1px 2px #ffffff55;
+}
+
+.main-button:active {
+  transform: translateY(1px);
+}
+
+/* Sign in / Sign up switch */
+.switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 24px;
+  color: #91a89d;
+  font-size: 12px;
+}
+
+.switch button {
+  padding: 3px;
+  border: none;
+  background: transparent;
+  color: #42e0a1;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.switch button:hover {
+  color: #a1ffd5;
+  text-decoration: underline;
+}
+
+/* Footer */
+.bottom-mark {
+  margin-top: 27px;
+  padding-top: 19px;
+  border-top: 1px solid #294239;
+  color: #718a7e;
+  font-size: 10px;
+  text-align: center;
+}
+
+.bottom-mark span {
+  margin-right: 5px;
+  color: #35d99a;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .page {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 32px 23px 23px;
+    border-radius: 21px;
+  }
+
+  .logo h1 {
+    font-size: 29px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
