@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { StatusBadge } from '../common/StatusBadge';
 import { reportService } from '../../services/reportService';
+import { medicineService } from '../../services/medicineService'; // <-- IMPORT SERVICE
 import { useToast } from '../../context/ToastContext';
 
 export const InventoryManagementView = ({
@@ -22,7 +23,7 @@ export const InventoryManagementView = ({
     onOpenAddModal,
     onEditMedicine,
     onDeleteMedicine,
-    onAdjustStock
+    onRefreshData // <-- WE ASSUME YOU PASS A REFRESH FUNCTION FROM PARENT
 }) => {
     const { showToast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
@@ -30,6 +31,7 @@ export const InventoryManagementView = ({
     const [selectedStatus, setSelectedStatus] = useState('ALL');
     const [sortField, setSortField] = useState('name');
     const [sortAsc, setSortAsc] = useState(true);
+    const [isAdjusting, setIsAdjusting] = useState(false); // Prevent double-clicks
 
     const categories = [
         'ALL',
@@ -91,21 +93,31 @@ export const InventoryManagementView = ({
         const rows = filteredMedicines.map(m => ({
             ID: m.id,
             Product: m.name,
-            Generic: m.genericName,
-            NDC: m.ndc,
             Category: m.category,
-            DosageForm: m.dosageForm,
             Quantity: m.quantity,
             MinQuantity: m.minQuantity,
             UnitPriceUSD: m.unitPrice,
             Batch: m.batchNumber,
             ExpiryDate: m.expiryDate,
-            Storage: m.storageCondition,
-            Supplier: m.supplierName,
             Status: m.status
         }));
         reportService.exportToCSV(`medistock_formulary_${new Date().toISOString().split('T')[0]}.csv`, rows);
         showToast(`Exported ${rows.length} formulary rows to CSV`, 'success');
+    };
+
+    // --- NEW: Handle Stock Adjustment ---
+    const handleStockAdjustment = async (id, delta, reason) => {
+        if (isAdjusting) return;
+        setIsAdjusting(true);
+        try {
+            await medicineService.adjustStock(id, delta);
+            showToast(`Stock ${delta > 0 ? 'increased' : 'decreased'} successfully`, 'success');
+            if (onRefreshData) onRefreshData(); // Refresh the parent data
+        } catch (error) {
+            showToast(error.message || 'Failed to adjust stock', 'error');
+        } finally {
+            setIsAdjusting(false);
+        }
     };
 
     return (
@@ -165,6 +177,7 @@ export const InventoryManagementView = ({
                             <option value="LOW_STOCK">Low Stock</option>
                             <option value="EXPIRING_SOON">Expiring Soon</option>
                             <option value="OUT_OF_STOCK">Out of Stock</option>
+                            <option value="EXPIRED">Expired</option>
                         </select>
                     </div>
                 </div>
@@ -205,7 +218,7 @@ export const InventoryManagementView = ({
                                         <ArrowUpDown size={12} />
                                     </div>
                                 </th>
-                                <th className="p-4">NDC & Lot Batch</th>
+                                <th className="p-4">Batch Number</th>
                                 <th 
                                     className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
                                     onClick={() => handleSort('quantity')}
@@ -224,7 +237,7 @@ export const InventoryManagementView = ({
                                         <ArrowUpDown size={12} />
                                     </div>
                                 </th>
-                                <th className="p-4">Storage Condition</th>
+                                <th className="p-4">Supplier</th>
                                 <th 
                                     className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
                                     onClick={() => handleSort('unitPrice')}
@@ -246,20 +259,21 @@ export const InventoryManagementView = ({
                                             {item.name}
                                         </div>
                                         <div className="text-[11px] text-slate-500 mt-0.5">
-                                            {item.genericName} • <span className="text-slate-700 font-medium">{item.strength}</span>
+                                            {item.category}
                                         </div>
                                     </td>
 
                                     <td className="p-4 font-mono text-[11px]">
-                                        <div className="text-slate-800 font-semibold">{item.ndc}</div>
-                                        <div className="text-slate-400 mt-0.5 text-[10px]">Lot: {item.batchNumber}</div>
+                                        <div className="text-slate-800 font-semibold">{item.batchNumber}</div>
                                     </td>
 
+                                    {/* --- UPDATED STOCK ACTIONS HERE --- */}
                                     <td className="p-4">
                                         <div className="flex items-center gap-2">
                                             <button
-                                                onClick={() => onAdjustStock(item.id, -1, 'Dispensed')}
-                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                                                onClick={() => handleStockAdjustment(item.id, -1, 'Dispensed')}
+                                                disabled={isAdjusting}
+                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer disabled:opacity-50"
                                                 title="Dispense 1 unit"
                                             >
                                                 <Minus size={12} />
@@ -268,15 +282,13 @@ export const InventoryManagementView = ({
                                                 {item.quantity}
                                             </span>
                                             <button
-                                                onClick={() => onAdjustStock(item.id, 1, 'Inbound intake')}
-                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                                                onClick={() => handleStockAdjustment(item.id, 1, 'Inbound intake')}
+                                                disabled={isAdjusting}
+                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer disabled:opacity-50"
                                                 title="Intake 1 unit"
                                             >
                                                 <PlusCircle size={12} />
                                             </button>
-                                            <span className="text-[11px] text-slate-500">
-                                                {item.unit}
-                                            </span>
                                         </div>
                                         <div className="text-[10px] text-slate-400 mt-0.5">
                                             Min: {item.minQuantity}
@@ -288,7 +300,7 @@ export const InventoryManagementView = ({
                                     </td>
 
                                     <td className="p-4 text-[11px] text-slate-600">
-                                        {item.storageCondition}
+                                        {item.supplierName || '-'}
                                     </td>
 
                                     <td className="p-4 font-bold text-slate-900">

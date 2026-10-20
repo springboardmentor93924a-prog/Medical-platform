@@ -7,6 +7,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import { LoginView } from './components/views/LoginView';
+import InventoryPage from './pages/InventoryPage';
+
 
 // Protected Route Component
 const ProtectedApp = () => {
@@ -48,6 +50,8 @@ function AppRoutes() {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/clinical-login" element={<AuthViewHandler />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/inventory" element={<InventoryPage />} />
+
         </Routes>
     );
 }

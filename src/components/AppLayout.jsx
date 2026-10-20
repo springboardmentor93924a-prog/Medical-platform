@@ -9,7 +9,8 @@ import { ReportsExportView } from './views/ReportsExportView';
 import { AuditLogsView } from './views/AuditLogsView';
 import { ProfileView } from './views/ProfileView';
 
-import { AddEditMedicineModal } from './modals/AddEditMedicineModal';
+import AddEditMedicineModal from './modals/AddEditMedicineModal';
+
 import { AddSupplierModal } from './modals/AddSupplierModal';
 import { DeleteConfirmModal } from './modals/DeleteConfirmModal';
 
