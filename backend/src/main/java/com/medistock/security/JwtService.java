@@ -15,11 +15,14 @@ import java.util.Date;
 public class JwtService {
 
     private final SecretKey signingKey;
-    private final long expirationMs = 15 * 60 * 1000;
+    private final long expirationMs;
 
-    public JwtService(@Value("${jwt.secret}") String secret) {
+    public JwtService(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration-ms:28800000}") long expirationMs) {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.signingKey = Keys.hmacShaKeyFor(keyBytes);
+        this.expirationMs = expirationMs;
     }
 
     public String generateToken(String email) {
@@ -32,6 +35,10 @@ public class JwtService {
                 .expiration(expiry)
                 .signWith(signingKey)
                 .compact();
+    }
+
+    public long getExpirationSeconds() {
+        return expirationMs / 1000;
     }
 
     public String extractEmail(String token) {

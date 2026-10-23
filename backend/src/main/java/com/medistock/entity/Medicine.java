@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class Medicine {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "medicine_id")
     private Long medicineId;
 
@@ -20,7 +21,7 @@ public class Medicine {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
     public Medicine() {
@@ -30,16 +31,32 @@ public class Medicine {
         return medicineId;
     }
 
+    public void setMedicineId(Long medicineId) {
+        this.medicineId = medicineId;
+    }
+
     public String getMedicineName() {
         return medicineName;
+    }
+
+    public void setMedicineName(String medicineName) {
+        this.medicineName = medicineName;
     }
 
     public String getCategory() {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreatedAt() {

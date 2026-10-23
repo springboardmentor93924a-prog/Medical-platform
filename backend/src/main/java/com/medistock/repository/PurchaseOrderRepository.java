@@ -8,4 +8,6 @@ public interface PurchaseOrderRepository
         extends JpaRepository<PurchaseOrder, Long> {
 
     List<PurchaseOrder> findBySupplierId(Long supplierId);
+
+    List<PurchaseOrder> findAllByOrderByOrderDateDesc();
 }

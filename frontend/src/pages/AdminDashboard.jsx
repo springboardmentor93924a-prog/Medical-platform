@@ -1,10 +1,35 @@
 
 import { useState } from "react";
+import DashboardHome from "./admin/DashboardHome";
 import Users from "./admin/Users";
+import Medicines from "./admin/Medicines";
+import Suppliers from "./admin/Suppliers";
+import Inventory from "./admin/Inventory";
+import PurchaseOrders from "./admin/PurchaseOrders";
+import StockMovements from "./admin/StockMovements";
+import ExpiryTracking from "./admin/ExpiryTracking";
+import Reports from "./admin/Reports";
+import Notifications from "./admin/Notifications";
+import AuditLogs from "./admin/AuditLogs";
 
+const pages = {
+  Dashboard: DashboardHome,
+  Users,
+  Medicines,
+  Suppliers,
+  Inventory,
+  "Purchase Orders": PurchaseOrders,
+  "Stock Movements": StockMovements,
+  "Expiry Tracking": ExpiryTracking,
+  Reports,
+  Notifications,
+  "Audit Logs": AuditLogs,
+};
 
 export default function AdminDashboard({ onLogout }) {
   const [activePage, setActivePage] = useState("Dashboard");
+
+  const ActivePage = pages[activePage];
 
   const menuItems = [
     "Dashboard",
@@ -13,9 +38,11 @@ export default function AdminDashboard({ onLogout }) {
     "Suppliers",
     "Inventory",
     "Purchase Orders",
+    "Stock Movements",
     "Expiry Tracking",
     "Reports",
     "Notifications",
+    "Audit Logs",
   ];
 
   return (
@@ -75,32 +102,11 @@ export default function AdminDashboard({ onLogout }) {
       <main style={{ flex: 1, padding: "30px", background: "#f4f7f6" }}>
         <h1>{activePage}</h1>
 
-        {activePage === "Dashboard" ? (
-          <div>
-            <p>Welcome to the MediStock Admin Dashboard!</p>
-
-            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              <div style={{ background: "white", padding: "20px", borderRadius: "10px" }}>
-                <h3>Total Users</h3>
-                <p>Manage system users</p>
-              </div>
-
-              <div style={{ background: "white", padding: "20px", borderRadius: "10px" }}>
-                <h3>Medicines</h3>
-                <p>Manage medicines</p>
-              </div>
-
-              <div style={{ background: "white", padding: "20px", borderRadius: "10px" }}>
-                <h3>Inventory</h3>
-                <p>Monitor stock levels</p>
-              </div>
-            </div>
-          </div>
-) : activePage === "Users" ? (
-  <Users />
-) : (
-  <p>{activePage} page will be connected to the backend next.</p>
-)}
+        {ActivePage ? (
+          <ActivePage />
+        ) : (
+          <p>{activePage} page will be connected to the backend next.</p>
+        )}
       </main>
     </div>
   );

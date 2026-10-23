@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useEffect, useState } from "react";
 
@@ -18,7 +19,7 @@ export default function Medicines() {
       }
 
       const response = await fetch(
-        "http://localhost:8080/api/admin/medicines",
+        `${API_BASE}/admin/medicines`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -2,6 +2,7 @@
 package com.medistock.config;
 
 import com.medistock.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,9 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
+
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
@@ -41,7 +45,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
+                List.of(allowedOrigins.split("\\s*,\\s*"))
         );
 
         configuration.setAllowedMethods(
@@ -76,16 +80,47 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .requestMatchers("/api/health").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/inventory/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
+                .requestMatchers("/api/inventory/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
+                .requestMatchers(HttpMethod.GET, "/api/stock-movements/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
+                .requestMatchers("/api/stock-movements/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
+                .requestMatchers("/api/notifications/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
+                .requestMatchers("/api/reports/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
+                .requestMatchers("/api/search/**")
+                    .authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/purchase-orders/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST", "SUPPLIER")
+                .requestMatchers("/api/purchase-orders/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
                 .requestMatchers("/api/admin/medicines/**")
-    .hasAnyRole("ADMIN", "PHARMACIST")
-.requestMatchers("/api/admin/**")
-    .hasRole("ADMIN")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
+                .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
                 .requestMatchers("/api/medicines/**")
                     .hasAnyRole("ADMIN", "PHARMACIST")
-                .requestMatchers("/api/inventory/**")
-                    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
                 .requestMatchers("/api/supplier/**").hasRole("SUPPLIER")
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(401);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write("{\"message\":\"Authentication required\"}");
+                })
+                // Write 403 directly instead of sendError(): sendError triggers an
+                // ERROR dispatch that re-enters the security chain without the
+                // request-scoped SecurityContext and wrongly downgrades 403 -> 401.
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(403);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write("{\"message\":\"Access denied for your role\"}");
+                })
             )
             .addFilterBefore(
                 jwtAuthenticationFilter,

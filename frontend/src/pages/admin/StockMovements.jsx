@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -18,9 +19,9 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-const API_URL = "http://localhost:8080/api/stock-movements";
-const INVENTORY_URL = "http://localhost:8080/api/inventory";
-const MEDICINES_URL = "http://localhost:8080/api/admin/medicines";
+const API_URL = `${API_BASE}/stock-movements`;
+const INVENTORY_URL = `${API_BASE}/inventory`;
+const MEDICINES_URL = `${API_BASE}/admin/medicines`;
 
 function getToken() {
   return sessionStorage.getItem("medistock_token");

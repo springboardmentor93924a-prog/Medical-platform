@@ -1,3 +1,4 @@
+import { API_BASE, downloadFile } from "../../services/api";
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -16,7 +17,7 @@ import {
   Wallet,
 } from "lucide-react";
 
-const API = "http://localhost:8080/api";
+const API = `${API_BASE}`;
 
 export default function Reports() {
   const [inventory, setInventory] = useState([]);
@@ -25,6 +26,11 @@ export default function Reports() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [reportType, setReportType] = useState("stock");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
 
   const token = sessionStorage.getItem("medistock_token");
 
@@ -125,6 +131,38 @@ export default function Reports() {
     medicines.find((medicine) => medicine.medicineId === id)?.medicineName ||
     `Medicine #${id}`;
 
+  const reportTypes = [
+    { type: "stock", name: "Stock on hand" },
+    { type: "expiry", name: "Expiry status" },
+    { type: "low-stock", name: "Low stock items" },
+    { type: "movements", name: "Stock movements" },
+    { type: "orders", name: "Purchase orders" },
+    { type: "users", name: "User directory" },
+  ];
+
+  const dateFiltered = reportType === "movements" || reportType === "orders";
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    setDownloadError("");
+    try {
+      const params = new URLSearchParams();
+      if (dateFrom) params.set("from", dateFrom);
+      if (dateTo) params.set("to", dateTo);
+      const query = params.toString();
+      const stamp = new Date().toISOString().slice(0, 10);
+
+      await downloadFile(
+        `/reports/${reportType}.csv${query ? `?${query}` : ""}`,
+        `medistock-${reportType}-${stamp}.csv`
+      );
+    } catch (err) {
+      setDownloadError(err.message || "Download failed.");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const matchesSearch = (value) =>
     String(value ?? "").toLowerCase().includes(search.toLowerCase());
 
@@ -211,6 +249,76 @@ export default function Reports() {
           </div>
         </div>
       </header>
+
+      {/* CSV export */}
+      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-700">
+            <Download size={20} />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Download CSV</h2>
+            <p className="text-sm text-slate-500">
+              Server-generated exports. Movements and orders accept a date range.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Report
+            <select
+              value={reportType}
+              onChange={(event) => setReportType(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+            >
+              {reportTypes.map((report) => (
+                <option key={report.type} value={report.type}>
+                  {report.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {dateFiltered && (
+            <>
+              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                From
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(event) => setDateFrom(event.target.value)}
+                  className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+                />
+              </label>
+              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                To
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(event) => setDateTo(event.target.value)}
+                  className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+                />
+              </label>
+            </>
+          )}
+
+          <button
+            onClick={handleDownload}
+            disabled={downloading}
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-700 disabled:opacity-60"
+          >
+            <Download size={16} />
+            {downloading ? "Preparing..." : "Download CSV"}
+          </button>
+        </div>
+
+        {downloadError && (
+          <p role="alert" className="mt-3 text-sm font-medium text-red-600">
+            {downloadError}
+          </p>
+        )}
+      </section>
 
       {error && (
         <div

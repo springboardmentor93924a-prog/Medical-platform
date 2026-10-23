@@ -1,3 +1,4 @@
+import { API_BASE } from "../services/api";
 
 import { useState } from "react";
 
@@ -21,7 +22,7 @@ export default function Login({ onLogin, onSignup }) {
       setLoading(true);
 
       const response = await fetch(
-        "http://localhost:8080/api/auth/login",
+        `${API_BASE}/auth/login`,
         {
           method: "POST",
           headers: {

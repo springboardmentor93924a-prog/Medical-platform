@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -16,7 +17,7 @@ import {
   Receipt,
 } from "lucide-react";
 
-const API = "http://localhost:8080/api";
+const API = `${API_BASE}`;
 
 export default function PurchaseOrders() {
   const [orders, setOrders] = useState([]);

@@ -100,6 +100,7 @@ public class PurchaseOrderService {
         order.setCreatedBy(userId);
         order.setStatus("PENDING");
         order.setTotalAmount(total);
+        order.setOrderDate(java.time.LocalDate.now());
 
         PurchaseOrder savedOrder = orderRepository.save(order);
 
@@ -121,6 +122,16 @@ public class PurchaseOrderService {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Purchase order not found"));
+    }
+
+    @Transactional(readOnly = true)
+    public List<PurchaseOrder> getSupplierOrders(Long supplierId) {
+        return orderRepository.findBySupplierId(supplierId);
+    }
+
+    @Transactional
+    public PurchaseOrder saveOrder(PurchaseOrder order) {
+        return orderRepository.save(order);
     }
 
     @Transactional(readOnly = true)

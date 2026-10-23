@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -12,7 +13,7 @@ import {
   Siren,
 } from "lucide-react";
 
-const API = "http://localhost:8080/api";
+const API = `${API_BASE}`;
 
 export default function ExpiryTracking() {
   const [inventory, setInventory] = useState([]);

@@ -26,17 +26,20 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuditService auditService;
 
     public AuthService(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService) {
+            JwtService jwtService,
+            AuditService auditService) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.auditService = auditService;
     }
 
     // LOGIN
@@ -77,7 +80,11 @@ public class AuthService {
 
         String roleName = user.getRole().getRoleName();
 
-        return new LoginResponse(token, "Bearer", 900, roleName);
+        auditService.record("LOGIN", "USER", user.getUserId(),
+                "Logged in as " + roleName, email);
+
+        return new LoginResponse(token, "Bearer",
+                jwtService.getExpirationSeconds(), roleName);
     }
 
     // REGISTER
@@ -123,6 +130,9 @@ public class AuthService {
         user.setActive(true);
 
         userRepository.save(user);
+
+        auditService.record("REGISTER", "USER", user.getUserId(),
+                "Self-registered with role " + role.getRoleName(), email);
 
         return "Registration successful";
     }

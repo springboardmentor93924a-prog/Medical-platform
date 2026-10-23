@@ -16,12 +16,18 @@ public class StockMovementService {
 
     private final InventoryRepository inventoryRepository;
     private final StockLogRepository stockLogRepository;
+    private final AuditService auditService;
+    private final NotificationService notificationService;
 
     public StockMovementService(
             InventoryRepository inventoryRepository,
-            StockLogRepository stockLogRepository) {
+            StockLogRepository stockLogRepository,
+            AuditService auditService,
+            NotificationService notificationService) {
         this.inventoryRepository = inventoryRepository;
         this.stockLogRepository = stockLogRepository;
+        this.auditService = auditService;
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -72,6 +78,20 @@ public class StockMovementService {
         log.setMovementType(type);
         log.setNotes(request.getNotes());
 
-        return stockLogRepository.save(log);
+        StockLog saved = stockLogRepository.save(log);
+
+        auditService.record(
+                type.equals("IN") ? "STOCK_IN" : "STOCK_OUT",
+                "INVENTORY",
+                inventory.getInventoryId(),
+                (type.equals("IN") ? "Received " : "Issued ")
+                        + movementQuantity + " of batch "
+                        + inventory.getBatchNumber()
+                        + (request.getNotes() == null || request.getNotes().isBlank()
+                                ? "" : " (" + request.getNotes().trim() + ")"));
+
+        notificationService.notifyLowStock(inventory);
+
+        return saved;
     }
 }

@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -19,7 +20,7 @@ import {
   Building2,
 } from "lucide-react";
 
-const API = "http://localhost:8080/api/admin/suppliers";
+const API = `${API_BASE}/admin/suppliers`;
 
 const emptyForm = {
   supplierName: "",

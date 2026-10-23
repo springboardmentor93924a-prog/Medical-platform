@@ -3,6 +3,8 @@ package com.medistock.controller;
 
 import com.medistock.entity.Inventory;
 import com.medistock.repository.InventoryRepository;
+import com.medistock.service.AuditService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,9 +16,12 @@ import java.util.List;
 public class InventoryController {
 
     private final InventoryRepository inventoryRepository;
+    private final AuditService auditService;
 
-    public InventoryController(InventoryRepository inventoryRepository) {
+    public InventoryController(InventoryRepository inventoryRepository,
+                               AuditService auditService) {
         this.inventoryRepository = inventoryRepository;
+        this.auditService = auditService;
     }
 
     @GetMapping
@@ -41,7 +46,13 @@ public class InventoryController {
     public Inventory createInventory(@RequestBody Inventory inventory) {
         validateInventory(inventory);
         inventory.setInventoryId(null);
-        return inventoryRepository.save(inventory);
+        Inventory saved = inventoryRepository.save(inventory);
+
+        auditService.record("CREATE", "INVENTORY", saved.getInventoryId(),
+                "Added batch " + saved.getBatchNumber()
+                        + " qty " + saved.getQuantity());
+
+        return saved;
     }
 
     @PutMapping("/{id}")
@@ -64,7 +75,31 @@ public class InventoryController {
         existing.setManufacturingDate(updatedInventory.getManufacturingDate());
         existing.setExpiryDate(updatedInventory.getExpiryDate());
 
-        return inventoryRepository.save(existing);
+        Inventory saved = inventoryRepository.save(existing);
+
+        auditService.record("UPDATE", "INVENTORY", saved.getInventoryId(),
+                "Updated batch " + saved.getBatchNumber());
+
+        return saved;
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteInventory(@PathVariable Long id) {
+        Inventory existing = inventoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Inventory item not found"));
+
+        try {
+            inventoryRepository.delete(existing);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Cannot delete batch " + existing.getBatchNumber()
+                            + ": it has stock movement history");
+        }
+
+        auditService.record("DELETE", "INVENTORY", id,
+                "Deleted batch " + existing.getBatchNumber());
     }
 
     private void validateInventory(Inventory inventory) {

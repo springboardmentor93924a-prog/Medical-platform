@@ -3,6 +3,7 @@ package com.medistock.controller;
 
 import com.medistock.entity.Supplier;
 import com.medistock.repository.SupplierRepository;
+import com.medistock.service.AuditService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,12 @@ import java.util.List;
 public class SupplierController {
 
     private final SupplierRepository supplierRepository;
+    private final AuditService auditService;
 
-    public SupplierController(SupplierRepository supplierRepository) {
+    public SupplierController(SupplierRepository supplierRepository,
+                              AuditService auditService) {
         this.supplierRepository = supplierRepository;
+        this.auditService = auditService;
     }
 
     @GetMapping
@@ -41,7 +45,12 @@ public class SupplierController {
         copyFields(request, supplier);
         supplier.setActive(true);
 
-        return supplierRepository.save(supplier);
+        Supplier saved = supplierRepository.save(supplier);
+
+        auditService.record("CREATE", "SUPPLIER", saved.getSupplierId(),
+                "Added supplier " + saved.getSupplierName());
+
+        return saved;
     }
 
     @PutMapping("/{id}")
@@ -57,7 +66,12 @@ public class SupplierController {
 
         copyFields(request, supplier);
 
-        return supplierRepository.save(supplier);
+        Supplier saved = supplierRepository.save(supplier);
+
+        auditService.record("UPDATE", "SUPPLIER", id,
+                "Updated supplier " + saved.getSupplierName());
+
+        return saved;
     }
 
     @PatchMapping("/{id}/status")
@@ -75,7 +89,14 @@ public class SupplierController {
         }
 
         supplier.setActive(request.getActive());
-        return supplierRepository.save(supplier);
+        Supplier saved = supplierRepository.save(supplier);
+
+        auditService.record(request.getActive() ? "ACTIVATE" : "DEACTIVATE",
+                "SUPPLIER", id,
+                (request.getActive() ? "Activated" : "Deactivated")
+                        + " supplier " + saved.getSupplierName());
+
+        return saved;
     }
 
     private void validateSupplier(Supplier request) {

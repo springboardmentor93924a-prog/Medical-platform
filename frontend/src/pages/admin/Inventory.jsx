@@ -1,3 +1,4 @@
+import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -6,9 +7,9 @@ import {
   LoaderCircle, Filter, IndianRupee, CalendarDays, Pill,
 } from "lucide-react";
 
-const API_URL = "http://localhost:8080/api/inventory";
-const MEDICINES_API = "http://localhost:8080/api/admin/medicines";
-const SUPPLIERS_API = "http://localhost:8080/api/admin/suppliers";
+const API_URL = `${API_BASE}/inventory`;
+const MEDICINES_API = `${API_BASE}/admin/medicines`;
+const SUPPLIERS_API = `${API_BASE}/admin/suppliers`;
 
 const emptyForm = {
   medicineId: "",
