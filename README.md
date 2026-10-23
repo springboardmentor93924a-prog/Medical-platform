@@ -64,6 +64,11 @@ Frontend API base URL: `VITE_API_URL` env at build time
 `admin@medistock.local` · `pharmacist@medistock.local` ·
 `staff@medistock.local` · `supplier@medistock.local`
 
+## Docs
+
+- [`backend/README.md`](backend/README.md) — backend setup, config, structure, gotchas
+- [`backend/API.md`](backend/API.md) — full endpoint reference with roles and examples
+
 ## Hosting (planned)
 
 - **Backend** → Render web service (Docker), env vars: `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `CORS_ORIGINS`

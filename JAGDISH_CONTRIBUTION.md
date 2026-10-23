@@ -109,6 +109,10 @@ Everything in the README's M2 roadmap was implemented, tested and documented.
 ### Docs
 - README rewritten: M2 marked done, module table updated, dashboard section,
   `VITE_API_URL`/`JWT_EXPIRATION_MS` noted, gaps list refreshed
+- `backend/README.md` added — config table, run/build steps, auth model,
+  conventions, deploy notes, gotchas
+- `backend/API.md` added — all ~30 endpoints with roles matrix, request/response
+  examples, CSV column lists, dashboard response shape, status codes
 - This file updated with the M2 section above
 
 ### Notes for the team
