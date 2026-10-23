@@ -11,4 +11,4 @@ RUN addgroup -S app && adduser -S app -G app
 COPY --from=build /build/target/medistock-backend-0.0.1-SNAPSHOT.jar app.jar
 USER app
 EXPOSE 8080
-ENTRYPOINT ["java", "-Xmx350m", "-XX:+UseSerialGC", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-Xmx350m", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-jar", "/app/app.jar"]
