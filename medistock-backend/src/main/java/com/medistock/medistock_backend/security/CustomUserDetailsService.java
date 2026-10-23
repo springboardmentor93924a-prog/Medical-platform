@@ -2,30 +2,32 @@ package com.medistock.medistock_backend.security;
 
 import com.medistock.medistock_backend.entity.User;
 import com.medistock.medistock_backend.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Spring Security calls this during authentication.
- * We load the user by email; if not found, we throw UsernameNotFoundException.
- */
+import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
-    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
-        return new CustomUserDetails(user);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(), // <--- This will now work because of @Getter
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+                        .collect(Collectors.toList())
+        );
     }
 }

@@ -1,34 +1,34 @@
 package com.medistock.medistock_backend.controller;
 
-import com.medistock.medistock_backend.dto.request.LoginRequest;
-import com.medistock.medistock_backend.dto.response.LoginResponse;
-import com.medistock.medistock_backend.dto.response.UserResponse;
+import com.medistock.medistock_backend.dto.AuthResponse;
+import com.medistock.medistock_backend.dto.LoginRequest;
+import com.medistock.medistock_backend.dto.RegisterRequest;
 import com.medistock.medistock_backend.service.AuthService;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    /** Public endpoint. Returns a JWT on success. */
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    /** Requires a valid JWT. Returns the authenticated user's profile. */
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(authService.register(request));
+    }
+
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> me(@AuthenticationPrincipal UserDetails principal) {
-        return ResponseEntity.ok(authService.currentUser(principal.getUsername()));
+    public ResponseEntity<AuthResponse.UserDto> getMe(Authentication authentication) {
+        // Uses the email from the JWT token to fetch the real user data
+        return ResponseEntity.ok(authService.getCurrentUser(authentication.getName()));
     }
 }

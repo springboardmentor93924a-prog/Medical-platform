@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Medistock-Confi" type="Application" factoryName="Application">
+    <envs>
+      <env name="DB_USERNAME" value="medistock_user" />
+      <env name="DB_PASSWORD" value="Snct@1431" />
+      <env name="JWT_SECRET" value="nW6qdkVboaa7xXLH+gzARM/UB0T5BUho5ouQP/2+66SUCKa81/GAxScXZNsgZzN3" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.medistock.medistock_backend.MedistockBackendApplication" />
+    <module name="medistock-backend" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
