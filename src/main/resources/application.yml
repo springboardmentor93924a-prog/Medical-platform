@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: medistock-backend
+  profiles:
+    active: dev
+
+server:
+  port: 8080
