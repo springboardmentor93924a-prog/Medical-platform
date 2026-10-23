@@ -1,6 +1,13 @@
-import { API_BASE } from "../services/api";
-
 import { useState } from "react";
+
+import AuthLayout from "../components/AuthLayout";
+import { apiFetch } from "../services/api";
+
+const inputClass =
+  "w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:bg-slate-800 dark:focus:ring-blue-500/20";
+
+const labelClass =
+  "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
 
 export default function Signup({ onLogin, onBackToLogin }) {
   const [fullName, setFullName] = useState("");
@@ -22,35 +29,16 @@ export default function Signup({ onLogin, onBackToLogin }) {
     try {
       setLoading(true);
 
-      const response = await fetch(
-        `${API_BASE}/auth/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fullName,
-            email,
-            password,
-            role,
-          }),
-        }
-      );
+      const data = await apiFetch("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ fullName, email, password, role }),
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Registration failed.");
-      }
-
-      // If registration automatically returns a login token
       if (data.token && data.role) {
         sessionStorage.setItem("medistock_token", data.token);
         sessionStorage.setItem("medistock_role", data.role);
         onLogin(data);
       } else {
-        // Otherwise return to login after successful registration
         onBackToLogin();
       }
     } catch (err) {
@@ -61,142 +49,112 @@ export default function Signup({ onLogin, onBackToLogin }) {
   };
 
   return (
-    <div style={styles.page}>
-      <form onSubmit={handleSignup} style={styles.card}>
-        <h1 style={styles.title}>Create MediStock Account</h1>
-        <p style={styles.subtitle}>Register with your assigned role</p>
-
-        {error && <p style={styles.error}>{error}</p>}
-
-        <label style={styles.label}>Full Name</label>
-        <input
-          type="text"
-          placeholder="Enter your full name"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-          style={styles.input}
-        />
-
-        <label style={styles.label}>Email</label>
-        <input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={styles.input}
-        />
-
-        <label style={styles.label}>Password</label>
-        <input
-          type="password"
-          placeholder="Create a password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          minLength={8}
-          required
-          style={styles.input}
-        />
-
-        <label style={styles.label}>Register as</label>
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          required
-          style={styles.input}
-        >
-          <option value="">Select your role</option>
-          <option value="PHARMACIST">Pharmacist</option>
-          <option value="STAFF">Staff</option>
-          <option value="SUPPLIER">Supplier</option>
-        </select>
-
-        <button type="submit" disabled={loading} style={styles.button}>
-          {loading ? "Creating account..." : "Sign Up"}
-        </button>
-
-        <p style={styles.footer}>
-          Already have an account?{" "}
+    <AuthLayout
+      title="Create your account"
+      subtitle="Register with the role assigned to you by the pharmacy admin."
+      footer={
+        <>
+          Already registered?{" "}
           <button
             type="button"
             onClick={onBackToLogin}
-            style={styles.link}
+            className="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            Login
+            Sign in
           </button>
-        </p>
+        </>
+      }
+    >
+      <form onSubmit={handleSignup} className="space-y-4">
+        {error && (
+          <div className="flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
+            <span className="mt-0.5">!</span>
+            <p>{error}</p>
+          </div>
+        )}
+
+        <div>
+          <label htmlFor="fullName" className={labelClass}>
+            Full name
+          </label>
+          <input
+            id="fullName"
+            type="text"
+            autoComplete="name"
+            placeholder="Enter your full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className={labelClass}>
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="password" className={labelClass}>
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="At least 8 characters"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            minLength={8}
+            required
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="role" className={labelClass}>
+            Register as
+          </label>
+          <select
+            id="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            required
+            className={inputClass}
+          >
+            <option value="">Select your role</option>
+            <option value="PHARMACIST">Pharmacist</option>
+            <option value="STAFF">Staff</option>
+            <option value="SUPPLIER">Supplier</option>
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700 hover:shadow-blue-700/30 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {loading ? (
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+              Creating account...
+            </>
+          ) : (
+            "Create account"
+          )}
+        </button>
       </form>
-    </div>
+    </AuthLayout>
   );
 }
-
-const styles = {
-  page: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#f1f5f9",
-    padding: "20px",
-  },
-  card: {
-    width: "100%",
-    maxWidth: "420px",
-    background: "white",
-    padding: "32px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-  },
-  title: {
-    textAlign: "center",
-    color: "#2563eb",
-    marginBottom: "8px",
-  },
-  subtitle: {
-    textAlign: "center",
-    color: "#64748b",
-    marginBottom: "24px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "8px",
-    fontWeight: "600",
-  },
-  input: {
-    width: "100%",
-    boxSizing: "border-box",
-    padding: "12px",
-    marginBottom: "18px",
-    border: "1px solid #cbd5e1",
-    borderRadius: "8px",
-    fontSize: "15px",
-  },
-  button: {
-    width: "100%",
-    padding: "12px",
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-  error: {
-    color: "#dc2626",
-    background: "#fee2e2",
-    padding: "10px",
-    borderRadius: "8px",
-  },
-  footer: {
-    textAlign: "center",
-    marginTop: "20px",
-  },
-  link: {
-    color: "#2563eb",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
-};

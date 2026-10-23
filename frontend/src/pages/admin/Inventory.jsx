@@ -23,7 +23,7 @@ const emptyForm = {
 };
 
 const inputClass =
-  "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-100";
+  "w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-3 text-sm text-slate-700 dark:text-slate-300 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-100";
 
 function getToken() {
   return sessionStorage.getItem("medistock_token");
@@ -81,12 +81,12 @@ function getStatus(item) {
 
 function statusStyle(status) {
   const styles = {
-    Safe: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-    "Low stock": "bg-amber-50 text-amber-700 ring-amber-200",
-    "Out of stock": "bg-rose-50 text-rose-700 ring-rose-200",
-    Expired: "bg-rose-50 text-rose-700 ring-rose-200",
-    "Expiring soon": "bg-orange-50 text-orange-700 ring-orange-200",
-    Unknown: "bg-slate-100 text-slate-600 ring-slate-200",
+    Safe: "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30",
+    "Low stock": "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-200 dark:ring-amber-500/30",
+    "Out of stock": "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-rose-200 dark:ring-rose-500/30",
+    Expired: "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-rose-200 dark:ring-rose-500/30",
+    "Expiring soon": "bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-300 ring-orange-200 dark:ring-orange-500/30",
+    Unknown: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700",
   };
 
   return styles[status] || styles.Unknown;
@@ -361,11 +361,11 @@ export default function Inventory() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f3f8f8] p-4 text-slate-800 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f3f8f8] p-4 text-slate-800 dark:text-slate-200 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
 
         {/* Header — matches Expiry Tracking */}
-        <section className="overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-teal-100/80 p-6 shadow-sm sm:p-8">
+        <section className="overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-teal-100/80 p-6 shadow-sm sm:p-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-lg shadow-teal-200">
@@ -373,13 +373,13 @@ export default function Inventory() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs font-bold tracking-[0.18em] text-teal-700 sm:text-sm">
+                <p className="mb-2 text-xs font-bold tracking-[0.18em] text-teal-700 dark:text-teal-300 sm:text-sm">
                   MEDISTOCK / STOCK CONTROL
                 </p>
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                   Inventory Management
                 </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
                   Monitor medicine stock, manage batches, track suppliers,
                   and identify inventory that needs attention.
                 </p>
@@ -391,7 +391,7 @@ export default function Inventory() {
                 type="button"
                 onClick={loadData}
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-200 bg-white px-4 py-3 text-sm font-semibold text-teal-800 shadow-sm transition hover:bg-teal-50 disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-200 dark:border-teal-500/30 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-teal-800 dark:text-teal-200 shadow-sm transition hover:bg-teal-50 dark:hover:bg-teal-500/10 disabled:opacity-60"
               >
                 <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
                 Refresh data
@@ -459,17 +459,17 @@ export default function Inventory() {
         </div>
 
         {/* Add / edit form */}
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-5">
+        <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 p-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
                 {editingId !== null ? <Pencil size={20} /> : <Plus size={22} />}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                   {editingId !== null ? "Edit Inventory Batch" : "Add Inventory Batch"}
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Enter the stock and batch details.
                 </p>
               </div>
@@ -479,7 +479,7 @@ export default function Inventory() {
               <button
                 type="button"
                 onClick={resetForm}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50"
               >
                 <X size={15} /> Cancel edit
               </button>
@@ -597,7 +597,7 @@ export default function Inventory() {
               </Field>
             </div>
 
-            <div className="flex justify-end border-t border-slate-100 pt-5">
+            <div className="flex justify-end border-t border-slate-100 dark:border-slate-800 pt-5">
               <button
                 type="submit"
                 disabled={saving}
@@ -621,19 +621,19 @@ export default function Inventory() {
         </section>
 
         {/* Inventory register — matches Expiry Tracking */}
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 p-5 sm:p-6">
+        <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="border-b border-slate-100 dark:border-slate-800 p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">
                   Inventory Register
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Review stock quantities, batch details, and inventory status.
                 </p>
               </div>
 
-              <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-700">
+              <span className="rounded-full border border-teal-100 bg-teal-50 dark:bg-teal-500/10 px-3 py-1.5 text-xs font-bold text-teal-700 dark:text-teal-300">
                 {filteredItems.length} batches
               </span>
             </div>
@@ -642,7 +642,7 @@ export default function Inventory() {
               <div className="relative w-full xl:max-w-sm">
                 <Search
                   size={17}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
                 />
                 <input
                   value={search}
@@ -668,7 +668,7 @@ export default function Inventory() {
                       className={`rounded-xl border px-3 py-2 text-xs font-semibold transition sm:text-sm ${
                         statusFilter === status
                           ? "border-teal-600 bg-teal-600 text-white shadow-sm"
-                          : "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50"
+                          : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10"
                       }`}
                     >
                       {status === "All" ? "All" : status} ({count})
@@ -680,26 +680,26 @@ export default function Inventory() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center gap-3 p-16 text-slate-500">
-              <LoaderCircle size={22} className="animate-spin text-teal-600" />
+            <div className="flex items-center justify-center gap-3 p-16 text-slate-500 dark:text-slate-400">
+              <LoaderCircle size={22} className="animate-spin text-teal-600 dark:text-teal-400" />
               Loading inventory...
             </div>
           ) : filteredItems.length === 0 ? (
             <div className="px-5 py-16 text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
                 <Boxes size={28} />
               </div>
-              <h3 className="font-semibold text-slate-800">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-200">
                 No inventory batches found
               </h3>
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 Try a different filter or add an inventory batch above.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1000px] text-left text-sm">
-                <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   <tr>
                     <th className="px-5 py-4">Medicine / Batch</th>
                     <th className="px-5 py-4">Supplier</th>
@@ -711,43 +711,43 @@ export default function Inventory() {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredItems.map((item) => (
                     <tr key={item.inventoryId} className="transition hover:bg-teal-50/30">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
                             <Pill size={19} />
                           </div>
                           <div>
-                            <p className="font-semibold text-slate-800">
+                            <p className="font-semibold text-slate-800 dark:text-slate-200">
                               {medicineName(item.medicineId)}
                             </p>
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                               {item.batchNumber} · ID: {item.inventoryId}
                             </p>
                           </div>
                         </div>
                       </td>
 
-                      <td className="px-5 py-4 text-slate-600">
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
                         {supplierName(item.supplierId)}
                       </td>
 
                       <td className="px-5 py-4">
                         <p className={`font-bold ${
                           item.status === "Low stock" || item.status === "Out of stock"
-                            ? "text-rose-600"
-                            : "text-slate-800"
+                            ? "text-rose-600 dark:text-rose-400"
+                            : "text-slate-800 dark:text-slate-200"
                         }`}>
                           {Number(item.quantity ?? 0).toLocaleString("en-IN")}
                         </p>
-                        <p className="mt-1 text-xs text-slate-400">
+                        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                           Minimum: {item.minimumStock ?? 10}
                         </p>
                       </td>
 
-                      <td className="whitespace-nowrap px-5 py-4 font-medium text-slate-700">
+                      <td className="whitespace-nowrap px-5 py-4 font-medium text-slate-700 dark:text-slate-300">
                         <span className="inline-flex items-center">
                           <IndianRupee size={14} />
                           {Number(item.unitPrice ?? 0).toFixed(2)}
@@ -755,8 +755,8 @@ export default function Inventory() {
                       </td>
 
                       <td className="whitespace-nowrap px-5 py-4">
-                        <span className="inline-flex items-center gap-2 text-slate-600">
-                          <CalendarDays size={15} className="text-slate-400" />
+                        <span className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                          <CalendarDays size={15} className="text-slate-400 dark:text-slate-500" />
                           {formatDate(item.expiryDate)}
                         </span>
                       </td>
@@ -773,7 +773,7 @@ export default function Inventory() {
                             type="button"
                             onClick={() => startEdit(item)}
                             title="Edit batch"
-                            className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:border-teal-300 hover:bg-teal-50 hover:text-teal-700"
+                            className="rounded-lg border border-slate-200 dark:border-slate-800 p-2 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10 hover:text-teal-700"
                           >
                             <Pencil size={16} />
                           </button>
@@ -781,7 +781,7 @@ export default function Inventory() {
                             type="button"
                             onClick={() => setDeleteItem(item)}
                             title="Delete batch"
-                            className="rounded-lg border border-slate-200 p-2 text-rose-600 hover:border-rose-200 hover:bg-rose-50"
+                            className="rounded-lg border border-slate-200 dark:border-slate-800 p-2 text-rose-600 dark:text-rose-400 hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -794,7 +794,7 @@ export default function Inventory() {
             </div>
           )}
 
-          <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
+          <div className="border-t border-slate-100 dark:border-slate-800 px-5 py-3 text-xs text-slate-500 dark:text-slate-400">
             Showing {filteredItems.length} of {items.length} inventory batches
           </div>
         </section>
@@ -803,18 +803,18 @@ export default function Inventory() {
       {/* Delete confirmation */}
       {deleteItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-600">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-2xl">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400">
               <Trash2 size={22} />
             </div>
 
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               Delete inventory batch?
             </h2>
 
-            <p className="mt-2 text-sm leading-6 text-slate-500">
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
               Delete batch{" "}
-              <strong className="text-slate-800">
+              <strong className="text-slate-800 dark:text-slate-200">
                 {deleteItem.batchNumber}
               </strong>
               ? The backend may reject deletion if the batch is referenced elsewhere.
@@ -825,7 +825,7 @@ export default function Inventory() {
                 type="button"
                 onClick={() => setDeleteItem(null)}
                 disabled={deleting}
-                className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50"
+                className="rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/50"
               >
                 Cancel
               </button>
@@ -850,7 +850,7 @@ export default function Inventory() {
 function Field({ label, children }) {
   return (
     <label className="block space-y-2">
-      <span className="text-sm font-semibold text-slate-700">{label}</span>
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
       {children}
     </label>
   );
@@ -858,29 +858,29 @@ function Field({ label, children }) {
 
 function Summary({ title, value, subtitle, icon, color }) {
   const colors = {
-    teal: "border-teal-100 bg-gradient-to-br from-teal-50/80 to-white text-teal-700",
-    rose: "border-rose-100 bg-gradient-to-br from-rose-50/80 to-white text-rose-700",
-    amber: "border-amber-100 bg-gradient-to-br from-amber-50/80 to-white text-amber-700",
-    green: "border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-white text-emerald-700",
+    teal: "border-teal-100 bg-gradient-to-br from-teal-50/80 to-white text-teal-700 dark:text-teal-300",
+    rose: "border-rose-100 bg-gradient-to-br from-rose-50/80 to-white text-rose-700 dark:text-rose-300",
+    amber: "border-amber-100 bg-gradient-to-br from-amber-50/80 to-white text-amber-700 dark:text-amber-300",
+    green: "border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-white text-emerald-700 dark:text-emerald-300",
   };
 
   const iconColors = {
-    teal: "bg-teal-100 text-teal-700",
-    rose: "bg-rose-100 text-rose-600",
-    amber: "bg-amber-100 text-amber-700",
-    green: "bg-emerald-100 text-emerald-700",
+    teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",
+    rose: "bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400",
+    amber: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    green: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
   };
 
   return (
     <div className={`rounded-2xl border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${colors[color]}`}>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-slate-600">{title}</p>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</p>
         <div className={`rounded-xl p-3 ${iconColors[color]}`}>{icon}</div>
       </div>
-      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
         {value}
       </p>
-      <p className="mt-3 text-sm text-slate-500">{subtitle}</p>
+      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
     </div>
   );
 }
@@ -893,8 +893,8 @@ function Notice({ type, message, onClose }) {
       role={success ? "status" : "alert"}
       className={`flex items-start justify-between gap-3 rounded-xl border p-4 text-sm ${
         success
-          ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-          : "border-rose-200 bg-rose-50 text-rose-700"
+          ? "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-200"
+          : "border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300"
       }`}
     >
       <div className="flex items-start gap-2">

@@ -4,7 +4,33 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f2f2b" />
+    <meta
+      name="description"
+      content="MediStock - pharmacy inventory management for medicines, batches, expiry tracking and purchase orders."
+    />
     <title>MediStock</title>
+    <script>
+      (function () {
+        try {
+          var requested = new URLSearchParams(window.location.search).get("theme");
+          var stored = localStorage.getItem("medistock_theme");
+          var theme =
+            requested === "light" || requested === "dark"
+              ? requested
+              : stored === "light" || stored === "dark"
+                ? stored
+                : window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light";
+          if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (error) {
+          /* ignore */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

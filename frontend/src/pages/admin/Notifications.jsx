@@ -19,11 +19,11 @@ const TYPE_META = {
 };
 
 const TONES = {
-  amber: "bg-amber-50 text-amber-700 ring-amber-200",
-  orange: "bg-orange-50 text-orange-700 ring-orange-200",
-  red: "bg-red-50 text-red-700 ring-red-200",
-  violet: "bg-violet-50 text-violet-700 ring-violet-200",
-  slate: "bg-slate-100 text-slate-600 ring-slate-200",
+  amber: "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-200 dark:ring-amber-500/30",
+  orange: "bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-300 ring-orange-200 dark:ring-orange-500/30",
+  red: "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 ring-red-200 dark:ring-red-500/30",
+  violet: "bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-200 dark:ring-violet-500/30",
+  slate: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700",
 };
 
 const FILTERS = ["ALL", "UNREAD", "LOW_STOCK", "EXPIRING_SOON", "EXPIRED", "ORDER_PENDING"];
@@ -113,7 +113,7 @@ export default function Notifications() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm">
+      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
@@ -125,13 +125,13 @@ export default function Notifications() {
               )}
             </div>
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
                 MediStock / Alerts
               </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Notifications
               </h1>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 {unread} unread — low stock, expiry and pending purchase order alerts.
               </p>
             </div>
@@ -140,7 +140,7 @@ export default function Notifications() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={load}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50"
             >
               <RefreshCw size={16} />
               Reload
@@ -148,7 +148,7 @@ export default function Notifications() {
             <button
               onClick={markAllRead}
               disabled={unread === 0}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50 disabled:opacity-50"
             >
               <CheckCheck size={16} />
               Mark all read
@@ -168,7 +168,7 @@ export default function Notifications() {
       {notice && (
         <div
           role="status"
-          className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800"
+          className="rounded-2xl border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 p-4 text-sm font-medium text-emerald-800 dark:text-emerald-200"
         >
           {notice}
         </div>
@@ -177,7 +177,7 @@ export default function Notifications() {
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+          className="rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm font-medium text-red-700 dark:text-red-300"
         >
           {error}
         </div>
@@ -192,7 +192,7 @@ export default function Notifications() {
             className={`rounded-full px-4 py-2 text-xs font-bold ring-1 ring-inset transition ${
               filter === value
                 ? "bg-teal-600 text-white ring-teal-600"
-                : "bg-white text-slate-600 ring-slate-200 hover:bg-slate-50"
+                : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50"
             }`}
           >
             {value === "ALL"
@@ -206,14 +206,14 @@ export default function Notifications() {
 
       {/* List */}
       {loading ? (
-        <div className="flex items-center justify-center gap-3 p-10 text-slate-600">
+        <div className="flex items-center justify-center gap-3 p-10 text-slate-600 dark:text-slate-300">
           <RefreshCw size={22} className="animate-spin" /> Loading notifications...
         </div>
       ) : visible.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
+        <div className="rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-10 text-center">
           <Bell size={34} className="mx-auto mb-3 text-slate-300" />
-          <p className="font-semibold text-slate-600">Nothing here</p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="font-semibold text-slate-600 dark:text-slate-300">Nothing here</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Use “Scan for alerts” to check stock, expiry and pending orders.
           </p>
         </div>
@@ -231,8 +231,8 @@ export default function Notifications() {
                 key={item.notificationId}
                 className={`flex items-start gap-4 rounded-2xl border p-4 shadow-sm ${
                   item.read
-                    ? "border-slate-200 bg-white"
-                    : "border-teal-200 bg-teal-50/40"
+                    ? "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
+                    : "border-teal-200 dark:border-teal-500/30 bg-teal-50/40"
                 }`}
               >
                 <div className={`rounded-xl p-2.5 ring-1 ring-inset ${toneFor(item.notificationType)}`}>
@@ -250,13 +250,13 @@ export default function Notifications() {
                         NEW
                       </span>
                     )}
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-slate-400 dark:text-slate-500">
                       {item.createdAt ? item.createdAt.replace("T", " ").slice(0, 16) : ""}
                     </span>
                   </div>
                   <p
                     className={`mt-1.5 text-sm ${
-                      item.read ? "text-slate-500" : "font-medium text-slate-800"
+                      item.read ? "text-slate-500 dark:text-slate-400" : "font-medium text-slate-800 dark:text-slate-200"
                     }`}
                   >
                     {item.message}
@@ -265,7 +265,7 @@ export default function Notifications() {
                 {!item.read && (
                   <button
                     onClick={() => markRead(item.notificationId)}
-                    className="shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                    className="shrink-0 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                   >
                     Mark read
                   </button>
@@ -276,7 +276,7 @@ export default function Notifications() {
         </ul>
       )}
 
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-slate-400 dark:text-slate-500">
         Alerts are generated server-side from inventory levels, expiry dates and
         pending purchase orders. Email/SMS delivery is not part of this milestone.
       </p>

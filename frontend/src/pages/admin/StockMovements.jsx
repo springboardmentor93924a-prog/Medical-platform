@@ -50,14 +50,14 @@ function formatDate(value) {
 
 function movementStyle(type) {
   if (type === "IN") {
-    return "bg-emerald-50 text-emerald-700 ring-emerald-200";
+    return "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30";
   }
 
   if (type === "OUT") {
-    return "bg-orange-50 text-orange-700 ring-orange-200";
+    return "bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-300 ring-orange-200 dark:ring-orange-500/30";
   }
 
-  return "bg-slate-100 text-slate-700 ring-slate-200";
+  return "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 ring-slate-200 dark:ring-slate-700";
 }
 
 export default function StockMovements() {
@@ -223,11 +223,11 @@ export default function StockMovements() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f3f8f8] p-4 text-slate-800 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-[#f3f8f8] p-4 text-slate-800 dark:text-slate-200 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
 
         {/* Header */}
-        <section className="overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-teal-100/80 p-6 shadow-sm sm:p-8">
+        <section className="overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-teal-100/80 p-6 shadow-sm sm:p-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-lg shadow-teal-200">
@@ -235,15 +235,15 @@ export default function StockMovements() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs font-bold tracking-[0.18em] text-teal-700 sm:text-sm">
+                <p className="mb-2 text-xs font-bold tracking-[0.18em] text-teal-700 dark:text-teal-300 sm:text-sm">
                   MEDISTOCK / STOCK AUDIT
                 </p>
 
-                <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                   Stock Movement History
                 </h1>
 
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
                   Track stock received and issued, review movement records,
                   and maintain visibility into inventory changes.
                 </p>
@@ -318,19 +318,19 @@ export default function StockMovements() {
         </div>
 
         {/* Movement register */}
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 p-5 sm:p-6">
+        <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="border-b border-slate-100 dark:border-slate-800 p-5 sm:p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">
                   Stock Movement Register
                 </h2>
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   Review stock movement dates, quantities, and notes.
                 </p>
               </div>
 
-              <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-700">
+              <span className="rounded-full border border-teal-100 bg-teal-50 dark:bg-teal-500/10 px-3 py-1.5 text-xs font-bold text-teal-700 dark:text-teal-300">
                 {filteredMovements.length} records
               </span>
             </div>
@@ -339,7 +339,7 @@ export default function StockMovements() {
               <div className="relative w-full xl:max-w-sm">
                 <Search
                   size={17}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
                 />
 
                 <input
@@ -347,7 +347,7 @@ export default function StockMovements() {
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search medicine, type or notes..."
                   aria-label="Search stock movements"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-3 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-100"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 py-3 pl-10 pr-3 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-100"
                 />
               </div>
 
@@ -360,7 +360,7 @@ export default function StockMovements() {
                     className={`rounded-xl border px-3 py-2 text-xs font-semibold transition sm:text-sm ${
                       movementFilter === option.value
                         ? "border-teal-600 bg-teal-600 text-white shadow-sm"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-teal-300 hover:bg-teal-50"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10"
                     }`}
                   >
                     {option.label} ({option.count})
@@ -371,24 +371,24 @@ export default function StockMovements() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center gap-3 p-16 text-slate-500">
+            <div className="flex items-center justify-center gap-3 p-16 text-slate-500 dark:text-slate-400">
               <LoaderCircle
                 size={22}
-                className="animate-spin text-teal-600"
+                className="animate-spin text-teal-600 dark:text-teal-400"
               />
               Loading movement history...
             </div>
           ) : filteredMovements.length === 0 ? (
             <div className="px-5 py-16 text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
                 <Package size={28} />
               </div>
 
-              <h3 className="font-semibold text-slate-800">
+              <h3 className="font-semibold text-slate-800 dark:text-slate-200">
                 No movement records found
               </h3>
 
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                 {movements.length === 0
                   ? "Stock movements will appear here when they are recorded."
                   : "Try a different search term or movement filter."}
@@ -397,7 +397,7 @@ export default function StockMovements() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full min-w-[1050px] text-left text-sm">
-                <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   <tr>
                     <th className="px-5 py-4">Date & Time</th>
                     <th className="px-5 py-4">Medicine</th>
@@ -409,7 +409,7 @@ export default function StockMovements() {
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {filteredMovements.map((movement, index) => {
                     const isIn = movement.movementType === "IN";
                     const batch = getBatch(movement.inventoryId);
@@ -420,10 +420,10 @@ export default function StockMovements() {
                         className="transition hover:bg-teal-50/30"
                       >
                         <td className="whitespace-nowrap px-5 py-4">
-                          <div className="flex items-center gap-2 text-slate-600">
+                          <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
                             <CalendarClock
                               size={16}
-                              className="shrink-0 text-slate-400"
+                              className="shrink-0 text-slate-400 dark:text-slate-500"
                             />
                             {formatDate(movement.changedAt)}
                           </div>
@@ -431,14 +431,14 @@ export default function StockMovements() {
 
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
                               <Package size={19} />
                             </div>
                             <div>
-                              <p className="font-semibold text-slate-800">
+                              <p className="font-semibold text-slate-800 dark:text-slate-200">
                                 {getMedicineName(movement.inventoryId)}
                               </p>
-                              <p className="mt-1 text-xs text-slate-400">
+                              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                                 Movement #{movement.stockLogId ?? "—"}
                               </p>
                             </div>
@@ -446,10 +446,10 @@ export default function StockMovements() {
                         </td>
 
                         <td className="px-5 py-4">
-                          <p className="font-medium text-slate-700">
+                          <p className="font-medium text-slate-700 dark:text-slate-300">
                             {batch?.batchNumber || "—"}
                           </p>
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                             Inventory #{movement.inventoryId ?? "—"}
                           </p>
                         </td>
@@ -471,23 +471,23 @@ export default function StockMovements() {
                           <span
                             className={`font-bold ${
                               isIn
-                                ? "text-emerald-700"
+                                ? "text-emerald-700 dark:text-emerald-300"
                                 : movement.movementType === "OUT"
-                                  ? "text-orange-700"
-                                  : "text-slate-700"
+                                  ? "text-orange-700 dark:text-orange-300"
+                                  : "text-slate-700 dark:text-slate-300"
                             }`}
                           >
                             {Number(movement.changeQuantity) > 0 ? "+" : ""}
                             {Number(movement.changeQuantity ?? 0).toLocaleString("en-IN")}
                           </span>
-                          <p className="mt-1 text-xs text-slate-400">Units</p>
+                          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Units</p>
                         </td>
 
-                        <td className="px-5 py-4 text-slate-600">
+                        <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
                           {movement.userId ?? "System"}
                         </td>
 
-                        <td className="max-w-xs px-5 py-4 text-slate-500">
+                        <td className="max-w-xs px-5 py-4 text-slate-500 dark:text-slate-400">
                           <p className="line-clamp-2">
                             {movement.notes || "No notes"}
                           </p>
@@ -500,7 +500,7 @@ export default function StockMovements() {
             </div>
           )}
 
-          <div className="border-t border-slate-100 px-5 py-3 text-xs text-slate-500">
+          <div className="border-t border-slate-100 dark:border-slate-800 px-5 py-3 text-xs text-slate-500 dark:text-slate-400">
             Showing {filteredMovements.length} of {movements.length} movement records
           </div>
         </section>
@@ -518,26 +518,26 @@ function Summary({ title, value, subtitle, icon, color }) {
   };
 
   const iconColors = {
-    teal: "bg-teal-100 text-teal-700",
-    green: "bg-emerald-100 text-emerald-700",
-    amber: "bg-amber-100 text-amber-700",
-    blue: "bg-sky-100 text-sky-700",
+    teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",
+    green: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+    amber: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    blue: "bg-sky-100 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300",
   };
 
   return (
     <div className={`rounded-2xl border p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${colors[color]}`}>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-slate-600">{title}</p>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">{title}</p>
         <div className={`rounded-xl p-3 ${iconColors[color]}`}>
           {icon}
         </div>
       </div>
 
-      <p className="mt-3 break-words text-3xl font-bold tracking-tight text-slate-900">
+      <p className="mt-3 break-words text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
         {value}
       </p>
 
-      <p className="mt-3 text-sm text-slate-500">{subtitle}</p>
+      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
     </div>
   );
 }
@@ -550,8 +550,8 @@ function Notice({ type, message, onClose }) {
       role={success ? "status" : "alert"}
       className={`flex items-start justify-between gap-3 rounded-xl border p-4 text-sm ${
         success
-          ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-          : "border-rose-200 bg-rose-50 text-rose-700"
+          ? "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-200"
+          : "border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300"
       }`}
     >
       <div className="flex items-start gap-2">
@@ -567,7 +567,7 @@ function Notice({ type, message, onClose }) {
         type="button"
         onClick={onClose}
         aria-label="Dismiss message"
-        className="shrink-0 rounded p-1 hover:bg-black/5"
+        className="shrink-0 rounded p-1 hover:bg-black/5 dark:hover:bg-white/10"
       >
         <X size={16} />
       </button>

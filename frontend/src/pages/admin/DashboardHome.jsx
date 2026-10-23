@@ -45,7 +45,7 @@ function KpiCard({ icon: Icon, label, value, tone = "teal" }) {
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <div
           className={`rounded-xl bg-gradient-to-br p-2.5 text-white shadow-md ${tones[tone] || tones.teal}`}
@@ -53,10 +53,10 @@ function KpiCard({ icon: Icon, label, value, tone = "teal" }) {
           <Icon size={18} />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="truncate text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             {label}
           </p>
-          <p className="truncate text-xl font-extrabold text-slate-900">{value}</p>
+          <p className="truncate text-xl font-extrabold text-slate-900 dark:text-white">{value}</p>
         </div>
       </div>
     </div>
@@ -65,9 +65,9 @@ function KpiCard({ icon: Icon, label, value, tone = "teal" }) {
 
 function Panel({ title, subtitle, children, className = "" }) {
   return (
-    <div className={`rounded-3xl border border-slate-200 bg-white p-5 shadow-sm ${className}`}>
-      <h3 className="mb-1 text-sm font-bold text-slate-800">{title}</h3>
-      {subtitle && <p className="mb-4 text-xs text-slate-500">{subtitle}</p>}
+    <div className={`rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm ${className}`}>
+      <h3 className="mb-1 text-sm font-bold text-slate-800 dark:text-slate-200">{title}</h3>
+      {subtitle && <p className="mb-4 text-xs text-slate-500 dark:text-slate-400">{subtitle}</p>}
       {!subtitle && <div className="mb-4" />}
       {children}
     </div>
@@ -122,8 +122,8 @@ export default function DashboardHome() {
   if (loading) {
     return (
       <div className="flex min-h-80 flex-col items-center justify-center gap-4">
-        <RefreshCw size={30} className="animate-spin text-teal-600" />
-        <p className="font-medium text-slate-600">Loading dashboard...</p>
+        <RefreshCw size={30} className="animate-spin text-teal-600 dark:text-teal-400" />
+        <p className="font-medium text-slate-600 dark:text-slate-300">Loading dashboard...</p>
       </div>
     );
   }
@@ -135,34 +135,34 @@ export default function DashboardHome() {
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+          className="rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm font-medium text-red-700 dark:text-red-300"
         >
           {error}
         </div>
       )}
 
       {/* Global search */}
-      <div className="relative rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+      <div className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 shadow-sm">
         <div className="flex items-center gap-2">
-          <Search size={18} className="shrink-0 text-slate-400" />
+          <Search size={18} className="shrink-0 text-slate-400 dark:text-slate-500" />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search medicines, batches or users..."
-            className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+            className="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none"
           />
-          {searching && <RefreshCw size={14} className="animate-spin text-teal-600" />}
+          {searching && <RefreshCw size={14} className="animate-spin text-teal-600 dark:text-teal-400" />}
         </div>
 
         {results && (
-          <div className="mt-3 space-y-3 border-t border-slate-100 pt-3">
+          <div className="mt-3 space-y-3 border-t border-slate-100 dark:border-slate-800 pt-3">
             {results.medicines?.length > 0 && (
               <div>
-                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700">
+                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700 dark:text-teal-300">
                   Medicines
                 </p>
                 {results.medicines.map((item) => (
-                  <p key={item.medicineId} className="text-sm text-slate-700">
+                  <p key={item.medicineId} className="text-sm text-slate-700 dark:text-slate-300">
                     {item.medicineName}
                     {item.category ? ` — ${item.category}` : ""}
                   </p>
@@ -171,11 +171,11 @@ export default function DashboardHome() {
             )}
             {results.inventory?.length > 0 && (
               <div>
-                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700">
+                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700 dark:text-teal-300">
                   Inventory
                 </p>
                 {results.inventory.map((item) => (
-                  <p key={item.inventoryId} className="text-sm text-slate-700">
+                  <p key={item.inventoryId} className="text-sm text-slate-700 dark:text-slate-300">
                     Batch {item.batchNumber} — {item.quantity} units, expires{" "}
                     {item.expiryDate || "n/a"}
                   </p>
@@ -184,11 +184,11 @@ export default function DashboardHome() {
             )}
             {results.users?.length > 0 && (
               <div>
-                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700">
+                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-teal-700 dark:text-teal-300">
                   Users
                 </p>
                 {results.users.map((item) => (
-                  <p key={item.userId} className="text-sm text-slate-700">
+                  <p key={item.userId} className="text-sm text-slate-700 dark:text-slate-300">
                     {item.fullName} ({item.email}) — {item.role}
                   </p>
                 ))}
@@ -197,7 +197,7 @@ export default function DashboardHome() {
             {!results.medicines?.length &&
               !results.inventory?.length &&
               !results.users?.length && (
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-slate-400">
                   No matches for “{results.query}”.
                 </p>
               )}
@@ -340,7 +340,7 @@ export default function DashboardHome() {
       <div className="flex justify-end">
         <button
           onClick={loadStats}
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50"
         >
           <RefreshCw size={15} />
           Refresh stats

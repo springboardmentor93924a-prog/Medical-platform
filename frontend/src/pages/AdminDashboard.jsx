@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+
+import AppShell from "../components/AppShell";
 import DashboardHome from "./admin/DashboardHome";
 import Users from "./admin/Users";
 import Medicines from "./admin/Medicines";
@@ -12,102 +13,52 @@ import Reports from "./admin/Reports";
 import Notifications from "./admin/Notifications";
 import AuditLogs from "./admin/AuditLogs";
 
+const menu = [
+  { id: "dashboard", label: "Dashboard", icon: "dashboard" },
+  { id: "users", label: "Users", icon: "users" },
+  { id: "medicines", label: "Medicines", icon: "pill" },
+  { id: "suppliers", label: "Suppliers", icon: "truck" },
+  { id: "inventory", label: "Inventory", icon: "boxes" },
+  { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
+  { id: "stock-movements", label: "Stock Movements", icon: "swap" },
+  { id: "expiry", label: "Expiry Tracking", icon: "clock" },
+  { id: "reports", label: "Reports", icon: "file" },
+  { id: "notifications", label: "Notifications", icon: "bell" },
+  { id: "audit", label: "Audit Logs", icon: "shield" },
+];
+
 const pages = {
-  Dashboard: DashboardHome,
-  Users,
-  Medicines,
-  Suppliers,
-  Inventory,
-  "Purchase Orders": PurchaseOrders,
-  "Stock Movements": StockMovements,
-  "Expiry Tracking": ExpiryTracking,
-  Reports,
-  Notifications,
-  "Audit Logs": AuditLogs,
+  dashboard: DashboardHome,
+  users: Users,
+  medicines: Medicines,
+  suppliers: Suppliers,
+  inventory: Inventory,
+  "purchase-orders": PurchaseOrders,
+  "stock-movements": StockMovements,
+  expiry: ExpiryTracking,
+  reports: Reports,
+  notifications: Notifications,
+  audit: AuditLogs,
 };
 
 export default function AdminDashboard({ onLogout }) {
-  const [activePage, setActivePage] = useState("Dashboard");
-
-  const ActivePage = pages[activePage];
-
-  const menuItems = [
-    "Dashboard",
-    "Users",
-    "Medicines",
-    "Suppliers",
-    "Inventory",
-    "Purchase Orders",
-    "Stock Movements",
-    "Expiry Tracking",
-    "Reports",
-    "Notifications",
-    "Audit Logs",
-  ];
+  const [active, setActive] = useState("dashboard");
+  const ActivePage = pages[active];
+  const current = menu.find((item) => item.id === active);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <aside
-        style={{
-          width: "240px",
-          background: "#123b35",
-          color: "white",
-          padding: "20px",
-        }}
-      >
-        <h2>MediStock</h2>
-        <p>Admin Panel</p>
-
-        {menuItems.map((item) => (
-          <button
-            key={item}
-            onClick={() => setActivePage(item)}
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "12px",
-              marginBottom: "8px",
-              textAlign: "left",
-              background:
-                activePage === item ? "#28765f" : "transparent",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-          >
-            {item}
-          </button>
-        ))}
-        <button
-  onClick={onLogout}
-  style={{
-    display: "block",
-    width: "100%",
-    padding: "12px",
-    marginTop: "20px",
-    background: "#dc2626",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  }}
->
-  Logout
-</button>
-      </aside>
-
-      {/* Main content */}
-      <main style={{ flex: 1, padding: "30px", background: "#f4f7f6" }}>
-        <h1>{activePage}</h1>
-
-        {ActivePage ? (
-          <ActivePage />
-        ) : (
-          <p>{activePage} page will be connected to the backend next.</p>
-        )}
-      </main>
-    </div>
+    <AppShell
+      role="Admin"
+      menu={menu}
+      active={active}
+      onSelect={setActive}
+      onLogout={onLogout}
+      title={current.label}
+      subtitle="Full control over inventory, orders and people"
+    >
+      <div key={active} className="animate-rise">
+        {ActivePage ? <ActivePage /> : null}
+      </div>
+    </AppShell>
   );
 }

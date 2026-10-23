@@ -11,6 +11,8 @@ stock tracking, expiry alerts, reports.
   (ADMIN / PHARMACIST / STAFF / SUPPLIER)
 - ✅ **M2 — Admin panel:** dashboard with charts, user CRUD, stock tracking,
   notifications, CSV reports, search, audit logs
+- ✅ **UI revamp:** split-screen auth, shared app shell with icon nav and mobile
+  drawer, light/dark theme toggle (saved per browser), responsive tables/modals
 - 📋 **Later:** billing, more roles & modules, token refresh, tests
 
 ## Modules status

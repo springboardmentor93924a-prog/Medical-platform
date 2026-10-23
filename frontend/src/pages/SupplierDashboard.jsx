@@ -1,181 +1,87 @@
-
 import { useState } from "react";
+import { ArrowRight, ClipboardList } from "lucide-react";
 
-export default function SupplierDashboard({ onLogout }) {
-  const [activePage, setActivePage] = useState("dashboard");
+import AppShell from "../components/AppShell";
+import SupplierOrders from "./SupplierOrders";
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "🏠" },
-    { id: "medicines", label: "Medicines", icon: "💊" },
-    { id: "purchase-orders", label: "Purchase Orders", icon: "📋" },
-    { id: "deliveries", label: "Deliveries", icon: "🚚" },
-    { id: "notifications", label: "Notifications", icon: "🔔" },
-  ];
+const menu = [
+  { id: "dashboard", label: "Dashboard", icon: "dashboard" },
+  { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
+];
 
+function SupplierHome({ onSelect }) {
   return (
-    <div style={styles.layout}>
-      <aside style={styles.sidebar}>
-        <h2 style={styles.logo}>💊 MediStock</h2>
-        <p style={styles.role}>SUPPLIER PORTAL</p>
-
-        {menuItems.map((item) => (
+    <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink-800 via-ink-900 to-slate-950 p-6 text-white shadow-xl sm:p-10">
+        <div className="brand-grid pointer-events-none absolute inset-0 opacity-40" />
+        <div className="relative max-w-2xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200/70">
+            Supplier portal
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Keep deliveries on track.
+          </h2>
+          <p className="mt-3 text-sm text-slate-300 sm:text-base">
+            Review the purchase orders the pharmacy has placed with you and
+            coordinate upcoming deliveries.
+          </p>
           <button
-            key={item.id}
-            onClick={() => setActivePage(item.id)}
-            style={{
-              ...styles.menuItem,
-              ...(activePage === item.id ? styles.activeMenu : {}),
-            }}
+            type="button"
+            onClick={() => onSelect("purchase-orders")}
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-ink-900 shadow-lg transition hover:bg-blue-50"
           >
-            {item.icon} {item.label}
+            View purchase orders
+            <ArrowRight className="h-4 w-4" />
           </button>
-        ))}
+        </div>
+      </section>
 
-        <button onClick={onLogout} style={styles.logout}>
-          ↪ Logout
-        </button>
-      </aside>
-
-      <main style={styles.main}>
-        <header style={styles.header}>
-          <div>
-            <h1>{menuItems.find((item) => item.id === activePage)?.label}</h1>
-            <p style={styles.subtitle}>
-              MediStock Medical Inventory Management
-            </p>
-          </div>
-
-          <span style={styles.badge}>SUPPLIER</span>
-        </header>
-
-        {activePage === "dashboard" && (
-          <section style={styles.content}>
-            <h2>Welcome, Supplier!</h2>
-            <p>Manage your medicines, purchase orders, and deliveries.</p>
-
-            <div style={styles.cards}>
-              <div style={styles.card}>
-                <h3>📋 Purchase Orders</h3>
-                <p>View purchase order information.</p>
-                <button
-                  style={styles.actionButton}
-                  onClick={() => setActivePage("purchase-orders")}
-                >
-                  View Orders
-                </button>
-              </div>
-
-              <div style={styles.card}>
-                <h3>🚚 Deliveries</h3>
-                <p>Check delivery information.</p>
-                <button
-                  style={styles.actionButton}
-                  onClick={() => setActivePage("deliveries")}
-                >
-                  View Deliveries
-                </button>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {activePage !== "dashboard" && (
-          <section style={styles.content}>
-            <h2>{menuItems.find((item) => item.id === activePage)?.label}</h2>
-            <p>This section will be connected to the backend API next.</p>
-          </section>
-        )}
-      </main>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400">
+            <ClipboardList className="h-5 w-5" />
+          </span>
+          <p className="mt-4 font-semibold text-slate-900 dark:text-white">
+            Order status
+          </p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Track pending, approved and delivered orders in one list.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400">
+            <ClipboardList className="h-5 w-5" />
+          </span>
+          <p className="mt-4 font-semibold text-slate-900 dark:text-white">
+            Account records
+          </p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            Your medicines and deliveries are managed by the pharmacy admin.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
 
-const styles = {
-  layout: {
-    display: "flex",
-    minHeight: "100vh",
-    background: "#f3f6fb",
-    fontFamily: "Arial, sans-serif",
-    color: "#1e293b",
-  },
-  sidebar: {
-    width: "245px",
-    flexShrink: 0,
-    background: "#123b63",
-    color: "white",
-    padding: "24px 16px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  logo: { margin: "0 0 4px", fontSize: "23px" },
-  role: {
-    fontSize: "11px",
-    letterSpacing: "1.5px",
-    color: "#b9d9f7",
-    marginBottom: "24px",
-  },
-  menuItem: {
-    textAlign: "left",
-    padding: "13px 12px",
-    border: "none",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-  activeMenu: { background: "#2563eb" },
-  logout: {
-    marginTop: "auto",
-    padding: "13px",
-    border: "1px solid #8baac8",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-  },
-  main: { flex: 1, minWidth: 0, padding: "32px" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "12px",
-    marginBottom: "32px",
-  },
-  subtitle: { color: "#64748b", marginTop: "8px" },
-  badge: {
-    background: "#dbeafe",
-    color: "#1d4ed8",
-    borderRadius: "20px",
-    padding: "8px 14px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-  cards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-    gap: "20px",
-    marginTop: "24px",
-  },
-  card: {
-    background: "white",
-    borderRadius: "12px",
-    padding: "24px",
-    boxShadow: "0 3px 12px rgba(0,0,0,0.05)",
-  },
-  content: {
-    background: "white",
-    borderRadius: "12px",
-    padding: "24px",
-  },
-  actionButton: {
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    padding: "10px 14px",
-    borderRadius: "7px",
-    cursor: "pointer",
-  },
-};
+export default function SupplierDashboard({ onLogout }) {
+  const [active, setActive] = useState("dashboard");
+  const current = menu.find((item) => item.id === active);
+
+  return (
+    <AppShell
+      role="Supplier"
+      menu={menu}
+      active={active}
+      onSelect={setActive}
+      onLogout={onLogout}
+      title={current.label}
+      subtitle="Orders and deliveries from the pharmacy"
+    >
+      <div key={active} className="animate-rise">
+        {active === "dashboard" && <SupplierHome onSelect={setActive} />}
+        {active === "purchase-orders" && <SupplierOrders />}
+      </div>
+    </AppShell>
+  );
+}

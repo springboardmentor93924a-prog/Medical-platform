@@ -121,3 +121,23 @@ Everything in the README's M2 roadmap was implemented, tested and documented.
 - Not committed — everything is in the working tree, review before pushing
 - Deferred on purpose: token refresh, movements server-paging,
   stock-value-trend chart (needs history table), full DTO/service refactor
+
+### UI revamp (post-deploy)
+- New design system: Tailwind dark variant + theme tokens, thin scrollbars,
+  entrance animation, dark-aware Recharts axes/tooltips
+- Auth pages rebuilt as split-screen brand + form layout (Login, Signup),
+  password reveal, inline errors, one-click demo role cards
+- Shared `AppShell` for all four dashboards: icon sidebar, section titles,
+  role pill, theme toggle, sign-out, mobile drawer with overlay
+- Admin/pharmacist/staff/supplier dashboards all use the shell; pharmacist and
+  supplier home screens get real shortcut cards
+- New read-only pages: `StaffInventory` (search + KPIs) and `SupplierOrders`;
+  Medicines page rebuilt (KPI strip, search, empty/loading states)
+- Dark mode applied to all 11 admin pages via mechanical class pass + manual
+  badge/modal/table fixes; theme follows system by default, toggle persists in
+  localStorage, `?theme=dark` override for screenshots
+- Responsive: tables scroll horizontally, modals capped at 90vh, grids stack
+  from 1-col on phones; auth verified at 500 px and 1440 px viewports
+- Verified visually with headless Chrome screenshots (login light/dark/mobile,
+  dashboard light/dark/mobile); build 0 errors, lint 0 errors (29 warnings)
+- No new dependencies added

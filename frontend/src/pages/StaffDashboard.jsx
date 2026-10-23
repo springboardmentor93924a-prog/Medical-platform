@@ -1,149 +1,99 @@
-
 import { useState } from "react";
+import { Bell, Boxes, Search } from "lucide-react";
 
-export default function StaffDashboard({ onLogout }) {
-  const [activePage, setActivePage] = useState("dashboard");
+import AppShell from "../components/AppShell";
+import StaffInventory from "./StaffInventory";
+import Notifications from "./admin/Notifications";
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "🏠" },
-    { id: "medicines", label: "View Medicines", icon: "💊" },
-    { id: "inventory", label: "View Inventory", icon: "📦" },
-    { id: "notifications", label: "Notifications", icon: "🔔" },
+const menu = [
+  { id: "dashboard", label: "Dashboard", icon: "dashboard" },
+  { id: "inventory", label: "Inventory", icon: "boxes" },
+  { id: "notifications", label: "Notifications", icon: "bell" },
+];
+
+function StaffHome({ onSelect }) {
+  const cards = [
+    {
+      id: "inventory",
+      icon: Boxes,
+      title: "Browse inventory",
+      text: "Check batches, stock levels and expiry dates across the pharmacy.",
+      action: "View inventory",
+    },
+    {
+      id: "notifications",
+      icon: Bell,
+      title: "Stock alerts",
+      text: "See low-stock, expiry and order notifications raised by the system.",
+      action: "View notifications",
+    },
   ];
 
   return (
-    <div style={styles.layout}>
-      <aside style={styles.sidebar}>
-        <h2>💊 MediStock</h2>
-        <p style={styles.role}>STAFF PORTAL</p>
+    <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink-800 via-ink-900 to-slate-950 p-6 text-white shadow-xl sm:p-10">
+        <div className="brand-grid pointer-events-none absolute inset-0 opacity-40" />
+        <div className="relative max-w-2xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200/70">
+            Staff workspace
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Welcome back. Here is what you can do today.
+          </h2>
+          <p className="mt-3 text-sm text-slate-300 sm:text-base">
+            Your account gives you read-only access to stock information and
+            pharmacy alerts.
+          </p>
+        </div>
+      </section>
 
-        {menuItems.map((item) => (
+      <div className="grid gap-4 md:grid-cols-2">
+        {cards.map((card) => (
           <button
-            key={item.id}
-            onClick={() => setActivePage(item.id)}
-            style={{
-              ...styles.menuItem,
-              ...(activePage === item.id ? styles.activeMenu : {}),
-            }}
+            key={card.id}
+            type="button"
+            onClick={() => onSelect(card.id)}
+            className="group rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-500/40"
           >
-            {item.icon} {item.label}
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white dark:bg-blue-500/10 dark:text-blue-400">
+              <card.icon className="h-5 w-5" />
+            </span>
+            <p className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+              {card.title}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              {card.text}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">
+              {card.action}
+              <Search className="h-3.5 w-3.5" />
+            </span>
           </button>
         ))}
-
-        <button onClick={onLogout} style={styles.logout}>
-          ↪ Logout
-        </button>
-      </aside>
-
-      <main style={styles.main}>
-        <header style={styles.header}>
-          <div>
-            <h1>{menuItems.find((item) => item.id === activePage)?.label}</h1>
-            <p style={styles.subtitle}>
-              MediStock Medical Inventory Management
-            </p>
-          </div>
-          <span style={styles.badge}>STAFF</span>
-        </header>
-
-        {activePage === "dashboard" && (
-          <section style={styles.content}>
-            <h2>Welcome, Staff!</h2>
-            <p>View medicines and check inventory information.</p>
-
-            <button
-              style={styles.actionButton}
-              onClick={() => setActivePage("medicines")}
-            >
-              View Medicines
-            </button>
-          </section>
-        )}
-
-        {activePage !== "dashboard" && (
-          <section style={styles.content}>
-            <h2>{menuItems.find((item) => item.id === activePage)?.label}</h2>
-            <p>This section will be connected to the backend API next.</p>
-          </section>
-        )}
-      </main>
+      </div>
     </div>
   );
 }
 
-const styles = {
-  layout: {
-    display: "flex",
-    minHeight: "100vh",
-    background: "#f3f6fb",
-    fontFamily: "Arial, sans-serif",
-    color: "#1e293b",
-  },
-  sidebar: {
-    width: "245px",
-    flexShrink: 0,
-    background: "#123b63",
-    color: "white",
-    padding: "24px 16px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  role: {
-    fontSize: "11px",
-    letterSpacing: "1.5px",
-    color: "#b9d9f7",
-    marginBottom: "24px",
-  },
-  menuItem: {
-    textAlign: "left",
-    padding: "13px 12px",
-    border: "none",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-  activeMenu: { background: "#2563eb" },
-  logout: {
-    marginTop: "auto",
-    padding: "13px",
-    border: "1px solid #8baac8",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-  },
-  main: { flex: 1, minWidth: 0, padding: "32px" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "12px",
-    marginBottom: "32px",
-  },
-  subtitle: { color: "#64748b", marginTop: "8px" },
-  badge: {
-    background: "#dbeafe",
-    color: "#1d4ed8",
-    borderRadius: "20px",
-    padding: "8px 14px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-  content: {
-    background: "white",
-    borderRadius: "12px",
-    padding: "24px",
-  },
-  actionButton: {
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    padding: "10px 14px",
-    borderRadius: "7px",
-    cursor: "pointer",
-  },
-};
+export default function StaffDashboard({ onLogout }) {
+  const [active, setActive] = useState("dashboard");
+  const current = menu.find((item) => item.id === active);
+
+  return (
+    <AppShell
+      role="Staff"
+      menu={menu}
+      active={active}
+      onSelect={setActive}
+      onLogout={onLogout}
+      title={current.label}
+      subtitle="Read-only access to stock and alerts"
+    >
+      <div key={active} className="animate-rise">
+        {active === "dashboard" && <StaffHome onSelect={setActive} />}
+        {active === "inventory" && <StaffInventory />}
+        {active === "notifications" && <Notifications />}
+      </div>
+    </AppShell>
+  );
+}

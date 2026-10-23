@@ -9,16 +9,16 @@ import { apiFetch } from "../../services/api";
 const PAGE_SIZE = 20;
 
 const ACTION_STYLES = {
-  CREATE: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  UPDATE: "bg-sky-50 text-sky-700 ring-sky-200",
-  DELETE: "bg-red-50 text-red-700 ring-red-200",
-  ACTIVATE: "bg-emerald-50 text-emerald-700 ring-emerald-200",
-  DEACTIVATE: "bg-slate-100 text-slate-600 ring-slate-200",
-  LOGIN: "bg-violet-50 text-violet-700 ring-violet-200",
-  REGISTER: "bg-violet-50 text-violet-700 ring-violet-200",
-  STOCK_IN: "bg-teal-50 text-teal-700 ring-teal-200",
-  STOCK_OUT: "bg-amber-50 text-amber-700 ring-amber-200",
-  REPORT_GENERATED: "bg-indigo-50 text-indigo-700 ring-indigo-200",
+  CREATE: "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30",
+  UPDATE: "bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-300 ring-sky-200 dark:ring-sky-500/30",
+  DELETE: "bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 ring-red-200 dark:ring-red-500/30",
+  ACTIVATE: "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30",
+  DEACTIVATE: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700",
+  LOGIN: "bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-200 dark:ring-violet-500/30",
+  REGISTER: "bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-200 dark:ring-violet-500/30",
+  STOCK_IN: "bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300 ring-teal-200 dark:ring-teal-500/30",
+  STOCK_OUT: "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-200 dark:ring-amber-500/30",
+  REPORT_GENERATED: "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 ring-indigo-200 dark:ring-indigo-500/30",
 };
 
 const ACTIONS = [
@@ -76,20 +76,20 @@ export default function AuditLogs() {
 
   return (
     <div className="space-y-6">
-      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm">
+      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
               <History size={28} />
             </div>
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
                 MediStock / Security
               </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 Audit Logs
               </h1>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 {data.totalElements} recorded action(s) — every change is attributed to a user.
               </p>
             </div>
@@ -97,7 +97,7 @@ export default function AuditLogs() {
 
           <button
             onClick={load}
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50"
           >
             <RefreshCw size={16} />
             Refresh
@@ -108,20 +108,20 @@ export default function AuditLogs() {
       {error && (
         <div
           role="alert"
-          className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+          className="rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm font-medium text-red-700 dark:text-red-300"
         >
           {error}
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
-        <div className="flex min-w-64 flex-1 items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-          <Search size={18} className="text-slate-400" />
+        <div className="flex min-w-64 flex-1 items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 shadow-sm">
+          <Search size={18} className="text-slate-400 dark:text-slate-500" />
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search by user, summary or entity..."
-            className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+            className="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none"
           />
         </div>
 
@@ -131,7 +131,7 @@ export default function AuditLogs() {
             setAction(event.target.value);
             setPage(0);
           }}
-          className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm focus:border-teal-500 focus:outline-none"
+          className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm focus:border-teal-500 focus:outline-none"
         >
           {ACTIONS.map((value) => (
             <option key={value || "ALL"} value={value}>
@@ -141,16 +141,17 @@ export default function AuditLogs() {
         </select>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
         {loading ? (
-          <div className="flex items-center justify-center gap-3 p-10 text-slate-600">
+          <div className="flex items-center justify-center gap-3 p-10 text-slate-600 dark:text-slate-300">
             <RefreshCw size={22} className="animate-spin" /> Loading audit logs...
           </div>
         ) : data.content.length === 0 ? (
-          <p className="p-10 text-center text-sm text-slate-500">No audit entries found.</p>
+          <p className="p-10 text-center text-sm text-slate-500 dark:text-slate-400">No audit entries found.</p>
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left text-sm">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               <tr>
                 <th className="px-5 py-3.5">When</th>
                 <th className="px-5 py-3.5">Action</th>
@@ -159,39 +160,40 @@ export default function AuditLogs() {
                 <th className="px-5 py-3.5">By</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {data.content.map((log) => (
-                <tr key={log.auditId} className="hover:bg-slate-50/70">
-                  <td className="whitespace-nowrap px-5 py-3.5 text-xs text-slate-500">
+                <tr key={log.auditId} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                  <td className="whitespace-nowrap px-5 py-3.5 text-xs text-slate-500 dark:text-slate-400">
                     {log.createdAt ? log.createdAt.replace("T", " ").slice(0, 19) : "—"}
                   </td>
                   <td className="px-5 py-3.5">
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-bold ring-1 ring-inset ${
-                        ACTION_STYLES[log.action] || "bg-slate-100 text-slate-600 ring-slate-200"
+                        ACTION_STYLES[log.action] || "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700"
                       }`}
                     >
                       {log.action}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5 text-slate-600">
+                  <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">
                     {log.entityType}
                     {log.entityId ? ` #${log.entityId}` : ""}
                   </td>
-                  <td className="max-w-md truncate px-5 py-3.5 text-slate-700">
+                  <td className="max-w-md truncate px-5 py-3.5 text-slate-700 dark:text-slate-300">
                     {log.summary || "—"}
                   </td>
-                  <td className="whitespace-nowrap px-5 py-3.5 text-xs text-slate-500">
+                  <td className="whitespace-nowrap px-5 py-3.5 text-xs text-slate-500 dark:text-slate-400">
                     {log.performedBy || "system"}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600 dark:text-slate-300">
         <span>
           Page {data.number + 1} of {Math.max(data.totalPages, 1)} — {data.totalElements} total
         </span>
@@ -199,14 +201,14 @@ export default function AuditLogs() {
           <button
             disabled={page === 0}
             onClick={() => setPage((value) => Math.max(0, value - 1))}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Previous
           </button>
           <button
             disabled={page + 1 >= data.totalPages}
             onClick={() => setPage((value) => value + 1)}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Next
           </button>

@@ -129,9 +129,9 @@ export default function ExpiryTracking() {
     });
 
   return (
-    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
+    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 dark:from-slate-900 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
       {/* Header */}
-      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm md:p-8">
+      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm md:p-8">
         <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-100/70 blur-3xl" />
 
         <div className="relative flex flex-wrap items-center justify-between gap-5">
@@ -141,13 +141,13 @@ export default function ExpiryTracking() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
                 MediStock / Inventory Safety
               </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-4xl">
                 Expiry Tracking
               </h1>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Monitor batch expiry dates and identify stock that needs attention.
               </p>
             </div>
@@ -170,7 +170,7 @@ export default function ExpiryTracking() {
       {error && (
         <div
           role="alert"
-          className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+          className="flex items-start gap-3 rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300"
         >
           <AlertTriangle size={20} className="mt-0.5 shrink-0" />
           <div>
@@ -216,19 +216,19 @@ export default function ExpiryTracking() {
       </section>
 
       {/* Expiry table */}
-      <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="space-y-5 border-b border-slate-100 p-5 md:p-6">
+      <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+        <div className="space-y-5 border-b border-slate-100 dark:border-slate-800 p-5 md:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                 Medicine Expiry Register
               </h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Batches are sorted by nearest expiry date.
               </p>
             </div>
 
-            <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1.5 text-xs font-bold text-teal-700">
+            <span className="rounded-full border border-teal-100 bg-teal-50 dark:bg-teal-500/10 px-3 py-1.5 text-xs font-bold text-teal-700 dark:text-teal-300">
               {filteredInventory.length} batches
             </span>
           </div>
@@ -237,13 +237,13 @@ export default function ExpiryTracking() {
             <div className="relative w-full lg:max-w-sm">
               <Search
                 size={18}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
               />
               <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search medicine, batch or date..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
               />
             </div>
 
@@ -267,7 +267,7 @@ export default function ExpiryTracking() {
                     className={`whitespace-nowrap rounded-xl border px-3.5 py-2.5 text-xs font-semibold transition ${
                       filter === key
                         ? "border-teal-600 bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-md"
-                        : "border-slate-200 bg-white text-slate-600 hover:border-teal-200 hover:bg-teal-50"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-teal-200 hover:bg-teal-50 dark:hover:bg-teal-500/10"
                     }`}
                   >
                     {label} ({count})
@@ -279,19 +279,19 @@ export default function ExpiryTracking() {
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center gap-3 p-14 text-slate-500">
-            <RefreshCw size={28} className="animate-spin text-teal-600" />
+          <div className="flex flex-col items-center justify-center gap-3 p-14 text-slate-500 dark:text-slate-400">
+            <RefreshCw size={28} className="animate-spin text-teal-600 dark:text-teal-400" />
             <p className="text-sm font-medium">Loading expiry records...</p>
           </div>
         ) : filteredInventory.length === 0 ? (
           <div className="flex flex-col items-center px-6 py-14 text-center">
-            <div className="rounded-2xl bg-emerald-50 p-4 text-emerald-600">
+            <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 p-4 text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 size={32} />
             </div>
-            <h3 className="mt-4 font-bold text-slate-900">
+            <h3 className="mt-4 font-bold text-slate-900 dark:text-white">
               No matching batches
             </h3>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
               Try another search or expiry filter.
             </p>
             <button
@@ -307,7 +307,7 @@ export default function ExpiryTracking() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 <tr>
                   <th className="whitespace-nowrap px-5 py-4">Medicine</th>
                   <th className="whitespace-nowrap px-5 py-4">Batch</th>
@@ -318,16 +318,16 @@ export default function ExpiryTracking() {
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {filteredInventory.map((item) => {
                   const status = getStatus(item);
                   const days = getDaysLeft(item.expiryDate);
 
                   const badgeStyles = {
-                    EXPIRED: "bg-rose-100 text-rose-800",
-                    EXPIRING: "bg-amber-100 text-amber-800",
-                    SAFE: "bg-emerald-100 text-emerald-800",
-                    UNKNOWN: "bg-slate-100 text-slate-700",
+                    EXPIRED: "bg-rose-100 dark:bg-rose-500/15 text-rose-800 dark:text-rose-200",
+                    EXPIRING: "bg-amber-100 dark:bg-amber-500/15 text-amber-800 dark:text-amber-200",
+                    SAFE: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-200",
+                    UNKNOWN: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300",
                   };
 
                   const statusLabels = {
@@ -343,41 +343,41 @@ export default function ExpiryTracking() {
                       className="transition hover:bg-teal-50/50"
                     >
                       <td className="px-5 py-4">
-                        <div className="font-semibold text-slate-800">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
                           {medicineName(item.medicineId)}
                         </div>
-                        <div className="mt-1 text-xs text-slate-400">
+                        <div className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                           Medicine ID: {item.medicineId}
                         </div>
                       </td>
 
                       <td className="whitespace-nowrap px-5 py-4">
-                        <span className="rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 font-mono text-xs text-slate-600">
+                        <span className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2.5 py-1.5 font-mono text-xs text-slate-600 dark:text-slate-300">
                           {item.batchNumber || "—"}
                         </span>
                       </td>
 
-                      <td className="px-5 py-4 font-semibold text-slate-700">
+                      <td className="px-5 py-4 font-semibold text-slate-700 dark:text-slate-300">
                         {item.quantity}
                       </td>
 
-                      <td className="whitespace-nowrap px-5 py-4 text-slate-600">
+                      <td className="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300">
                         {item.expiryDate || "—"}
                       </td>
 
                       <td className="whitespace-nowrap px-5 py-4">
                         {days === null ? (
-                          <span className="text-slate-400">Not available</span>
+                          <span className="text-slate-400 dark:text-slate-500">Not available</span>
                         ) : days < 0 ? (
-                          <span className="font-semibold text-rose-700">
+                          <span className="font-semibold text-rose-700 dark:text-rose-300">
                             {Math.abs(days)} days overdue
                           </span>
                         ) : (
                           <span
                             className={
                               days <= 30
-                                ? "font-semibold text-amber-700"
-                                : "text-slate-600"
+                                ? "font-semibold text-amber-700 dark:text-amber-300"
+                                : "text-slate-600 dark:text-slate-300"
                             }
                           >
                             {days} days left
@@ -410,8 +410,8 @@ export default function ExpiryTracking() {
         )}
       </section>
 
-      <footer className="rounded-2xl border border-slate-200 bg-white p-4 text-xs leading-6 text-slate-500">
-        <strong className="text-slate-700">Expiry policy:</strong> Batches
+      <footer className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 text-xs leading-6 text-slate-500 dark:text-slate-400">
+        <strong className="text-slate-700 dark:text-slate-300">Expiry policy:</strong> Batches
         past their expiry date are marked Expired. Batches expiring within
         30 days are marked Expiring Soon. This page reports status only; it
         does not delete stock or change inventory quantities.
@@ -422,17 +422,17 @@ export default function ExpiryTracking() {
 
 function Metric({ title, value, subtitle, icon: Icon, color }) {
   const themes = {
-    teal: "border-teal-100 from-teal-50 to-white",
-    red: "border-rose-100 from-rose-50 to-white",
-    amber: "border-amber-100 from-amber-50 to-white",
-    emerald: "border-emerald-100 from-emerald-50 to-white",
+    teal: "border-teal-100 from-teal-50 dark:from-teal-500/10 to-white",
+    red: "border-rose-100 from-rose-50 dark:from-rose-500/10 to-white",
+    amber: "border-amber-100 from-amber-50 dark:from-amber-500/10 to-white",
+    emerald: "border-emerald-100 from-emerald-50 dark:from-emerald-500/10 to-white",
   };
 
   const iconThemes = {
-    teal: "bg-teal-100 text-teal-700",
-    red: "bg-rose-100 text-rose-700",
-    amber: "bg-amber-100 text-amber-700",
-    emerald: "bg-emerald-100 text-emerald-700",
+    teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",
+    red: "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300",
+    amber: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    emerald: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
   };
 
   return (
@@ -441,11 +441,11 @@ function Metric({ title, value, subtitle, icon: Icon, color }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-slate-500">{title}</p>
-          <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900">
+          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{title}</p>
+          <p className="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             {value}
           </p>
-          <p className="mt-2 text-xs text-slate-400">{subtitle}</p>
+          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">{subtitle}</p>
         </div>
 
         <div

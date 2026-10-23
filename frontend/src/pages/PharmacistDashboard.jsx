@@ -1,171 +1,144 @@
-
 import { useState } from "react";
-import PharmacistMedicines from "./PharmacistMedicines";
-export default function PharmacistDashboard({ onLogout }) {
-  const [activePage, setActivePage] = useState("dashboard");
 
-  const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: "🏠" },
-    { id: "medicines", label: "View Medicines", icon: "💊" },
-    { id: "inventory", label: "Inventory", icon: "📦" },
-    { id: "expiry", label: "Expiry Tracking", icon: "📅" },
-    { id: "suppliers", label: "Suppliers", icon: "🚚" },
-    { id: "notifications", label: "Notifications", icon: "🔔" },
-  ];
+import AppShell from "../components/AppShell";
+import { Icon } from "../components/icons";
+import Medicines from "./admin/Medicines";
+import Inventory from "./admin/Inventory";
+import PurchaseOrders from "./admin/PurchaseOrders";
+import StockMovements from "./admin/StockMovements";
+import ExpiryTracking from "./admin/ExpiryTracking";
+import Reports from "./admin/Reports";
+import Notifications from "./admin/Notifications";
 
+const menu = [
+  { id: "dashboard", label: "Dashboard", icon: "dashboard" },
+  { id: "medicines", label: "Medicines", icon: "pill" },
+  { id: "inventory", label: "Inventory", icon: "boxes" },
+  { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
+  { id: "stock-movements", label: "Stock Movements", icon: "swap" },
+  { id: "expiry", label: "Expiry Tracking", icon: "clock" },
+  { id: "reports", label: "Reports", icon: "file" },
+  { id: "notifications", label: "Notifications", icon: "bell" },
+];
+
+const pages = {
+  medicines: Medicines,
+  inventory: Inventory,
+  "purchase-orders": PurchaseOrders,
+  "stock-movements": StockMovements,
+  expiry: ExpiryTracking,
+  reports: Reports,
+  notifications: Notifications,
+};
+
+const shortcuts = [
+  {
+    id: "medicines",
+    icon: "pill",
+    title: "Medicine catalogue",
+    text: "Browse every medicine registered in the system.",
+  },
+  {
+    id: "inventory",
+    icon: "boxes",
+    title: "Stock on hand",
+    text: "Check batches, quantities and storage locations.",
+  },
+  {
+    id: "purchase-orders",
+    icon: "cart",
+    title: "Purchase orders",
+    text: "Raise orders and track supplier deliveries.",
+  },
+  {
+    id: "expiry",
+    icon: "clock",
+    title: "Expiry watch",
+    text: "Spot batches expiring soon before they are wasted.",
+  },
+  {
+    id: "stock-movements",
+    icon: "swap",
+    title: "Stock movements",
+    text: "Review every inward and outward stock entry.",
+  },
+  {
+    id: "reports",
+    icon: "file",
+    title: "Reports",
+    text: "Download CSV reports for audits and reviews.",
+  },
+];
+
+function PharmacistHome({ onSelect }) {
   return (
-    <div style={styles.layout}>
-      <aside style={styles.sidebar}>
-        <h2 style={styles.logo}>💊 MediStock</h2>
-        <p style={styles.role}>PHARMACIST PORTAL</p>
+    <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ink-800 via-ink-900 to-slate-950 p-6 text-white shadow-xl sm:p-10">
+        <div className="brand-grid pointer-events-none absolute inset-0 opacity-40" />
+        <div className="relative max-w-2xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-200/70">
+            Pharmacist workspace
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Good to see you. Everything pharmacy, in one place.
+          </h2>
+          <p className="mt-3 text-sm text-slate-300 sm:text-base">
+            Dispense confidently - review stock levels, follow expiry dates and
+            keep purchase orders moving.
+          </p>
+        </div>
+      </section>
 
-        {menuItems.map((item) => (
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {shortcuts.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActivePage(item.id)}
-            style={{
-              ...styles.menuItem,
-              ...(activePage === item.id ? styles.activeMenu : {}),
-            }}
+            type="button"
+            onClick={() => onSelect(item.id)}
+            className="group rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-500/40"
           >
-            {item.icon} {item.label}
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white dark:bg-blue-500/10 dark:text-blue-400">
+              <Icon name={item.icon} className="h-5 w-5" />
+            </span>
+            <p className="mt-4 font-semibold text-slate-900 dark:text-white">
+              {item.title}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              {item.text}
+            </p>
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-600 dark:text-blue-400">
+              Open
+              <Icon name="arrow" className="h-4 w-4 transition group-hover:translate-x-0.5" />
+            </span>
           </button>
         ))}
-
-        <button onClick={onLogout} style={styles.logout}>
-          ↪ Logout
-        </button>
-      </aside>
-
-      <main style={styles.main}>
-        <header style={styles.header}>
-          <div>
-            <h1 style={styles.heading}>
-              {menuItems.find((item) => item.id === activePage)?.label}
-            </h1>
-            <p style={styles.subtitle}>
-              MediStock Medical Inventory Management
-            </p>
-          </div>
-          <span style={styles.badge}>PHARMACIST</span>
-        </header>
-
-        {activePage === "medicines" && (
-  <section style={styles.content}>
-    <PharmacistMedicines />
-  </section>
-)}
-
-{activePage !== "dashboard" && activePage !== "medicines" && (
-  <section style={styles.content}>
-    <h2>{menuItems.find((item) => item.id === activePage)?.label}</h2>
-    <p>
-      This section is ready for the next development step.
-    </p>
-  </section>
-)}
-        {activePage !== "dashboard" && (
-          <section style={styles.content}>
-            <h2>{menuItems.find((item) => item.id === activePage)?.label}</h2>
-            <p>
-              This section is ready for the next development step. We will
-              connect it to the backend API before displaying real data.
-            </p>
-          </section>
-        )}
-      </main>
+      </section>
     </div>
   );
 }
 
-const styles = {
-  layout: {
-    display: "flex",
-    minHeight: "100vh",
-    background: "#f3f6fb",
-    fontFamily: "Arial, sans-serif",
-    color: "#1e293b",
-  },
-  sidebar: {
-    width: "245px",
-    flexShrink: 0,
-    background: "#123b63",
-    color: "white",
-    padding: "24px 16px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  logo: { margin: "0 0 4px", fontSize: "23px" },
-  role: {
-    fontSize: "11px",
-    letterSpacing: "1.5px",
-    color: "#b9d9f7",
-    marginBottom: "24px",
-  },
-  menuItem: {
-    textAlign: "left",
-    padding: "13px 12px",
-    border: "none",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-  activeMenu: { background: "#2563eb" },
-  logout: {
-    marginTop: "auto",
-    padding: "13px",
-    border: "1px solid #8baac8",
-    borderRadius: "8px",
-    background: "transparent",
-    color: "white",
-    cursor: "pointer",
-    fontSize: "14px",
-  },
-  main: { flex: 1, minWidth: 0, padding: "32px" },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "12px",
-    marginBottom: "32px",
-  },
-  heading: { margin: 0, fontSize: "28px" },
-  subtitle: { color: "#64748b", marginTop: "8px" },
-  badge: {
-    background: "#dbeafe",
-    color: "#1d4ed8",
-    borderRadius: "20px",
-    padding: "8px 14px",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-  cards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-    gap: "20px",
-    marginTop: "24px",
-  },
-  card: {
-    background: "white",
-    borderRadius: "12px",
-    padding: "24px",
-    boxShadow: "0 3px 12px rgba(0,0,0,0.05)",
-  },
-  actionButton: {
-    background: "#2563eb",
-    color: "white",
-    border: "none",
-    padding: "10px 14px",
-    borderRadius: "7px",
-    cursor: "pointer",
-  },
-  content: {
-    background: "white",
-    borderRadius: "12px",
-    padding: "24px",
-  },
-};
+export default function PharmacistDashboard({ onLogout }) {
+  const [active, setActive] = useState("dashboard");
+  const ActivePage = pages[active];
+  const current = menu.find((item) => item.id === active);
+
+  return (
+    <AppShell
+      role="Pharmacist"
+      menu={menu}
+      active={active}
+      onSelect={setActive}
+      onLogout={onLogout}
+      title={current.label}
+      subtitle="Dispensing, stock and expiry at a glance"
+    >
+      <div key={active} className="animate-rise">
+        {active === "dashboard" ? (
+          <PharmacistHome onSelect={setActive} />
+        ) : (
+          <ActivePage />
+        )}
+      </div>
+    </AppShell>
+  );
+}

@@ -150,20 +150,20 @@ export default function Users() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm">
+      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
               <UsersIcon size={28} />
             </div>
             <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
                 MediStock / Administration
               </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 User Management
               </h1>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 {data.totalElements} account(s) — add, edit, activate or remove users.
               </p>
             </div>
@@ -182,7 +182,7 @@ export default function Users() {
       {notice && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-800"
+          className="flex items-center gap-2 rounded-2xl border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 p-4 text-sm font-medium text-emerald-800 dark:text-emerald-200"
         >
           <CheckCircle2 size={18} /> {notice}
         </div>
@@ -191,34 +191,35 @@ export default function Users() {
       {error && (
         <div
           role="alert"
-          className="flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+          className="flex items-center gap-2 rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm font-medium text-red-700 dark:text-red-300"
         >
           <AlertTriangle size={18} /> {error}
         </div>
       )}
 
       {/* Search */}
-      <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-        <Search size={18} className="text-slate-400" />
+      <div className="flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 shadow-sm">
+        <Search size={18} className="text-slate-400 dark:text-slate-500" />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search by name, email or role..."
-          className="w-full bg-transparent text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
+          className="w-full bg-transparent text-sm text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none"
         />
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
         {loading ? (
-          <div className="flex items-center justify-center gap-3 p-10 text-slate-600">
+          <div className="flex items-center justify-center gap-3 p-10 text-slate-600 dark:text-slate-300">
             <RefreshCw size={22} className="animate-spin" /> Loading users...
           </div>
         ) : data.content.length === 0 ? (
-          <p className="p-10 text-center text-sm text-slate-500">No users found.</p>
+          <p className="p-10 text-center text-sm text-slate-500 dark:text-slate-400">No users found.</p>
         ) : (
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left text-sm">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               <tr>
                 <th className="px-5 py-3.5">Name</th>
                 <th className="px-5 py-3.5">Email</th>
@@ -227,15 +228,15 @@ export default function Users() {
                 <th className="px-5 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {data.content.map((user) => (
-                <tr key={user.userId} className="hover:bg-slate-50/70">
-                  <td className="px-5 py-3.5 font-semibold text-slate-800">
+                <tr key={user.userId} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                  <td className="px-5 py-3.5 font-semibold text-slate-800 dark:text-slate-200">
                     {user.fullName}
                   </td>
-                  <td className="px-5 py-3.5 text-slate-600">{user.email}</td>
+                  <td className="px-5 py-3.5 text-slate-600 dark:text-slate-300">{user.email}</td>
                   <td className="px-5 py-3.5">
-                    <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-bold text-teal-700 ring-1 ring-inset ring-teal-200">
+                    <span className="rounded-full bg-teal-50 dark:bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700 dark:text-teal-300 ring-1 ring-inset ring-teal-200 dark:ring-teal-500/30">
                       {user.role}
                     </span>
                   </td>
@@ -243,8 +244,8 @@ export default function Users() {
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-bold ring-1 ring-inset ${
                         user.active
-                          ? "bg-emerald-50 text-emerald-700 ring-emerald-200"
-                          : "bg-slate-100 text-slate-600 ring-slate-200"
+                          ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700"
                       }`}
                     >
                       {user.active ? "Active" : "Inactive"}
@@ -255,21 +256,21 @@ export default function Users() {
                       <button
                         onClick={() => openEdit(user)}
                         title="Edit"
-                        className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={() => toggleActive(user)}
                         title={user.active ? "Deactivate" : "Activate"}
-                        className="rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                        className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50"
                       >
                         {user.active ? "Disable" : "Enable"}
                       </button>
                       <button
                         onClick={() => removeUser(user)}
                         title="Delete"
-                        className="rounded-lg border border-red-200 bg-white p-2 text-red-600 hover:bg-red-50"
+                        className="rounded-lg border border-red-200 dark:border-red-500/30 bg-white dark:bg-slate-900 p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -279,11 +280,12 @@ export default function Users() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600 dark:text-slate-300">
         <span>
           Page {data.number + 1} of {Math.max(data.totalPages, 1)} — {data.totalElements} total
         </span>
@@ -291,14 +293,14 @@ export default function Users() {
           <button
             disabled={page === 0}
             onClick={() => setPage((value) => Math.max(0, value - 1))}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Previous
           </button>
           <button
             disabled={page + 1 >= data.totalPages}
             onClick={() => setPage((value) => value + 1)}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Next
           </button>
@@ -310,41 +312,41 @@ export default function Users() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
           <form
             onSubmit={saveUser}
-            className="w-full max-w-md space-y-4 rounded-3xl bg-white p-6 shadow-2xl"
+            className="max-h-[90vh] w-full max-w-md space-y-4 overflow-y-auto rounded-3xl bg-white dark:bg-slate-900 p-6 shadow-2xl"
           >
-            <h2 className="text-xl font-extrabold text-slate-900">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
               {editing ? "Edit user" : "Add user"}
             </h2>
 
             {formError && (
-              <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-medium text-red-700">
+              <p role="alert" className="rounded-xl bg-red-50 dark:bg-red-500/10 p-3 text-sm font-medium text-red-700 dark:text-red-300">
                 {formError}
               </p>
             )}
 
             <label className="block text-sm">
-              <span className="mb-1 block font-semibold text-slate-700">Full name</span>
+              <span className="mb-1 block font-semibold text-slate-700 dark:text-slate-300">Full name</span>
               <input
                 required
                 value={form.fullName}
                 onChange={(event) => setForm({ ...form, fullName: event.target.value })}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
               />
             </label>
 
             <label className="block text-sm">
-              <span className="mb-1 block font-semibold text-slate-700">Email</span>
+              <span className="mb-1 block font-semibold text-slate-700 dark:text-slate-300">Email</span>
               <input
                 required
                 type="email"
                 value={form.email}
                 onChange={(event) => setForm({ ...form, email: event.target.value })}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
               />
             </label>
 
             <label className="block text-sm">
-              <span className="mb-1 block font-semibold text-slate-700">
+              <span className="mb-1 block font-semibold text-slate-700 dark:text-slate-300">
                 Password {editing && "(leave blank to keep current)"}
               </span>
               <input
@@ -353,16 +355,16 @@ export default function Users() {
                 placeholder={editing ? "••••••••" : "Minimum 8 characters"}
                 value={form.password}
                 onChange={(event) => setForm({ ...form, password: event.target.value })}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
               />
             </label>
 
             <label className="block text-sm">
-              <span className="mb-1 block font-semibold text-slate-700">Role</span>
+              <span className="mb-1 block font-semibold text-slate-700 dark:text-slate-300">Role</span>
               <select
                 value={form.role}
                 onChange={(event) => setForm({ ...form, role: event.target.value })}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-2.5 focus:border-teal-500 focus:outline-none"
               >
                 {ROLES.map((role) => (
                   <option key={role} value={role}>
@@ -376,7 +378,7 @@ export default function Users() {
               <button
                 type="button"
                 onClick={() => setFormOpen(false)}
-                className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600"
+                className="rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-600 dark:text-slate-300"
               >
                 Cancel
               </button>

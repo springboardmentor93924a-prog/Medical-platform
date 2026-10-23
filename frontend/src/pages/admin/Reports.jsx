@@ -196,19 +196,19 @@ export default function Reports() {
 
   if (loading) {
     return (
-      <div className="flex min-h-80 flex-col items-center justify-center gap-4 bg-slate-50 p-8">
-        <div className="rounded-2xl bg-teal-50 p-4 text-teal-700">
+      <div className="flex min-h-80 flex-col items-center justify-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-8">
+        <div className="rounded-2xl bg-teal-50 dark:bg-teal-500/10 p-4 text-teal-700 dark:text-teal-300">
           <RefreshCw size={30} className="animate-spin" />
         </div>
-        <p className="font-medium text-slate-600">Preparing your reports...</p>
+        <p className="font-medium text-slate-600 dark:text-slate-300">Preparing your reports...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
+    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 dark:from-slate-900 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
       {/* Header */}
-      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm md:p-8">
+      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm md:p-8">
         <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-100/70 blur-3xl" />
 
         <div className="relative flex flex-wrap items-center justify-between gap-5">
@@ -218,13 +218,13 @@ export default function Reports() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
                 MediStock / Analytics
               </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-4xl">
                 Reports & Analytics
               </h1>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
                 Monitor inventory value, stock risks, expiry dates and purchasing activity.
               </p>
             </div>
@@ -233,7 +233,7 @@ export default function Reports() {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={loadReports}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800/50"
             >
               <RefreshCw size={16} />
               Refresh
@@ -251,26 +251,26 @@ export default function Reports() {
       </header>
 
       {/* CSV export */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+      <section className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm md:p-6">
         <div className="mb-4 flex items-center gap-3">
-          <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-700">
+          <div className="rounded-xl bg-emerald-50 dark:bg-emerald-500/10 p-2.5 text-emerald-700 dark:text-emerald-300">
             <Download size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Download CSV</h2>
-            <p className="text-sm text-slate-500">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Download CSV</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Server-generated exports. Movements and orders accept a date range.
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-end gap-3">
-          <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Report
             <select
               value={reportType}
               onChange={(event) => setReportType(event.target.value)}
-              className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm font-medium text-slate-800 dark:text-slate-200 shadow-sm focus:border-teal-500 focus:outline-none"
             >
               {reportTypes.map((report) => (
                 <option key={report.type} value={report.type}>
@@ -282,22 +282,22 @@ export default function Reports() {
 
           {dateFiltered && (
             <>
-              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 From
                 <input
                   type="date"
                   value={dateFrom}
                   onChange={(event) => setDateFrom(event.target.value)}
-                  className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm font-medium text-slate-800 dark:text-slate-200 shadow-sm focus:border-teal-500 focus:outline-none"
                 />
               </label>
-              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 To
                 <input
                   type="date"
                   value={dateTo}
                   onChange={(event) => setDateTo(event.target.value)}
-                  className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm focus:border-teal-500 focus:outline-none"
+                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2.5 text-sm font-medium text-slate-800 dark:text-slate-200 shadow-sm focus:border-teal-500 focus:outline-none"
                 />
               </label>
             </>
@@ -314,7 +314,7 @@ export default function Reports() {
         </div>
 
         {downloadError && (
-          <p role="alert" className="mt-3 text-sm font-medium text-red-600">
+          <p role="alert" className="mt-3 text-sm font-medium text-red-600 dark:text-red-400">
             {downloadError}
           </p>
         )}
@@ -323,7 +323,7 @@ export default function Reports() {
       {error && (
         <div
           role="alert"
-          className="flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+          className="flex items-start gap-3 rounded-2xl border border-red-200 dark:border-red-500/30 bg-red-50 dark:bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300"
         >
           <AlertTriangle size={20} className="mt-0.5 shrink-0" />
           <div>
@@ -395,36 +395,36 @@ export default function Reports() {
 
       {/* Purchase summary */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-teal-100 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-teal-100 bg-white dark:bg-slate-900 p-5 shadow-sm">
           <div>
-            <p className="text-sm font-medium text-slate-500">
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
               Total recorded purchase order value
             </p>
-            <p className="mt-2 break-words text-2xl font-extrabold text-slate-900">
+            <p className="mt-2 break-words text-2xl font-extrabold text-slate-900 dark:text-white">
               {formatCurrency(totalOrderValue)}
             </p>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
               Includes all order statuses
             </p>
           </div>
-          <div className="rounded-2xl bg-teal-50 p-4 text-teal-700">
+          <div className="rounded-2xl bg-teal-50 dark:bg-teal-500/10 p-4 text-teal-700 dark:text-teal-300">
             <ShoppingCart size={27} />
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-emerald-100 bg-white dark:bg-slate-900 p-5 shadow-sm">
           <div>
-            <p className="text-sm font-medium text-slate-500">
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
               Stock batches within minimum level
             </p>
-            <p className="mt-2 text-2xl font-extrabold text-slate-900">
+            <p className="mt-2 text-2xl font-extrabold text-slate-900 dark:text-white">
               {lowStock.length}
             </p>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
               Review these batches before replenishment
             </p>
           </div>
-          <div className="rounded-2xl bg-emerald-50 p-4 text-emerald-700">
+          <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 p-4 text-emerald-700 dark:text-emerald-300">
             <CheckCircle2 size={27} />
           </div>
         </div>
@@ -434,13 +434,13 @@ export default function Reports() {
       <div className="relative">
         <Search
           size={18}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
         />
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search medicine, batch, order ID or status..."
-          className="w-full rounded-2xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm shadow-sm outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
+          className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-3.5 pl-11 pr-4 text-sm shadow-sm outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10"
         />
       </div>
 
@@ -508,8 +508,8 @@ export default function Reports() {
         />
       </div>
 
-      <footer className="rounded-2xl border border-slate-200 bg-white/80 p-4 text-xs leading-6 text-slate-500">
-        <strong className="text-slate-700">Report notes:</strong> Inventory
+      <footer className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 p-4 text-xs leading-6 text-slate-500 dark:text-slate-400">
+        <strong className="text-slate-700 dark:text-slate-300">Report notes:</strong> Inventory
         value is calculated from current recorded quantity and unit price.
         Purchase order value includes all order statuses and should not be
         interpreted as completed expenditure.
@@ -520,21 +520,21 @@ export default function Reports() {
 
 function Metric({ title, value, subtitle, icon: Icon, color }) {
   const themes = {
-    teal: "border-teal-100 from-teal-50 to-white text-teal-700",
-    blue: "border-blue-100 from-blue-50 to-white text-blue-700",
-    amber: "border-amber-100 from-amber-50 to-white text-amber-700",
-    red: "border-rose-100 from-rose-50 to-white text-rose-700",
-    purple: "border-purple-100 from-purple-50 to-white text-purple-700",
-    emerald: "border-emerald-100 from-emerald-50 to-white text-emerald-700",
+    teal: "border-teal-100 from-teal-50 dark:from-teal-500/10 to-white text-teal-700 dark:text-teal-300",
+    blue: "border-blue-100 from-blue-50 dark:from-blue-500/10 to-white text-blue-700 dark:text-blue-300",
+    amber: "border-amber-100 from-amber-50 dark:from-amber-500/10 to-white text-amber-700 dark:text-amber-300",
+    red: "border-rose-100 from-rose-50 dark:from-rose-500/10 to-white text-rose-700 dark:text-rose-300",
+    purple: "border-purple-100 from-purple-50 dark:from-purple-500/10 to-white text-purple-700 dark:text-purple-300",
+    emerald: "border-emerald-100 from-emerald-50 dark:from-emerald-500/10 to-white text-emerald-700 dark:text-emerald-300",
   };
 
   const iconThemes = {
-    teal: "bg-teal-100",
-    blue: "bg-blue-100",
-    amber: "bg-amber-100",
-    red: "bg-rose-100",
-    purple: "bg-purple-100",
-    emerald: "bg-emerald-100",
+    teal: "bg-teal-100 dark:bg-teal-500/15",
+    blue: "bg-blue-100 dark:bg-blue-500/15",
+    amber: "bg-amber-100 dark:bg-amber-500/15",
+    red: "bg-rose-100 dark:bg-rose-500/15",
+    purple: "bg-purple-100 dark:bg-purple-500/15",
+    emerald: "bg-emerald-100 dark:bg-emerald-500/15",
   };
 
   return (
@@ -543,11 +543,11 @@ function Metric({ title, value, subtitle, icon: Icon, color }) {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-slate-500">{title}</p>
-          <p className="mt-3 break-words text-2xl font-extrabold tracking-tight text-slate-900">
+          <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{title}</p>
+          <p className="mt-3 break-words text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
             {value}
           </p>
-          <p className="mt-2 text-xs leading-5 text-slate-400">{subtitle}</p>
+          <p className="mt-2 text-xs leading-5 text-slate-400 dark:text-slate-500">{subtitle}</p>
         </div>
 
         <div
@@ -571,42 +571,42 @@ function ReportTable({
   statusColumn = -1,
 }) {
   const iconThemes = {
-    amber: "bg-amber-100 text-amber-700",
-    red: "bg-rose-100 text-rose-700",
-    purple: "bg-purple-100 text-purple-700",
-    blue: "bg-blue-100 text-blue-700",
+    amber: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    red: "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300",
+    purple: "bg-purple-100 dark:bg-purple-500/15 text-purple-700 dark:text-purple-300",
+    blue: "bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300",
   };
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
-      <header className="flex items-center gap-3 border-b border-slate-100 p-5">
+    <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition hover:shadow-md">
+      <header className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 p-5">
         <div
           className={`rounded-xl p-3 ${iconThemes[color] || iconThemes.blue}`}
         >
           <Icon size={21} />
         </div>
         <div className="min-w-0">
-          <h2 className="font-bold text-slate-900">{title}</h2>
-          <p className="mt-1 text-xs leading-5 text-slate-500">
+          <h2 className="font-bold text-slate-900 dark:text-white">{title}</h2>
+          <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
             {description}
           </p>
         </div>
-        <span className="ml-auto rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
+        <span className="ml-auto rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-bold text-slate-600 dark:text-slate-300">
           {rows.length}
         </span>
       </header>
 
       {rows.length === 0 ? (
         <div className="flex flex-col items-center px-4 py-10 text-center">
-          <div className="rounded-2xl bg-slate-50 p-4 text-slate-400">
+          <div className="rounded-2xl bg-slate-50 dark:bg-slate-800/50 p-4 text-slate-400 dark:text-slate-500">
             <CheckCircle2 size={27} />
           </div>
-          <p className="mt-3 text-sm font-medium text-slate-600">{emptyText}</p>
+          <p className="mt-3 text-sm font-medium text-slate-600 dark:text-slate-300">{emptyText}</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
               <tr>
                 {headers.map((header) => (
                   <th key={header} className="whitespace-nowrap px-4 py-3.5">
@@ -616,28 +616,28 @@ function ReportTable({
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {rows.map((row, index) => (
                 <tr key={index} className="transition hover:bg-teal-50/60">
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="whitespace-nowrap px-4 py-4 text-slate-600"
+                      className="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300"
                     >
                       {cellIndex === statusColumn ? (
                         <span
                           className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
                             String(cell).toUpperCase() === "PENDING"
-                              ? "bg-amber-100 text-amber-800"
+                              ? "bg-amber-100 dark:bg-amber-500/15 text-amber-800 dark:text-amber-200"
                               : String(cell).toUpperCase() === "CANCELLED"
-                              ? "bg-rose-100 text-rose-800"
-                              : "bg-emerald-100 text-emerald-800"
+                              ? "bg-rose-100 dark:bg-rose-500/15 text-rose-800 dark:text-rose-200"
+                              : "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-200"
                           }`}
                         >
                           {cell}
                         </span>
                       ) : (
-                        <span className={cellIndex === 0 ? "font-semibold text-slate-800" : ""}>
+                        <span className={cellIndex === 0 ? "font-semibold text-slate-800 dark:text-slate-200" : ""}>
                           {cell ?? "—"}
                         </span>
                       )}
