@@ -53,8 +53,9 @@ public class AuthService {
         String token = jwtService.generateToken(email, authorities);
 
         return new LoginResponse(
-                token,
-                "Bearer",
-                jwtService.getExpirationSeconds());
+        token,
+        "Bearer",
+        jwtService.getExpirationSeconds(),
+        user.getRole().getName());
     }
 }

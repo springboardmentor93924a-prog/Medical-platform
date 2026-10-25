@@ -3,10 +3,12 @@ import { AlertTriangle, CalendarClock, ClipboardList, Clock, IndianRupee, Packag
 import { useApp } from "../context/AppContext.jsx";
 import { BarList, Card, Empty, PageHeader, Row, Stat, Tag } from "../components/ui.jsx";
 import { MY_SUPPLIER, categories, daysTo, expiryStatus, inr, stockStatus } from "../data/mock.js";
+import AdminDashboard from "./AdminDashboard.jsx";
 
 export default function Dashboard() {
   const { user, medicines, orders, suppliers, logs } = useApp();
   const role = user.role;
+    if (role === "Admin") return <AdminDashboard />;
   const low = medicines.filter((m) => stockStatus(m) !== "In stock");
   const exp = medicines.filter((m) => expiryStatus(m) !== "Safe").sort((a, b) => daysTo(a.expiry) - daysTo(b.expiry));
   const mine = orders.filter((o) => o.supplier === MY_SUPPLIER);
