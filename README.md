@@ -71,11 +71,11 @@ Frontend API base URL: `VITE_API_URL` env at build time
 - [`backend/README.md`](backend/README.md) — backend setup, config, structure, gotchas
 - [`backend/API.md`](backend/API.md) — full endpoint reference with roles and examples
 
-## Hosting (planned)
+## Hosting (live)
 
 - **Backend** → Render web service (Docker), env vars: `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `JWT_EXPIRATION_MS`, `CORS_ORIGINS`
 - **Frontend** → Render static site, build `npm ci && npm run build`, publish `dist` (set `VITE_API_URL`)
-- **DB** → hosted MySQL/MariaDB (free tier); move to OCI VPS MariaDB or bigger host when data grows (free tier = 5 MB)
+- **DB** → Aiven MySQL 8.4 (TLS required, `sslMode=REQUIRED`); previous freesqldatabase host expired. API URL lives in `backend/.env` (git-ignored).
 
 ## Team & workflow
 
@@ -86,7 +86,7 @@ Frontend API base URL: `VITE_API_URL` env at build time
 
 ## Known gaps / deferred
 
-- Free DB has no TLS + MySQL 5.5 — demo only, swap later
+- Demo data only; production needs backups, migrations (Flyway) and a paid DB tier
 - No tests, no Maven wrapper yet
 - Token: fixed 8h expiry (configurable) — no refresh tokens yet
 - Stock movements list is loaded whole (client-side filter); server paging

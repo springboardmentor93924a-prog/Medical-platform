@@ -17,7 +17,7 @@
 - Wrote `database/seed-demo.sql` — 4 roles, 4 demo users, 8 medicines,
   3 suppliers, 8 inventory batches (incl. expired / expiring / low-stock),
   1 purchase order + items, 5 stock logs — idempotent re-runnable
-- Created both on the hosted free MySQL DB (`sql12.freesqldatabase.com`)
+- Created both on the hosted MySQL DB (now Aiven MySQL 8.4; earlier free host expired)
   → ~0.44 MB used of 5 MB
 
 ### Backend config
