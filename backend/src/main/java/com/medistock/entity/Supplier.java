@@ -71,7 +71,30 @@ public class Supplier {
         return active;
     }
 
+    @Transient
+    public String getPhone() {
+        return contactNumber;
+    }
+
+    public void setPhone(String phone) {
+        if (this.contactNumber == null || this.contactNumber.isBlank()) {
+            this.contactNumber = phone;
+        }
+    }
+
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+
+    @Column(name = "medicines", length = 500)
+private String medicines;
+
+public String getMedicines() {
+    return medicines;
+}
+
+public void setMedicines(String medicines) {
+    this.medicines = medicines;
+}
 }

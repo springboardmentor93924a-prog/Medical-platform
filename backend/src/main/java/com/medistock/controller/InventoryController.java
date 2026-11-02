@@ -131,10 +131,16 @@ public class InventoryController {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Unit price cannot be negative");
         }
+        if (inventory.getManufacturingDate() != null
+        && inventory.getExpiryDate() != null
+        && inventory.getExpiryDate().isBefore(
+                inventory.getManufacturingDate())) {
 
-        if (inventory.getExpiryDate() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Expiry date is required");
-        }
+    throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Expiry date cannot be before manufacturing date"
+    );
+}
+        
     }
 }

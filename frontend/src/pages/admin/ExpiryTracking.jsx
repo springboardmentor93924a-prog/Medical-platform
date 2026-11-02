@@ -129,43 +129,42 @@ export default function ExpiryTracking() {
     });
 
   return (
-    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 dark:from-slate-900 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
-      {/* Header */}
-      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm md:p-8">
-        <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-100/70 blur-3xl" />
+    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 p-4 transition-colors dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 md:p-7 lg:p-8">
+       
+{/* Header */}
+<header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-emerald-50 p-5 shadow-sm dark:border-teal-900/50 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/30 md:p-7">
+  <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-200/40 blur-3xl dark:bg-teal-500/10" />
 
-        <div className="relative flex flex-wrap items-center justify-between gap-5">
-          <div className="flex items-center gap-4">
-            <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
-              <CalendarClock size={30} />
-            </div>
+  <div className="relative flex flex-wrap items-center justify-between gap-5">
+    <div className="flex items-center gap-4">
+      <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
+        <CalendarClock size={30} />
+      </div>
 
-            <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
-                MediStock / Inventory Safety
-              </p>
-              <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-4xl">
-                Expiry Tracking
-              </h1>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                Monitor batch expiry dates and identify stock that needs attention.
-              </p>
-            </div>
-          </div>
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
+          MediStock / Inventory Safety
+        </p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white md:text-4xl">
+          Expiry Tracking
+        </h1>
+        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Monitor batch expiry dates and identify stock that needs attention.
+        </p>
+      </div>
+    </div>
 
-          <button
-            onClick={loadData}
-            disabled={loading}
-            className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-teal-600/20 transition hover:-translate-y-0.5 hover:bg-teal-700 disabled:opacity-50"
-          >
-            <RefreshCw
-              size={17}
-              className={loading ? "animate-spin" : ""}
-            />
-            Refresh data
-          </button>
-        </div>
-      </header>
+    <button
+      onClick={loadData}
+      disabled={loading}
+      className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-teal-600/20 transition hover:-translate-y-0.5 hover:bg-teal-700 disabled:opacity-50"
+    >
+      <RefreshCw size={17} className={loading ? "animate-spin" : ""} />
+      Refresh data
+    </button>
+  </div>
+</header>
+
 
       {error && (
         <div
@@ -243,7 +242,7 @@ export default function ExpiryTracking() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Search medicine, batch or date..."
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 py-3 pl-10 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+                className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-400"
               />
             </div>
 
@@ -318,7 +317,7 @@ export default function ExpiryTracking() {
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-slate-100 bg-white dark:divide-slate-800 dark:bg-slate-900">
                 {filteredInventory.map((item) => {
                   const status = getStatus(item);
                   const days = getDaysLeft(item.expiryDate);
@@ -340,7 +339,7 @@ export default function ExpiryTracking() {
                   return (
                     <tr
                       key={item.inventoryId}
-                      className="transition hover:bg-teal-50/50"
+                      className="transition-colors hover:bg-teal-50/70 dark:hover:bg-teal-500/5"
                     >
                       <td className="px-5 py-4">
                         <div className="font-semibold text-slate-800 dark:text-slate-200">
@@ -422,11 +421,11 @@ export default function ExpiryTracking() {
 
 function Metric({ title, value, subtitle, icon: Icon, color }) {
   const themes = {
-    teal: "border-teal-100 from-teal-50 dark:from-teal-500/10 to-white",
-    red: "border-rose-100 from-rose-50 dark:from-rose-500/10 to-white",
-    amber: "border-amber-100 from-amber-50 dark:from-amber-500/10 to-white",
-    emerald: "border-emerald-100 from-emerald-50 dark:from-emerald-500/10 to-white",
-  };
+  teal: "border-teal-100 from-teal-50 to-white dark:border-teal-900/50 dark:from-teal-950/40 dark:to-slate-900",
+  red: "border-rose-100 from-rose-50 to-white dark:border-rose-900/50 dark:from-rose-950/40 dark:to-slate-900",
+  amber: "border-amber-100 from-amber-50 to-white dark:border-amber-900/50 dark:from-amber-950/40 dark:to-slate-900",
+  emerald: "border-emerald-100 from-emerald-50 to-white dark:border-emerald-900/50 dark:from-emerald-950/40 dark:to-slate-900",
+};
 
   const iconThemes = {
     teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",

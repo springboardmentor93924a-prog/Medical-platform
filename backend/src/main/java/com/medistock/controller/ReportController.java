@@ -1,3 +1,4 @@
+
 package com.medistock.controller;
 
 import com.medistock.entity.Inventory;
@@ -7,14 +8,16 @@ import com.medistock.entity.Report;
 import com.medistock.entity.StockLog;
 import com.medistock.entity.Supplier;
 import com.medistock.entity.User;
+
 import com.medistock.repository.InventoryRepository;
 import com.medistock.repository.MedicineRepository;
 import com.medistock.repository.PurchaseOrderRepository;
-import com.medistock.repository.ReportRepository;
 import com.medistock.repository.StockLogRepository;
 import com.medistock.repository.SupplierRepository;
 import com.medistock.repository.UserRepository;
-import com.medistock.service.AuditService;
+
+import com.medistock.service.SystemMonitoringService;
+import com.medistock.service.ReportService;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,6 +33,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,37 +52,44 @@ public class ReportController {
     private final StockLogRepository stockLogRepository;
     private final UserRepository userRepository;
     private final PurchaseOrderRepository purchaseOrderRepository;
-    private final ReportRepository reportRepository;
-    private final AuditService auditService;
+    private final SystemMonitoringService systemMonitoringService;
+    private final ReportService reportService;
 
-    public ReportController(InventoryRepository inventoryRepository,
-                            MedicineRepository medicineRepository,
-                            SupplierRepository supplierRepository,
-                            StockLogRepository stockLogRepository,
-                            UserRepository userRepository,
-                            PurchaseOrderRepository purchaseOrderRepository,
-                            ReportRepository reportRepository,
-                            AuditService auditService) {
+    public ReportController(
+            InventoryRepository inventoryRepository,
+            MedicineRepository medicineRepository,
+            SupplierRepository supplierRepository,
+            StockLogRepository stockLogRepository,
+            UserRepository userRepository,
+            PurchaseOrderRepository purchaseOrderRepository,
+            SystemMonitoringService systemMonitoringService,
+            ReportService reportService) {
+
         this.inventoryRepository = inventoryRepository;
         this.medicineRepository = medicineRepository;
         this.supplierRepository = supplierRepository;
         this.stockLogRepository = stockLogRepository;
         this.userRepository = userRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
-        this.reportRepository = reportRepository;
-        this.auditService = auditService;
+        this.systemMonitoringService = systemMonitoringService;
+        this.reportService = reportService;
     }
+
+    // ---------- REPORT TYPES ----------
 
     @GetMapping("/types")
     public List<Map<String, String>> types() {
+
         return List.of(
                 Map.of("type", "stock", "name", "Stock on hand"),
                 Map.of("type", "expiry", "name", "Expiry status"),
                 Map.of("type", "movements", "name", "Stock movements"),
-                Map.of("type", "users", "name", "User directory"),
                 Map.of("type", "orders", "name", "Purchase orders"),
-                Map.of("type", "low-stock", "name", "Low stock items"));
+                Map.of("type", "low-stock", "name", "Low stock items")
+        );
     }
+
+    // ---------- DOWNLOAD CSV ----------
 
     @GetMapping("/{type}.csv")
     public ResponseEntity<byte[]> downloadCsv(
@@ -86,58 +98,147 @@ public class ReportController {
             @RequestParam(required = false) String to,
             Authentication authentication) {
 
+        // User directory is ADMIN-only.
+        if ("users".equals(type) && !isAdmin(authentication)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Only administrators can download user reports."
+            );
+        }
+
+        // Validate date parameters.
+        LocalDate fromDate = parseDate(from);
+        LocalDate toDate = parseDate(to);
+
+        if (fromDate != null &&
+                toDate != null &&
+                fromDate.isAfter(toDate)) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "From date cannot be later than To date."
+            );
+        }
+
         String csv;
         String label;
 
         switch (type) {
-            case "stock" -> { csv = stockCsv(); label = "Stock on hand"; }
-            case "expiry" -> { csv = expiryCsv(); label = "Expiry status"; }
-            case "movements" -> { csv = movementsCsv(from, to); label = "Stock movements"; }
-            case "users" -> { csv = usersCsv(); label = "User directory"; }
-            case "orders" -> { csv = ordersCsv(from, to); label = "Purchase orders"; }
-            case "low-stock" -> { csv = lowStockCsv(); label = "Low stock items"; }
+
+            case "stock" -> {
+                csv = stockCsv();
+                label = "Stock on hand";
+            }
+
+            case "expiry" -> {
+                csv = expiryCsv();
+                label = "Expiry status";
+            }
+
+            case "movements" -> {
+                csv = movementsCsv(fromDate, toDate);
+                label = "Stock movements";
+            }
+
+            case "users" -> {
+                csv = usersCsv();
+                label = "User directory";
+            }
+
+            case "orders" -> {
+                csv = ordersCsv(fromDate, toDate);
+                label = "Purchase orders";
+            }
+
+            case "low-stock" -> {
+                csv = lowStockCsv();
+                label = "Low stock items";
+            }
+
             default -> throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Unknown report type: " + type);
+                    HttpStatus.NOT_FOUND,
+                    "Unknown report type: " + type
+            );
         }
 
-        Long userId = userRepository.findByEmail(authentication.getName())
-                .map(User::getUserId)
-                .orElse(null);
+        // Save generated report.
+        String generatedBy = authentication == null
+                ? null
+                : authentication.getName();
 
-        Report report = new Report();
-        report.setReportType(type);
-        report.setGeneratedBy(userId);
-        report.setFilePath("generated/" + type + "-" + LocalDate.now() + ".csv");
-        reportRepository.save(report);
+        Report report = reportService.saveReport(
+                type,
+                "generated/" + type + "-" + LocalDate.now() + ".csv",
+                generatedBy
+        );
 
-        auditService.record("REPORT_GENERATED", "REPORT", report.getReportId(),
-                "Generated " + label + " CSV");
+        // Record report generation in System Monitoring.
+        systemMonitoringService.record(
+                "REPORT_GENERATED",
+                "REPORT",
+                report.getReportId(),
+                "Generated " + label + " CSV"
+        );
 
-        String filename = "medistock-" + type + "-" + LocalDate.now() + ".csv";
+        String filename =
+                "medistock-" + type + "-" + LocalDate.now() + ".csv";
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + filename + "\"")
-                .contentType(new MediaType("text", "csv", StandardCharsets.UTF_8))
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + filename + "\""
+                )
+                .contentType(
+                        new MediaType(
+                                "text",
+                                "csv",
+                                StandardCharsets.UTF_8
+                        )
+                )
                 .body(csv.getBytes(StandardCharsets.UTF_8));
     }
 
-    // ---------- CSV builders ----------
+    // ---------- SECURITY HELPER ----------
+
+    private boolean isAdmin(Authentication authentication) {
+
+        if (authentication == null) {
+            return false;
+        }
+
+        return authentication.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(role -> role.equals("ROLE_ADMIN"));
+    }
+
+    // ---------- STOCK CSV ----------
 
     private String stockCsv() {
+
         Map<Long, Medicine> medicines = medicineMap();
         Map<Long, Supplier> suppliers = supplierMap();
 
         StringBuilder sb = new StringBuilder(
                 "inventory_id,medicine,category,batch,quantity,minimum_stock,"
-                        + "unit_price,stock_value,supplier,expiry_date\n");
+                        + "unit_price,stock_value,supplier,expiry_date\n"
+        );
 
         for (Inventory item : inventoryRepository.findAll()) {
+
             Medicine med = medicines.get(item.getMedicineId());
+
             Supplier sup = item.getSupplierId() == null
-                    ? null : suppliers.get(item.getSupplierId());
-            BigDecimal value = item.getUnitPrice()
-                    .multiply(BigDecimal.valueOf(item.getQuantity()));
+                    ? null
+                    : suppliers.get(item.getSupplierId());
+
+            BigDecimal unitPrice = item.getUnitPrice() == null
+                    ? BigDecimal.ZERO
+                    : item.getUnitPrice();
+
+            BigDecimal value = unitPrice.multiply(
+                    BigDecimal.valueOf(item.getQuantity())
+            );
 
             sb.append(csv(
                     item.getInventoryId(),
@@ -146,51 +247,83 @@ public class ReportController {
                     item.getBatchNumber(),
                     item.getQuantity(),
                     item.getMinimumStock(),
-                    item.getUnitPrice(),
+                    unitPrice,
                     value,
                     sup == null ? "" : sup.getSupplierName(),
-                    item.getExpiryDate() == null ? "" : item.getExpiryDate().format(DATE)
+                    item.getExpiryDate() == null
+                            ? ""
+                            : item.getExpiryDate().format(DATE)
             )).append('\n');
         }
+
         return sb.toString();
     }
 
+    // ---------- EXPIRY CSV ----------
+
     private String expiryCsv() {
+
         Map<Long, Medicine> medicines = medicineMap();
         LocalDate today = LocalDate.now();
 
         StringBuilder sb = new StringBuilder(
-                "inventory_id,medicine,batch,expiry_date,status,quantity\n");
+                "inventory_id,medicine,batch,expiry_date,status,quantity\n"
+        );
 
-        List<Inventory> items = inventoryRepository.findAll().stream()
-                .sorted((a, b) -> a.getExpiryDate().compareTo(b.getExpiryDate()))
+        List<Inventory> items = inventoryRepository.findAll()
+                .stream()
+                .sorted((a, b) -> {
+
+                    if (a.getExpiryDate() == null) return 1;
+                    if (b.getExpiryDate() == null) return -1;
+
+                    return a.getExpiryDate()
+                            .compareTo(b.getExpiryDate());
+                })
                 .toList();
 
         for (Inventory item : items) {
+
             Medicine med = medicines.get(item.getMedicineId());
-            String status = expiryStatus(item.getExpiryDate(), today);
+
+            String status = expiryStatus(
+                    item.getExpiryDate(),
+                    today
+            );
 
             sb.append(csv(
                     item.getInventoryId(),
                     med == null ? "" : med.getMedicineName(),
                     item.getBatchNumber(),
-                    item.getExpiryDate() == null ? "" : item.getExpiryDate().format(DATE),
+                    item.getExpiryDate() == null
+                            ? ""
+                            : item.getExpiryDate().format(DATE),
                     status,
                     item.getQuantity()
             )).append('\n');
         }
+
         return sb.toString();
     }
 
+    // ---------- LOW STOCK CSV ----------
+
     private String lowStockCsv() {
+
         Map<Long, Medicine> medicines = medicineMap();
 
         StringBuilder sb = new StringBuilder(
-                "inventory_id,medicine,batch,quantity,minimum_stock,shortfall\n");
+                "inventory_id,medicine,batch,quantity,minimum_stock,shortfall\n"
+        );
 
         for (Inventory item : inventoryRepository.findLowStockItems()) {
+
             Medicine med = medicines.get(item.getMedicineId());
-            int shortfall = Math.max(0, item.getMinimumStock() - item.getQuantity());
+
+            int shortfall = Math.max(
+                    0,
+                    item.getMinimumStock() - item.getQuantity()
+            );
 
             sb.append(csv(
                     item.getInventoryId(),
@@ -201,140 +334,223 @@ public class ReportController {
                     shortfall
             )).append('\n');
         }
+
         return sb.toString();
     }
 
-    private String movementsCsv(String from, String to) {
+    // ---------- STOCK MOVEMENTS CSV ----------
+
+    private String movementsCsv(
+            LocalDate fromDate,
+            LocalDate toDate) {
+
         Map<Long, Medicine> medicines = medicineMap();
+
         Map<Long, Inventory> inventoryMap = new HashMap<>();
+
         inventoryRepository.findAll()
-                .forEach(i -> inventoryMap.put(i.getInventoryId(), i));
+                .forEach(item ->
+                        inventoryMap.put(item.getInventoryId(), item)
+                );
 
         Map<Long, String> users = new HashMap<>();
-        userRepository.findAll()
-                .forEach(u -> users.put(u.getUserId(), u.getEmail()));
 
-        LocalDate fromDate = parseDate(from);
-        LocalDate toDate = parseDate(to);
+        userRepository.findAll()
+                .forEach(user ->
+                        users.put(user.getUserId(), user.getEmail())
+                );
 
         StringBuilder sb = new StringBuilder(
                 "stock_log_id,changed_at,medicine,batch,movement_type,"
-                        + "change_quantity,user,notes\n");
+                        + "change_quantity,user,notes\n"
+        );
 
-        for (StockLog log : stockLogRepository.findAllByOrderByChangedAtDesc()) {
+        for (StockLog log :
+                stockLogRepository.findAllByOrderByChangedAtDesc()) {
+
             LocalDate changed = log.getChangedAt() == null
-                    ? null : log.getChangedAt().toLocalDate();
+                    ? null
+                    : log.getChangedAt().toLocalDate();
 
-            if (fromDate != null && (changed == null || changed.isBefore(fromDate))) {
+            if (fromDate != null &&
+                    (changed == null || changed.isBefore(fromDate))) {
                 continue;
             }
-            if (toDate != null && (changed == null || changed.isAfter(toDate))) {
+
+            if (toDate != null &&
+                    (changed == null || changed.isAfter(toDate))) {
                 continue;
             }
 
             Inventory item = inventoryMap.get(log.getInventoryId());
+
             Medicine med = item == null
-                    ? null : medicines.get(item.getMedicineId());
+                    ? null
+                    : medicines.get(item.getMedicineId());
 
             sb.append(csv(
                     log.getStockLogId(),
-                    log.getChangedAt() == null ? "" : log.getChangedAt().toString(),
+                    log.getChangedAt() == null
+                            ? ""
+                            : log.getChangedAt().toString(),
                     med == null ? "" : med.getMedicineName(),
                     item == null ? "" : item.getBatchNumber(),
                     log.getMovementType(),
                     log.getChangeQuantity(),
                     log.getUserId() == null
-                            ? "" : users.getOrDefault(log.getUserId(), ""),
+                            ? ""
+                            : users.getOrDefault(log.getUserId(), ""),
                     nullSafe(log.getNotes())
             )).append('\n');
         }
+
         return sb.toString();
     }
 
+    // ---------- USERS CSV (ADMIN ONLY) ----------
+
     private String usersCsv() {
+
         StringBuilder sb = new StringBuilder(
-                "user_id,full_name,email,role,active,created_at\n");
+                "user_id,full_name,email,role,active,created_at\n"
+        );
 
         for (User user : userRepository.findAll()) {
+
             sb.append(csv(
                     user.getUserId(),
                     user.getFullName(),
                     user.getEmail(),
-                    user.getRole().getRoleName(),
-                    Boolean.TRUE.equals(user.getActive()) ? "yes" : "no",
-                    user.getCreatedAt() == null ? "" : user.getCreatedAt().toString()
+                    user.getRole() == null
+                            ? ""
+                            : user.getRole().getRoleName(),
+                    Boolean.TRUE.equals(user.getActive())
+                            ? "yes"
+                            : "no",
+                    user.getCreatedAt() == null
+                            ? ""
+                            : user.getCreatedAt().toString()
             )).append('\n');
         }
+
         return sb.toString();
     }
 
-    private String ordersCsv(String from, String to) {
-        Map<Long, Supplier> suppliers = supplierMap();
-        Map<Long, String> users = new HashMap<>();
-        userRepository.findAll()
-                .forEach(u -> users.put(u.getUserId(), u.getEmail()));
+    // ---------- PURCHASE ORDERS CSV ----------
 
-        LocalDate fromDate = parseDate(from);
-        LocalDate toDate = parseDate(to);
+    private String ordersCsv(
+            LocalDate fromDate,
+            LocalDate toDate) {
+
+        Map<Long, Supplier> suppliers = supplierMap();
+
+        Map<Long, String> users = new HashMap<>();
+
+        userRepository.findAll()
+                .forEach(user ->
+                        users.put(user.getUserId(), user.getEmail())
+                );
 
         StringBuilder sb = new StringBuilder(
-                "purchase_order_id,order_date,supplier,status,total_amount,created_by\n");
+                "purchase_order_id,order_date,supplier,status,total_amount,created_by\n"
+        );
 
-        for (PurchaseOrder order : purchaseOrderRepository.findAllByOrderByOrderDateDesc()) {
+        for (PurchaseOrder order :
+                purchaseOrderRepository.findAllByOrderByOrderDateDesc()) {
+
             LocalDate orderDate = order.getOrderDate();
 
-            if (fromDate != null && (orderDate == null || orderDate.isBefore(fromDate))) {
-                continue;
-            }
-            if (toDate != null && (orderDate == null || orderDate.isAfter(toDate))) {
+            if (fromDate != null &&
+                    (orderDate == null || orderDate.isBefore(fromDate))) {
                 continue;
             }
 
-            Supplier sup = suppliers.get(order.getSupplierId());
+            if (toDate != null &&
+                    (orderDate == null || orderDate.isAfter(toDate))) {
+                continue;
+            }
+
+            Supplier sup = order.getSupplierId() == null
+                    ? null
+                    : suppliers.get(order.getSupplierId());
 
             sb.append(csv(
                     order.getPurchaseOrderId(),
-                    orderDate == null ? "" : orderDate.format(DATE),
+                    orderDate == null
+                            ? ""
+                            : orderDate.format(DATE),
                     sup == null ? "" : sup.getSupplierName(),
                     order.getStatus(),
                     order.getTotalAmount(),
                     order.getCreatedBy() == null
-                            ? "" : users.getOrDefault(order.getCreatedBy(), "")
+                            ? ""
+                            : users.getOrDefault(order.getCreatedBy(), "")
             )).append('\n');
         }
+
         return sb.toString();
     }
 
-    // ---------- helpers ----------
+    // ---------- HELPER METHODS ----------
 
     private Map<Long, Medicine> medicineMap() {
+
         Map<Long, Medicine> map = new HashMap<>();
-        medicineRepository.findAll().forEach(m -> map.put(m.getMedicineId(), m));
+
+        medicineRepository.findAll()
+                .forEach(medicine ->
+                        map.put(medicine.getMedicineId(), medicine)
+                );
+
         return map;
     }
 
     private Map<Long, Supplier> supplierMap() {
+
         Map<Long, Supplier> map = new HashMap<>();
-        supplierRepository.findAll().forEach(s -> map.put(s.getSupplierId(), s));
+
+        supplierRepository.findAll()
+                .forEach(supplier ->
+                        map.put(supplier.getSupplierId(), supplier)
+                );
+
         return map;
     }
 
-    private static String expiryStatus(LocalDate expiry, LocalDate today) {
-        if (expiry == null) return "UNKNOWN";
-        if (expiry.isBefore(today)) return "EXPIRED";
-        if (!expiry.isAfter(today.plusDays(30))) return "EXPIRING_SOON";
+    private static String expiryStatus(
+            LocalDate expiry,
+            LocalDate today) {
+
+        if (expiry == null) {
+            return "UNKNOWN";
+        }
+
+        if (expiry.isBefore(today)) {
+            return "EXPIRED";
+        }
+
+        if (!expiry.isAfter(today.plusDays(30))) {
+            return "EXPIRING_SOON";
+        }
+
         return "SAFE";
     }
 
     private static LocalDate parseDate(String value) {
+
         if (value == null || value.isBlank()) {
             return null;
         }
+
         try {
-            return LocalDate.parse(value.trim());
-        } catch (IllegalArgumentException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Dates must be in YYYY-MM-DD format");
+            return LocalDate.parse(value.trim(), DATE);
+
+        } catch (DateTimeParseException ex) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Dates must be in YYYY-MM-DD format"
+            );
         }
     }
 
@@ -342,19 +558,36 @@ public class ReportController {
         return value == null ? "" : value;
     }
 
+    // ---------- CSV ESCAPING ----------
+
     private static String csv(Object... cells) {
+
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < cells.length; i++) {
+
             if (i > 0) {
                 sb.append(',');
             }
-            String value = cells[i] == null ? "" : cells[i].toString();
-            if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
-                sb.append('"').append(value.replace("\"", "\"\"")).append('"');
+
+            String value = cells[i] == null
+                    ? ""
+                    : cells[i].toString();
+
+            if (value.contains(",") ||
+                    value.contains("\"") ||
+                    value.contains("\n") ||
+                    value.contains("\r")) {
+
+                sb.append('"')
+                        .append(value.replace("\"", "\"\""))
+                        .append('"');
+
             } else {
                 sb.append(value);
             }
         }
+
         return sb.toString();
     }
 }

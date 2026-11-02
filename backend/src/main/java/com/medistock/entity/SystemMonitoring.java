@@ -1,11 +1,12 @@
+
 package com.medistock.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "audit_logs")
-public class AuditLog {
+@Table(name = "system_monitoring")
+public class SystemMonitoring {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

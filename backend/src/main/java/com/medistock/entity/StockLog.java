@@ -1,4 +1,3 @@
-
 package com.medistock.entity;
 
 import jakarta.persistence.*;
@@ -16,33 +15,104 @@ public class StockLog {
     @Column(name = "inventory_id", nullable = false)
     private Long inventoryId;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "movement_type", nullable = false, length = 20)
+    private String movementType;
 
     @Column(name = "change_quantity", nullable = false)
     private Integer changeQuantity;
 
-    @Column(name = "movement_type", nullable = false, length = 30)
-    private String movementType;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @Column(name = "notes")
+    @Column(name = "notes", length = 500)
     private String notes;
 
-    @Column(name = "changed_at", insertable = false, updatable = false)
+    @Column(name = "changed_at", nullable = false)
     private LocalDateTime changedAt;
 
-    public Long getStockLogId() { return stockLogId; }
-    public Long getInventoryId() { return inventoryId; }
-    public Long getUserId() { return userId; }
-    public Integer getChangeQuantity() { return changeQuantity; }
-    public String getMovementType() { return movementType; }
-    public String getNotes() { return notes; }
-    public LocalDateTime getChangedAt() { return changedAt; }
+    // Default constructor
+    public StockLog() {
+    }
 
-    public void setStockLogId(Long stockLogId) { this.stockLogId = stockLogId; }
-    public void setInventoryId(Long inventoryId) { this.inventoryId = inventoryId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public void setChangeQuantity(Integer changeQuantity) { this.changeQuantity = changeQuantity; }
-    public void setMovementType(String movementType) { this.movementType = movementType; }
-    public void setNotes(String notes) { this.notes = notes; }
+    // Parameterized constructor
+    public StockLog(
+            Long inventoryId,
+            String movementType,
+            Integer changeQuantity,
+            Long userId,
+            String notes) {
+
+        this.inventoryId = inventoryId;
+        this.movementType = movementType;
+        this.changeQuantity = changeQuantity;
+        this.userId = userId;
+        this.notes = notes;
+        this.changedAt = LocalDateTime.now();
+    }
+
+    // Automatically set timestamp before inserting
+    @PrePersist
+    protected void onCreate() {
+        if (this.changedAt == null) {
+            this.changedAt = LocalDateTime.now();
+        }
+    }
+
+    // Getters and Setters
+
+    public Long getStockLogId() {
+        return stockLogId;
+    }
+
+    public void setStockLogId(Long stockLogId) {
+        this.stockLogId = stockLogId;
+    }
+
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
+
+    public String getMovementType() {
+        return movementType;
+    }
+
+    public void setMovementType(String movementType) {
+        this.movementType = movementType;
+    }
+
+    public Integer getChangeQuantity() {
+        return changeQuantity;
+    }
+
+    public void setChangeQuantity(Integer changeQuantity) {
+        this.changeQuantity = changeQuantity;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public LocalDateTime getChangedAt() {
+        return changedAt;
+    }
+
+    public void setChangedAt(LocalDateTime changedAt) {
+        this.changedAt = changedAt;
+    }
 }

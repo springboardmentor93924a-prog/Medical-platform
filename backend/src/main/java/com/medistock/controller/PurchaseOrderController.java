@@ -1,3 +1,4 @@
+
 package com.medistock.controller;
 
 import com.medistock.dto.PurchaseOrderRequest;
@@ -68,12 +69,15 @@ public class PurchaseOrderController {
 
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "Authenticated user not found"));
+                        HttpStatus.UNAUTHORIZED,
+                        "Authenticated user not found"));
 
         PurchaseOrder order = purchaseOrderService.createOrder(
                 request, user.getUserId());
 
-        auditService.record("CREATE", "PURCHASE_ORDER",
+        auditService.record(
+                "CREATE",
+                "PURCHASE_ORDER",
                 order.getPurchaseOrderId(),
                 "Raised PO #" + order.getPurchaseOrderId()
                         + " for supplier #" + order.getSupplierId()
@@ -82,37 +86,87 @@ public class PurchaseOrderController {
         return order;
     }
 
+    // ADMIN ONLY: Approve, receive or cancel an order
     @PatchMapping("/{id}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
+    @PreAuthorize("hasRole('ADMIN')")
     public PurchaseOrder updateStatus(
             @PathVariable Long id,
-            @RequestBody StatusRequest request) {
+            @RequestBody StatusRequest request,
+            Authentication authentication) {
 
-        PurchaseOrder order = purchaseOrderService.getOrder(id);
-
-        String status = request.getStatus() == null
+        // Validate requested status
+        String newStatus = request.getStatus() == null
                 ? ""
                 : request.getStatus().trim().toUpperCase();
 
-        if (!status.equals("PENDING") && !status.equals("APPROVED")
-                && !status.equals("RECEIVED") && !status.equals("CANCELLED")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Status must be PENDING, APPROVED, RECEIVED or CANCELLED");
+        if (!newStatus.equals("APPROVED")
+                && !newStatus.equals("RECEIVED")
+                && !newStatus.equals("CANCELLED")) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Status must be APPROVED, RECEIVED or CANCELLED");
         }
 
-        order.setStatus(status);
-        PurchaseOrder saved = purchaseOrderService.saveOrder(order);
+        // Find authenticated admin
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED,
+                        "Authenticated user not found"));
 
-        auditService.record("UPDATE", "PURCHASE_ORDER", id,
-                "PO #" + id + " marked " + status);
+        // Find purchase order
+        PurchaseOrder order = purchaseOrderService.getOrder(id);
 
-        return saved;
+        String currentStatus = order.getStatus() == null
+                ? ""
+                : order.getStatus().trim().toUpperCase();
+
+        // Validate allowed status transitions
+        boolean validTransition =
+                (currentStatus.equals("PENDING")
+                        && (newStatus.equals("APPROVED")
+                        || newStatus.equals("CANCELLED")))
+                ||
+                (currentStatus.equals("APPROVED")
+                        && (newStatus.equals("RECEIVED")
+                        || newStatus.equals("CANCELLED")));
+
+        if (!validTransition) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Cannot change purchase order status from "
+                            + currentStatus + " to " + newStatus);
+        }
+
+        // Update order status
+        order.setStatus(newStatus);
+
+        PurchaseOrder savedOrder =
+                purchaseOrderService.saveOrder(order);
+
+        // Record audit information
+        auditService.record(
+                "UPDATE",
+                "PURCHASE_ORDER",
+                id,
+                "Admin #" + user.getUserId()
+                        + " changed PO #" + id
+                        + " from " + currentStatus
+                        + " to " + newStatus);
+
+        return savedOrder;
     }
 
     public static class StatusRequest {
+
         private String status;
 
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 }

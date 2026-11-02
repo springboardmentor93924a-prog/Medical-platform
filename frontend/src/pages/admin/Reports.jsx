@@ -206,9 +206,9 @@ export default function Reports() {
   }
 
   return (
-    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 dark:from-slate-900 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
+    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 p-4 transition-colors dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 md:p-7 lg:p-8">
       {/* Header */}
-      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm md:p-8">
+      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-white via-teal-50 to-cyan-50 p-6 shadow-sm transition-colors dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40 md:p-8">
         <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-100/70 blur-3xl" />
 
         <div className="relative flex flex-wrap items-center justify-between gap-5">
@@ -520,13 +520,13 @@ export default function Reports() {
 
 function Metric({ title, value, subtitle, icon: Icon, color }) {
   const themes = {
-    teal: "border-teal-100 from-teal-50 dark:from-teal-500/10 to-white text-teal-700 dark:text-teal-300",
-    blue: "border-blue-100 from-blue-50 dark:from-blue-500/10 to-white text-blue-700 dark:text-blue-300",
-    amber: "border-amber-100 from-amber-50 dark:from-amber-500/10 to-white text-amber-700 dark:text-amber-300",
-    red: "border-rose-100 from-rose-50 dark:from-rose-500/10 to-white text-rose-700 dark:text-rose-300",
-    purple: "border-purple-100 from-purple-50 dark:from-purple-500/10 to-white text-purple-700 dark:text-purple-300",
-    emerald: "border-emerald-100 from-emerald-50 dark:from-emerald-500/10 to-white text-emerald-700 dark:text-emerald-300",
-  };
+  teal: "border-teal-100 from-teal-50 to-white dark:border-teal-900/50 dark:from-teal-950/40 dark:to-slate-900",
+  blue: "border-blue-100 from-blue-50 to-white dark:border-blue-900/50 dark:from-blue-950/40 dark:to-slate-900",
+  amber: "border-amber-100 from-amber-50 to-white dark:border-amber-900/50 dark:from-amber-950/40 dark:to-slate-900",
+  red: "border-rose-100 from-rose-50 to-white dark:border-rose-900/50 dark:from-rose-950/40 dark:to-slate-900",
+  purple: "border-purple-100 from-purple-50 to-white dark:border-purple-900/50 dark:from-purple-950/40 dark:to-slate-900",
+  emerald: "border-emerald-100 from-emerald-50 to-white dark:border-emerald-900/50 dark:from-emerald-950/40 dark:to-slate-900",
+};
 
   const iconThemes = {
     teal: "bg-teal-100 dark:bg-teal-500/15",

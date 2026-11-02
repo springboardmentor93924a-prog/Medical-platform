@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -41,12 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
+         
+
         if (header == null || !header.startsWith("Bearer ")) {
+            System.out.println("[JWT] Missing Bearer token");
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = header.substring(7);
+
+        System.out.println("[JWT] Token contains whitespace: "
+                + token.matches(".*\\s+.*"));
 
         try {
             String email = jwtService.extractEmail(token);
@@ -55,32 +62,48 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     && SecurityContextHolder.getContext()
                             .getAuthentication() == null) {
 
-                User user = userRepository.findByEmail(email)
-                        .orElse(null);
+                Optional<User> userOptional =
+                        userRepository.findByEmail(email);
 
-                if (user != null && Boolean.TRUE.equals(user.getActive())) {
+                if (userOptional.isEmpty()) {
+                    System.out.println(
+                            "[JWT] User not found in database");
+                } else {
+                    User user = userOptional.get();
 
-                    String roleName = user.getRole().getRoleName();
+                    if (!Boolean.TRUE.equals(user.getActive())) {
+                        System.out.println(
+                                "[JWT] User account is inactive");
+                    } else {
+                        String roleName = user.getRole().getRoleName();
 
-                    SimpleGrantedAuthority authority =
-                            new SimpleGrantedAuthority("ROLE_" + roleName);
+                        SimpleGrantedAuthority authority =
+                                new SimpleGrantedAuthority(
+                                        "ROLE_" + roleName);
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    email,
-                                    null,
-                                    List.of(authority));
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(
+                                        email,
+                                        null,
+                                        List.of(authority));
 
-                    authentication.setDetails(
-                            new WebAuthenticationDetailsSource()
-                                    .buildDetails(request));
+                        authentication.setDetails(
+                                new WebAuthenticationDetailsSource()
+                                        .buildDetails(request));
 
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authentication);
+                        SecurityContextHolder.getContext()
+                                .setAuthentication(authentication);
+
+                
+                    }
                 }
             }
-
         } catch (Exception ex) {
+            System.err.println(
+                    "[JWT] Validation failed: "
+                            + ex.getClass().getSimpleName()
+                            + " - " + ex.getMessage());
+
             SecurityContextHolder.clearContext();
         }
 

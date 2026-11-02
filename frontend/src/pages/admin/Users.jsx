@@ -17,6 +17,13 @@ const PAGE_SIZE = 10;
 
 const emptyForm = { fullName: "", email: "", password: "", role: "STAFF", active: true };
 
+const inputClass =
+  "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500";
+
+const secondaryButton =
+  "rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800";
+
+
 export default function Users() {
   const [data, setData] = useState({ content: [], totalElements: 0, totalPages: 0, number: 0 });
   const [page, setPage] = useState(0);
@@ -148,9 +155,10 @@ export default function Users() {
   }, [notice]);
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-full space-y-6 bg-slate-50 p-4 text-slate-800 transition-colors dark:bg-slate-950 dark:text-slate-100 sm:p-6 lg:p-8">
       {/* Header */}
-      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm">
+     
+      <header className="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-r from-white via-teal-50 to-cyan-50 p-6 shadow-sm transition-colors dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
@@ -293,14 +301,14 @@ export default function Users() {
           <button
             disabled={page === 0}
             onClick={() => setPage((value) => Math.max(0, value - 1))}
-            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-400 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Previous
           </button>
           <button
             disabled={page + 1 >= data.totalPages}
             onClick={() => setPage((value) => value + 1)}
-            className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
+            className="rounded-xl border border-slate-400 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold disabled:opacity-40"
           >
             Next
           </button>
