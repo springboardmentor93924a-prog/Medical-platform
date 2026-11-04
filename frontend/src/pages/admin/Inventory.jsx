@@ -1,10 +1,9 @@
 import { API_BASE } from "../../services/api";
-import { getSuppliers } from "../../api/pharmacistApi.js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Boxes, Package, AlertTriangle, CalendarClock, ShieldCheck,
   RefreshCw, Search, Plus, Pencil, Trash2, X, CheckCircle2,
-  LoaderCircle, Filter, IndianRupee, CalendarDays, Pill,
+  LoaderCircle, IndianRupee, CalendarDays, Pill,
 } from "lucide-react";
 
 const API_URL = `${API_BASE}/inventory`;
@@ -329,10 +328,6 @@ export default function Inventory() {
     });
   }, [enrichedItems, medicines, suppliers, search, statusFilter]);
 
-  const expiredCount = enrichedItems.filter(
-    (item) => item.status === "Expired"
-  ).length;
-
   const expiringCount = enrichedItems.filter(
     (item) => item.status === "Expiring soon"
   ).length;
@@ -345,11 +340,6 @@ export default function Inventory() {
   const safeCount = enrichedItems.filter(
     (item) => item.status === "Safe"
   ).length;
-
-  const totalUnits = enrichedItems.reduce(
-    (sum, item) => sum + Number(item.quantity ?? 0),
-    0
-  );
 
   const statusOptions = [
     "All",

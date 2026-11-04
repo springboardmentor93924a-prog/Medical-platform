@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Boxes, Package, AlertTriangle, CalendarClock, ShieldCheck,
   RefreshCw, Search, Plus, Pencil, Trash2, X, CheckCircle2,
-  LoaderCircle, Filter, IndianRupee, CalendarDays, Pill,
+  LoaderCircle, IndianRupee, CalendarDays, Pill,
 } from "lucide-react";
 
 const API_URL = `${API_BASE}/pharmacist/inventory`;
@@ -382,10 +382,6 @@ export default function Inventory() {
     return matchesSearch && matchesStatus;
   });
 }, [enrichedItems, medicines, suppliers, search, statusFilter]);
-
-  const expiredCount = enrichedItems.filter(
-    (item) => item.status === "Expired"
-  ).length;
 
   const expiringCount = enrichedItems.filter(
     (item) => item.status === "Expiring soon"

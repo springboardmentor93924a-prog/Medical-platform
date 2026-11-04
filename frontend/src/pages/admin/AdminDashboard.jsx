@@ -4,10 +4,10 @@ import AppShell from "../../components/AppShell.jsx";
 import DashboardHome from "./DashboardHome.jsx";
 import Users from "./Users.jsx";
 import Medicines from "./Medicines.jsx";
+import Categories from "./Categories.jsx";
 import Suppliers from "./Suppliers.jsx";
-import Inventory from "./Inventory.jsx";
+import StockManagement from "./StockManagement.jsx";
 import PurchaseOrders from "./PurchaseOrders.jsx";
-import StockMovements from "./StockMovements.jsx";
 import ExpiryTracking from "./ExpiryTracking.jsx";
 import Reports from "./Reports.jsx";
 import Notifications from "./Notifications.jsx";
@@ -17,14 +17,14 @@ import Settings from "./Settings.jsx";
 
 const menu = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
-  { id: "users", label: "User Management", icon: "users" },
   { id: "medicines", label: "Medicine Management", icon: "pill" },
+  { id: "categories", label: "Categories", icon: "boxes" },
   { id: "suppliers", label: "Supplier Management", icon: "truck" },
-  { id: "inventory", label: "Inventory", icon: "boxes" },
   { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
-  { id: "stock-movements", label: "Stock Management", icon: "swap" },
+  { id: "stock-management", label: "Stock Management", icon: "swap" },
   { id: "expiry", label: "Expiry Tracking", icon: "clock" },
   { id: "reports", label: "Reports & Analytics", icon: "file" },
+  { id: "users", label: "User Management", icon: "users" },
   { id: "notifications", label: "Notifications", icon: "bell" },
   { id: "systemMonitoring", label: "System Monitoring", icon: "activity" },
   { id: "settings", label: "Settings", icon: "settings" },
@@ -34,10 +34,10 @@ const pages = {
   dashboard: DashboardHome,
   users: Users,
   medicines: Medicines,
+  categories: Categories,
   suppliers: Suppliers,
-  inventory: Inventory,
+  "stock-management": StockManagement,
   "purchase-orders": PurchaseOrders,
-  "stock-movements": StockMovements,
   expiry: ExpiryTracking,
   reports: Reports,
   notifications: Notifications,

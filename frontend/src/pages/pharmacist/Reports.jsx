@@ -15,8 +15,6 @@ import {
   ShoppingCart,
   TrendingUp,
   Wallet,
-  ArrowDownCircle,
-  ArrowUpCircle,
 } from "lucide-react";
 
 const API = API_BASE;

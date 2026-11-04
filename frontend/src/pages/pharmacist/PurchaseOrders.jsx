@@ -297,8 +297,12 @@ export default function PurchaseOrders() {
         "bg-blue-100 dark:bg-blue-500/15 text-blue-800 dark:text-blue-200",
       RECEIVED:
         "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-200",
-      CANCELLED:
+      PARTIALLY_RECEIVED:
+        "bg-cyan-100 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-200",
+      REJECTED:
         "bg-rose-100 dark:bg-rose-500/15 text-rose-800 dark:text-rose-200",
+      CANCELLED:
+        "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200",
     };
 
     return (
