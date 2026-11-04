@@ -1,3 +1,4 @@
+
 package com.medistock.entity;
 
 import jakarta.persistence.*;

@@ -19,6 +19,12 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
+    @Column(name = "phone", length = 30)
+    private String phone;
+
+    @Column(name = "profile_picture", columnDefinition = "LONGTEXT")
+private String profilePicture;
+
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
@@ -58,6 +64,22 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getProfilePicture() {
+    return profilePicture;
+}
+
+public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
+}
 
     public String getPasswordHash() {
         return passwordHash;

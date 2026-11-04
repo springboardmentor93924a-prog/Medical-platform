@@ -1,3 +1,4 @@
+
 package com.medistock.entity;
 
 import jakarta.persistence.*;
@@ -21,11 +22,36 @@ public class Notification {
     @Column(name = "message", nullable = false, length = 500)
     private String message;
 
-    @Column(name = "is_read")
+    @Column(name = "is_read", nullable = false)
     private Boolean read = false;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(
+        name = "created_at",
+        insertable = false,
+        updatable = false
+    )
     private LocalDateTime createdAt;
+
+    public Notification() {
+    }
+
+    public Notification(
+            Long userId,
+            String notificationType,
+            String message
+    ) {
+        this.userId = userId;
+        this.notificationType = notificationType;
+        this.message = message;
+        this.read = false;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (read == null) {
+            read = false;
+        }
+    }
 
     public Long getNotificationId() {
         return notificationId;

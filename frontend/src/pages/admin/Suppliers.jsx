@@ -253,11 +253,11 @@ export default function Suppliers() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f3f8f8] p-4 text-slate-800 dark:text-slate-200 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-slate-50 p-4 text-slate-800 transition-colors dark:bg-slate-950 dark:text-slate-100 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
 
         {/* Header matching Expiry Tracking */}
-        <section className="overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-teal-100/80 p-6 shadow-sm sm:p-8">
+        <section className="className=overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-r from-white via-teal-50 to-cyan-50 p-6 shadow-sm transition-colors dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40 sm:p-8">
           <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
             <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-lg shadow-teal-200">
@@ -709,11 +709,11 @@ function Field({ label, children }) {
 
 function Summary({ title, value, subtitle, icon, color }) {
   const colors = {
-    teal: "border-teal-100 bg-gradient-to-br from-teal-50/80 to-white",
-    green: "border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-white",
-    amber: "border-amber-100 bg-gradient-to-br from-amber-50/80 to-white",
-    blue: "border-sky-100 bg-gradient-to-br from-sky-50/80 to-white",
-  };
+  teal: "border-teal-200 bg-gradient-to-br from-white to-teal-50 dark:border-teal-900 dark:from-slate-900 dark:to-teal-950/40",
+  green: "border-emerald-200 bg-gradient-to-br from-white to-emerald-50 dark:border-emerald-900 dark:from-slate-900 dark:to-emerald-950/40",
+  amber: "border-amber-200 bg-gradient-to-br from-white to-amber-50 dark:border-amber-900 dark:from-slate-900 dark:to-amber-950/40",
+  blue: "border-sky-200 bg-gradient-to-br from-white to-sky-50 dark:border-sky-900 dark:from-slate-900 dark:to-sky-950/40",
+};
 
   const iconColors = {
     teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",

@@ -111,9 +111,9 @@ export default function Notifications() {
   const iconFor = (type) => (TYPE_META[type] || { icon: Bell }).icon;
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-full space-y-6 rounded-3xl bg-slate-50 p-3 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 sm:p-6">
       {/* Header */}
-      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm">
+      <header className="rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 via-white to-cyan-50 p-6 shadow-sm transition-colors duration-300 dark:border-teal-500/20 dark:from-teal-950/60 dark:via-slate-900 dark:to-cyan-950/40">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 p-4 text-white shadow-lg shadow-teal-600/20">
@@ -232,7 +232,7 @@ export default function Notifications() {
                 className={`flex items-start gap-4 rounded-2xl border p-4 shadow-sm ${
                   item.read
                     ? "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900"
-                    : "border-teal-200 dark:border-teal-500/30 bg-teal-50/40"
+                    : "border-teal-200 bg-teal-50/80 dark:border-teal-500/30 dark:bg-teal-500/10"
                 }`}
               >
                 <div className={`rounded-xl p-2.5 ring-1 ring-inset ${toneFor(item.notificationType)}`}>

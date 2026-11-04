@@ -13,6 +13,9 @@ public class LoginRequest {
     @NotBlank
     private String password;
 
+    @NotBlank
+    private String role;
+
     public String getEmail() {
         return email;
     }
@@ -28,13 +31,12 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-    private String role;
 
-public String getRole() {
-    return role;
-}
+    public String getRole() {
+        return role;
+    }
 
-public void setRole(String role) {
-    this.role = role;
-}
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

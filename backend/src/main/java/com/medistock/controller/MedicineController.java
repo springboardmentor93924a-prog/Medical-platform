@@ -26,35 +26,56 @@ public class MedicineController {
             MedicineRepository medicineRepository,
             InventoryRepository inventoryRepository,
             AuditService auditService) {
+
         this.medicineRepository = medicineRepository;
         this.inventoryRepository = inventoryRepository;
         this.auditService = auditService;
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
-    public List<Medicine> getAllMedicines() {
-        return medicineRepository.findAll();
-    }
+    // Staff can view medicines, but cannot modify them
+@GetMapping
+@PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST', 'STAFF')")
+public List<Medicine> getAllMedicines() {
+    return medicineRepository.findAll();
+}
+
+    // ================= ADD MEDICINE =================
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
-    public Medicine createMedicine(@RequestBody Medicine request) {
+   @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
+    public Medicine createMedicine(
+            @RequestBody Medicine request) {
+
         validate(request);
 
         Medicine medicine = new Medicine();
-        medicine.setMedicineName(request.getMedicineName().trim());
-        medicine.setCategory(trimToNull(request.getCategory()));
-        medicine.setDescription(trimToNull(request.getDescription()));
+
+        medicine.setMedicineName(
+                request.getMedicineName().trim()
+        );
+
+        medicine.setCategory(
+                trimToNull(request.getCategory())
+        );
+
+        medicine.setDescription(
+                trimToNull(request.getDescription())
+        );
 
         Medicine saved = medicineRepository.save(medicine);
 
-        auditService.record("CREATE", "MEDICINE", saved.getMedicineId(),
-                "Added medicine " + saved.getMedicineName());
+        auditService.record(
+                "CREATE",
+                "MEDICINE",
+                saved.getMedicineId(),
+                "Added medicine " + saved.getMedicineName()
+        );
 
         return saved;
     }
+
+    // ================= UPDATE MEDICINE =================
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
@@ -66,66 +87,108 @@ public class MedicineController {
 
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Medicine not found"));
+                        HttpStatus.NOT_FOUND,
+                        "Medicine not found"
+                ));
 
-        medicine.setMedicineName(request.getMedicineName().trim());
-        medicine.setCategory(trimToNull(request.getCategory()));
-        medicine.setDescription(trimToNull(request.getDescription()));
+        medicine.setMedicineName(
+                request.getMedicineName().trim()
+        );
+
+        medicine.setCategory(
+                trimToNull(request.getCategory())
+        );
+
+        medicine.setDescription(
+                trimToNull(request.getDescription())
+        );
 
         Medicine saved = medicineRepository.save(medicine);
 
-        auditService.record("UPDATE", "MEDICINE", id,
-                "Updated medicine " + saved.getMedicineName());
+        auditService.record(
+                "UPDATE",
+                "MEDICINE",
+                id,
+                "Updated medicine " + saved.getMedicineName()
+        );
 
         return saved;
     }
+
+    // ================= DELETE MEDICINE =================
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
     public void deleteMedicine(@PathVariable Long id) {
+
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Medicine not found"));
+                        HttpStatus.NOT_FOUND,
+                        "Medicine not found"
+                ));
 
         long batches = inventoryRepository.findAll().stream()
-                .filter(i -> id.equals(i.getMedicineId()))
+                .filter(inventory ->
+                        id.equals(inventory.getMedicineId()))
                 .count();
 
         if (batches > 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
                     "Cannot delete " + medicine.getMedicineName()
-                            + ": it still has " + batches + " inventory batch(es)");
+                            + ": it still has " + batches
+                            + " inventory batch(es)"
+            );
         }
 
         try {
             medicineRepository.delete(medicine);
         } catch (DataIntegrityViolationException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Cannot delete medicine: related records exist");
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Cannot delete medicine: related records exist"
+            );
         }
 
-        auditService.record("DELETE", "MEDICINE", id,
-                "Deleted medicine " + medicine.getMedicineName());
+        auditService.record(
+                "DELETE",
+                "MEDICINE",
+                id,
+                "Deleted medicine " + medicine.getMedicineName()
+        );
     }
+
+    // ================= VALIDATION =================
 
     private void validate(Medicine request) {
-        if (request.getMedicineName() == null
+
+        if (request == null
+                || request.getMedicineName() == null
                 || request.getMedicineName().isBlank()) {
+
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Medicine name is required");
+                    HttpStatus.BAD_REQUEST,
+                    "Medicine name is required"
+            );
         }
+
         if (request.getMedicineName().trim().length() > 150) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Medicine name is too long");
+                    HttpStatus.BAD_REQUEST,
+                    "Medicine name is too long"
+            );
         }
     }
 
+    // ================= HELPER METHOD =================
+
     private static String trimToNull(String value) {
+
         if (value == null || value.isBlank()) {
             return null;
         }
-        String trimmed = value.trim();
-        return trimmed.isEmpty() ? null : trimmed;
+
+        return value.trim();
     }
 }

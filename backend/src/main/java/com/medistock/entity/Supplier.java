@@ -27,6 +27,10 @@ public class Supplier {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
+    @Column(name = "profile_image_url", length = 500)
+private String profileImageUrl;
+
+
     public Long getSupplierId() {
         return supplierId;
     }
@@ -71,7 +75,38 @@ public class Supplier {
         return active;
     }
 
+    @Transient
+    public String getPhone() {
+        return contactNumber;
+    }
+
+    public void setPhone(String phone) {
+        if (this.contactNumber == null || this.contactNumber.isBlank()) {
+            this.contactNumber = phone;
+        }
+    }
+
+    public String getProfileImageUrl() {
+    return profileImageUrl;
+}
+
+public void setProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
+}
+
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+
+    @Column(name = "medicines", length = 500)
+private String medicines;
+
+public String getMedicines() {
+    return medicines;
+}
+
+public void setMedicines(String medicines) {
+    this.medicines = medicines;
+}
 }

@@ -113,11 +113,12 @@ public class SupplierController {
     }
 
     private void copyFields(Supplier source, Supplier target) {
-        target.setSupplierName(source.getSupplierName().trim());
-        target.setContactNumber(source.getContactNumber());
-        target.setEmail(source.getEmail());
-        target.setAddress(source.getAddress());
-    }
+    target.setSupplierName(source.getSupplierName().trim());
+    target.setContactNumber(source.getContactNumber());
+    target.setEmail(source.getEmail());
+    target.setAddress(source.getAddress());
+    target.setMedicines(source.getMedicines());
+}
 
     public static class StatusRequest {
         private Boolean active;

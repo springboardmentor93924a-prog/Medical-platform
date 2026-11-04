@@ -1,0 +1,996 @@
+import { API_BASE } from "../../services/api";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Boxes, Package, AlertTriangle, CalendarClock, ShieldCheck,
+  RefreshCw, Search, Plus, Pencil, Trash2, X, CheckCircle2,
+  LoaderCircle, Filter, IndianRupee, CalendarDays, Pill,
+} from "lucide-react";
+
+const API_URL = `${API_BASE}/pharmacist/inventory`;
+const MEDICINES_API = `${API_BASE}/pharmacist/medicines`;
+const SUPPLIERS_API = `${API_BASE}/pharmacist/suppliers`;
+
+const emptyForm = {
+  medicineId: "",
+  supplierId: "",
+  batchNumber: "",
+  quantity: "0",
+  minimumStock: "10",
+  unitPrice: "",
+  manufacturingDate: "",
+  expiryDate: "",
+};
+
+const inputClass =
+  "w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-400";
+
+
+function getToken() {
+  return sessionStorage.getItem("medistock_token");
+}
+
+function getList(data) {
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data?.content)) return data.content;
+  return [];
+}
+
+function dateOnly(value) {
+  return value ? String(value).slice(0, 10) : "";
+}
+
+function formatDate(value) {
+  const date = dateOnly(value);
+  if (!date) return "—";
+
+  const parsed = new Date(`${date}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return date;
+
+  return parsed.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function getStatus(item) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const expiryString = dateOnly(item.expiryDate);
+  const expiry = expiryString
+    ? new Date(`${expiryString}T00:00:00`)
+    : null;
+
+  if (!expiry || Number.isNaN(expiry.getTime())) {
+    return "Unknown";
+  }
+
+  if (expiry < today) return "Expired";
+
+  const quantity = Number(item.quantity ?? 0);
+  const minimumStock = Number(item.minimumStock ?? 10);
+
+  if (quantity <= 0) return "Out of stock";
+
+  if (quantity <= minimumStock) return "Low stock";
+
+  const daysLeft = Math.ceil((expiry - today) / 86400000);
+
+  if (daysLeft <= 30) return "Expiring soon";
+
+  return "Safe";
+}
+
+function statusStyle(status) {
+  const styles = {
+    Safe: "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-200 dark:ring-emerald-500/30",
+    "Low stock": "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-200 dark:ring-amber-500/30",
+    "Out of stock": "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-rose-200 dark:ring-rose-500/30",
+    Expired: "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-rose-200 dark:ring-rose-500/30",
+    "Expiring soon": "bg-orange-50 dark:bg-orange-500/10 text-orange-700 dark:text-orange-300 ring-orange-200 dark:ring-orange-500/30",
+    Unknown: "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 ring-slate-200 dark:ring-slate-700",
+  };
+
+  return styles[status] || styles.Unknown;
+}
+
+export default function Inventory() {
+  const [items, setItems] = useState([]);
+  const [medicines, setMedicines] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
+  const [deleteItem, setDeleteItem] = useState(null);
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  const request = useCallback(async (url, options = {}) => {
+    const token = getToken();
+
+    if (!token) {
+      throw new Error("Your session has expired. Please log in again.");
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(options.body ? { "Content-Type": "application/json" } : {}),
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(body || `Request failed (${response.status})`);
+    }
+
+    if (response.status === 204) return null;
+
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
+  }, []);
+
+
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const results = await Promise.allSettled([
+        request(API_URL),
+        request(MEDICINES_API),
+        request(SUPPLIERS_API),
+      ]);
+
+      const errors = [];
+
+      // 1. Load inventory
+      if (results[0].status === "fulfilled") {
+        setItems(getList(results[0].value));
+      } else {
+        console.error("Inventory API error:", results[0].reason);
+        errors.push("Failed to load inventory.");
+      }
+
+      // 2. Load medicines for the dropdown
+      if (results[1].status === "fulfilled") {
+        const medicineList = getList(results[1].value);
+        setMedicines(medicineList);
+
+        console.log("Medicines loaded:", medicineList);
+      } else {
+        setMedicines([]);
+        console.error("Medicine API error:", results[1].reason);
+        errors.push(
+          `Failed to load medicines: ${results[1].reason?.message || "Unknown error"
+          }`
+        );
+      }
+
+      // 3. Load suppliers for the dropdown
+      if (results[2].status === "fulfilled") {
+        const supplierList = getList(results[2].value);
+        setSuppliers(supplierList);
+
+        console.log("Suppliers loaded:", supplierList);
+      } else {
+        setSuppliers([]);
+
+        const supplierError = results[2].reason;
+        console.error("Supplier API error:", supplierError);
+
+        errors.push(
+          `Failed to load suppliers: ${supplierError?.message || "Unknown error"
+          }`
+        );
+      }
+
+      if (errors.length > 0) {
+        setError(errors.join(" "));
+      }
+    } catch (err) {
+      console.error("Unexpected loading error:", err);
+      setError(err.message || "Unable to load inventory data.");
+    } finally {
+      setLoading(false);
+    }
+  }, [request]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  function updateField(event) {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  }
+
+  function resetForm() {
+    setForm(emptyForm);
+    setEditingId(null);
+  }
+
+  function openAddForm() {
+    resetForm();
+    setError("");
+    setMessage("");
+  }
+
+  function startEdit(item) {
+    setEditingId(item.inventoryId);
+    setForm({
+      medicineId: String(item.medicineId ?? ""),
+      supplierId: item.supplierId == null ? "" : String(item.supplierId),
+      batchNumber: item.batchNumber ?? "",
+      quantity: String(item.quantity ?? 0),
+      minimumStock: String(item.minimumStock ?? 10),
+      unitPrice: String(item.unitPrice ?? ""),
+      manufacturingDate: dateOnly(item.manufacturingDate),
+      expiryDate: dateOnly(item.expiryDate),
+    });
+
+    setError("");
+    setMessage("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (
+      !form.medicineId ||
+      !form.batchNumber.trim() ||
+      form.unitPrice === "" 
+    ) {
+      setError("Please complete all required fields.");
+      return;
+    }
+
+    if (
+      Number(form.quantity) < 0 ||
+      Number(form.minimumStock) < 0 ||
+      Number(form.unitPrice) < 0
+    ) {
+      setError("Quantity, minimum stock, and unit price cannot be negative.");
+      return;
+    }
+
+    if (
+  form.manufacturingDate &&
+  form.expiryDate &&
+  form.expiryDate < form.manufacturingDate
+) {
+  setError("Expiry date must not be before manufacturing date.");
+  return;
+}
+
+    const payload = {
+      medicineId: Number(form.medicineId),
+      supplierId: form.supplierId ? Number(form.supplierId) : null,
+      batchNumber: form.batchNumber.trim(),
+      quantity: Number(form.quantity),
+      minimumStock: Number(form.minimumStock),
+      unitPrice: Number(form.unitPrice),
+      manufacturingDate: form.manufacturingDate || null,
+      expiryDate: form.expiryDate || null,
+    };
+
+    setSaving(true);
+
+    try {
+      const isEditing = editingId !== null;
+
+      await request(
+        isEditing ? `${API_URL}/${editingId}` : API_URL,
+        {
+          method: isEditing ? "PUT" : "POST",
+          body: JSON.stringify(payload),
+        }
+      );
+
+      resetForm();
+      setMessage(
+        isEditing
+          ? "Inventory batch updated successfully."
+          : "Inventory batch added successfully."
+      );
+
+      await loadData();
+    } catch (err) {
+      setError(err.message || "Unable to save inventory.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!deleteItem) return;
+
+    setDeleting(true);
+    setError("");
+    setMessage("");
+
+    try {
+      await request(`${API_URL}/${deleteItem.inventoryId}`, {
+        method: "DELETE",
+      });
+
+      setDeleteItem(null);
+      setMessage("Inventory batch deleted successfully.");
+      await loadData();
+    } catch (err) {
+      setDeleteItem(null);
+      setError(
+        err.message ||
+        "Unable to delete this batch. Check your backend DELETE route."
+      );
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  const medicineName = (id) =>
+    medicines.find(
+      (medicine) => String(medicine.medicineId) === String(id)
+    )?.medicineName || `Medicine #${id ?? "—"}`;
+
+  const supplierName = (id) =>
+    suppliers.find(
+      (supplier) => String(supplier.supplierId) === String(id)
+    )?.supplierName || (id ? `Supplier #${id}` : "Not assigned");
+
+  const enrichedItems = useMemo(
+    () => items.map((item) => ({ ...item, status: getStatus(item) })),
+    [items]
+  );
+
+  const filteredItems = useMemo(() => {
+  const term = search.trim().toLowerCase();
+
+  return enrichedItems.filter((item) => {
+    const text = [
+      medicineName(item.medicineId),
+      supplierName(item.supplierId),
+      item.batchNumber,
+      item.inventoryId,
+      item.expiryDate,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch = text.includes(term);
+
+    const matchesStatus =
+      statusFilter === "All" ||
+      (statusFilter === "Low stock" &&
+        ["Low stock", "Out of stock"].includes(item.status)) ||
+      item.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+}, [enrichedItems, medicines, suppliers, search, statusFilter]);
+
+  const expiredCount = enrichedItems.filter(
+    (item) => item.status === "Expired"
+  ).length;
+
+  const expiringCount = enrichedItems.filter(
+    (item) => item.status === "Expiring soon"
+  ).length;
+
+  const lowStockCount = enrichedItems.filter(
+    (item) =>
+      item.status === "Low stock" || item.status === "Out of stock"
+  ).length;
+
+  const safeCount = enrichedItems.filter(
+    (item) => item.status === "Safe"
+  ).length;
+
+  const totalUnits = enrichedItems.reduce(
+    (sum, item) => sum + Number(item.quantity ?? 0),
+    0
+  );
+
+  const statusOptions = [
+    "All",
+    "Safe",
+    "Low stock",
+    "Out of stock",
+    "Expiring soon",
+    "Expired",
+    "Unknown",
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 p-4 text-slate-800 transition-colors dark:bg-slate-950 dark:text-slate-100 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl space-y-6">
+
+        {/* Header — matches Expiry Tracking */}
+        <section className="overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-r from-white via-teal-50 to-cyan-50 p-6 shadow-sm transition-colors dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40 sm:p-8">
+          <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-lg shadow-teal-500/20">
+                <Boxes size={27} />
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs font-bold tracking-[0.18em] text-teal-700 dark:text-teal-300 sm:text-sm">
+                  MEDISTOCK / STOCK CONTROL
+                </p>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+                  Inventory Management
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400 sm:text-base">
+                  Monitor medicine stock, manage batches, track suppliers,
+                  and identify inventory that needs attention.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 lg:shrink-0">
+              <button
+                type="button"
+                onClick={loadData}
+                disabled={loading}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-teal-200 dark:border-teal-500/30 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-teal-800 dark:text-teal-200 shadow-sm transition hover:bg-teal-50 dark:hover:bg-teal-500/10 disabled:opacity-60"
+              >
+                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+                Refresh data
+              </button>
+
+              <button
+                type="button"
+                onClick={openAddForm}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-teal-200 transition hover:bg-teal-700"
+              >
+                <Plus size={17} />
+                Add inventory
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Alerts */}
+        {message && (
+          <Notice
+            type="success"
+            message={message}
+            onClose={() => setMessage("")}
+          />
+        )}
+
+        {error && (
+          <Notice
+            type="error"
+            message={error}
+            onClose={() => setError("")}
+          />
+        )}
+
+
+
+
+        {/* Summary cards */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <Summary
+            title="Total Batches"
+            value={items.length}
+            subtitle="All inventory batches"
+            icon={<Package size={20} />}
+            color="teal"
+          />
+          <Summary
+            title="Low Stock"
+            value={lowStockCount}
+            subtitle="Click to view low-stock medicines"
+            icon={<AlertTriangle size={20} />}
+            color="rose"
+            onClick={() => {
+              setStatusFilter("Low stock");
+              setSearch("");
+            }}
+          />
+          <Summary
+            title="Expiring Soon"
+            value={expiringCount}
+            subtitle="Within 30 days"
+            icon={<CalendarClock size={20} />}
+            color="amber"
+          />
+          <Summary
+            title="Safe Batches"
+            value={safeCount}
+            subtitle="Stock within safe limits"
+            icon={<ShieldCheck size={20} />}
+            color="green"
+          />
+          <Summary
+            title="Available Units"
+            value={totalUnits.toLocaleString("en-IN")}
+            subtitle="Total units across all batches"
+            icon={<Boxes size={20} />}
+            color="teal"
+          />
+        </div>
+
+        {/* Add / edit form */}
+        <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 p-5">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
+                {editingId !== null ? <Pencil size={20} /> : <Plus size={22} />}
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                  {editingId !== null ? "Edit Inventory Batch" : "Add Inventory Batch"}
+                </h2>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  Enter the stock and batch details.
+                </p>
+              </div>
+            </div>
+
+            {editingId !== null && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 px-3 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50"
+              >
+                <X size={15} /> Cancel edit
+              </button>
+            )}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5 p-5">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <Field label="Medicine *">
+                <select
+                  name="medicineId"
+                  value={form.medicineId}
+                  onChange={updateField}
+                  required
+                  className={inputClass}
+                >
+                  <option value="">Select medicine</option>
+                  {medicines.map((medicine) => (
+                    <option key={medicine.medicineId} value={medicine.medicineId}>
+                      {medicine.medicineName}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+
+              <Field label="Supplier">
+                <select
+                  name="supplierId"
+                  value={form.supplierId}
+                  onChange={updateField}
+                  className={inputClass}
+                >
+                  <option value="">No supplier</option>
+                  {suppliers
+                    .filter((supplier) => supplier.active !== false)
+                    .map((supplier) => (
+                      <option key={supplier.supplierId} value={supplier.supplierId}>
+                        {supplier.supplierName}
+                      </option>
+                    ))}
+                </select>
+              </Field>
+
+              <Field label="Batch Number *">
+                <input
+                  name="batchNumber"
+                  value={form.batchNumber}
+                  onChange={updateField}
+                  required
+                  maxLength={100}
+                  placeholder="e.g. BATCH-001"
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Quantity *">
+                <input
+                  name="quantity"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={form.quantity}
+                  onChange={updateField}
+                  required
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Minimum Stock *">
+                <input
+                  name="minimumStock"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={form.minimumStock}
+                  onChange={updateField}
+                  required
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Unit Price (₹) *">
+                <input
+                  name="unitPrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={form.unitPrice}
+                  onChange={updateField}
+                  required
+                  placeholder="0.00"
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Manufacturing Date">
+                <input
+                  name="manufacturingDate"
+                  type="date"
+                  value={form.manufacturingDate}
+                  onChange={updateField}
+                  className={inputClass}
+                />
+              </Field>
+
+              <Field label="Expiry Date (Optional)">
+                <input
+                  name="expiryDate"
+                  type="date"
+                  value={form.expiryDate}
+                  onChange={updateField} 
+                  className={inputClass}
+                />
+              </Field>
+            </div>
+
+            <div className="flex justify-end border-t border-slate-100 dark:border-slate-800 pt-5">
+              <button
+                type="submit"
+                disabled={saving}
+                className="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-700 disabled:opacity-60"
+              >
+                {saving ? (
+                  <LoaderCircle size={17} className="animate-spin" />
+                ) : editingId !== null ? (
+                  <Pencil size={17} />
+                ) : (
+                  <Plus size={18} />
+                )}
+                {saving
+                  ? "Saving..."
+                  : editingId !== null
+                    ? "Update Batch"
+                    : "Add Batch"}
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* Inventory register — matches Expiry Tracking */}
+        <section className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="border-b border-slate-100 dark:border-slate-800 p-5 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-white sm:text-2xl">
+                  Inventory Register
+                </h2>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  Review stock quantities, batch details, and inventory status.
+                </p>
+              </div>
+
+              <span className="rounded-full border border-teal-100 bg-teal-50 dark:bg-teal-500/10 px-3 py-1.5 text-xs font-bold text-teal-700 dark:text-teal-300">
+                {filteredItems.length} batches
+              </span>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+              <div className="relative w-full xl:max-w-sm">
+                <Search
+                  size={17}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+                />
+                <input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search medicine, batch or supplier..."
+                  aria-label="Search inventory"
+                  className={`${inputClass} pl-10`}
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {statusOptions.map((status) => {
+                  const count =
+                    status === "All"
+                      ? enrichedItems.length
+                      : enrichedItems.filter((item) => item.status === status).length;
+
+                  return (
+                    <button
+                      key={status}
+                      type="button"
+                      onClick={() => setStatusFilter(status)}
+                      className={`rounded-xl border px-3 py-2 text-xs font-semibold transition sm:text-sm ${statusFilter === status
+                        ? "border-teal-600 bg-teal-600 text-white shadow-sm"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10"
+                        }`}
+                    >
+                      {status === "All" ? "All" : status} ({count})
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="flex items-center justify-center gap-3 p-16 text-slate-500 dark:text-slate-400">
+              <LoaderCircle size={22} className="animate-spin text-teal-600 dark:text-teal-400" />
+              Loading inventory...
+            </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="px-5 py-16 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
+                <Boxes size={28} />
+              </div>
+              <h3 className="font-semibold text-slate-800 dark:text-slate-200">
+                No inventory batches found
+              </h3>
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                Try a different filter or add an inventory batch above.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1000px] text-left text-sm">
+                <thead className="bg-slate-50 dark:bg-slate-800/50 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <tr>
+                    <th className="px-5 py-4">Medicine / Batch</th>
+                    <th className="px-5 py-4">Supplier</th>
+                    <th className="px-5 py-4">Quantity</th>
+                    <th className="px-5 py-4">Unit Price</th>
+                    <th className="px-5 py-4">Expiry Date</th>
+                    <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {filteredItems.map((item) => (
+                    <tr key={item.inventoryId} className="transition hover:bg-teal-50/30">
+                      <td className="px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300">
+                            <Pill size={19} />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-800 dark:text-slate-200">
+                              {medicineName(item.medicineId)}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                              {item.batchNumber} · ID: {item.inventoryId}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-5 py-4 text-slate-600 dark:text-slate-300">
+                        {supplierName(item.supplierId)}
+                      </td>
+
+                      <td className="px-5 py-4">
+                        <p className={`font-bold ${item.status === "Low stock" || item.status === "Out of stock"
+                          ? "text-rose-600 dark:text-rose-400"
+                          : "text-slate-800 dark:text-slate-200"
+                          }`}>
+                          {Number(item.quantity ?? 0).toLocaleString("en-IN")}
+                        </p>
+                        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                          Minimum: {item.minimumStock ?? 10}
+                        </p>
+                      </td>
+
+                      <td className="whitespace-nowrap px-5 py-4 font-medium text-slate-700 dark:text-slate-300">
+                        <span className="inline-flex items-center">
+                          <IndianRupee size={14} />
+                          {Number(item.unitPrice ?? 0).toFixed(2)}
+                        </span>
+                      </td>
+
+                      <td className="whitespace-nowrap px-5 py-4">
+                        <span className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                          <CalendarDays size={15} className="text-slate-400 dark:text-slate-500" />
+                          {formatDate(item.expiryDate)}
+                        </span>
+                      </td>
+
+                      <td className="px-5 py-4">
+                        <span className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-semibold ring-1 ring-inset ${statusStyle(item.status)}`}>
+                          {item.status}
+                        </span>
+                      </td>
+
+                      <td className="px-5 py-4">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => startEdit(item)}
+                            title="Edit batch"
+                            className="rounded-lg border border-slate-200 dark:border-slate-800 p-2 text-slate-600 dark:text-slate-300 hover:border-teal-300 hover:bg-teal-50 dark:hover:bg-teal-500/10 hover:text-teal-700"
+                          >
+                            <Pencil size={16} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDeleteItem(item)}
+                            title="Delete batch"
+                            className="rounded-lg border border-slate-200 dark:border-slate-800 p-2 text-rose-600 dark:text-rose-400 hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div className="border-t border-slate-100 dark:border-slate-800 px-5 py-3 text-xs text-slate-500 dark:text-slate-400">
+            Showing {filteredItems.length} of {items.length} inventory batches
+          </div>
+        </section>
+      </div>
+
+      {/* Delete confirmation */}
+      {deleteItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4">
+          <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white dark:bg-slate-900 p-6 shadow-2xl">
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400">
+              <Trash2 size={22} />
+            </div>
+
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+              Delete inventory batch?
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
+              Delete batch{" "}
+              <strong className="text-slate-800 dark:text-slate-200">
+                {deleteItem.batchNumber}
+              </strong>
+              ? The backend may reject deletion if the batch is referenced elsewhere.
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleteItem(null)}
+                disabled={deleting}
+                className="rounded-xl border border-slate-200 dark:border-slate-800 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800/50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={deleting}
+                className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 disabled:opacity-60"
+              >
+                {deleting && <LoaderCircle size={16} className="animate-spin" />}
+                Delete batch
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Field({ label, children }) {
+  return (
+    <label className="block space-y-2">
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function Summary({ title, value, subtitle, icon, color, onClick }) {
+  const colors = {
+    teal: "border-teal-200 bg-gradient-to-br from-white to-teal-50 dark:border-teal-900 dark:from-slate-900 dark:to-teal-950/40",
+    rose: "border-rose-200 bg-gradient-to-br from-white to-rose-50 dark:border-rose-900 dark:from-slate-900 dark:to-rose-950/40",
+    amber: "border-amber-200 bg-gradient-to-br from-white to-amber-50 dark:border-amber-900 dark:from-slate-900 dark:to-amber-950/40",
+    green: "border-emerald-200 bg-gradient-to-br from-white to-emerald-50 dark:border-emerald-900 dark:from-slate-900 dark:to-emerald-950/40",
+  };
+
+  const iconColors = {
+    teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",
+    rose: "bg-rose-100 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400",
+    amber: "bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    green: "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={!onClick}
+      className={`w-full rounded-2xl border p-5 text-left shadow-sm transition ${colors[color]
+        } ${onClick
+          ? "cursor-pointer hover:-translate-y-0.5 hover:shadow-md"
+          : "cursor-default"
+        }`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+          {title}
+        </p>
+
+        <div className={`rounded-xl p-3 ${iconColors[color]}`}>
+          {icon}
+        </div>
+      </div>
+
+      <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+        {value}
+      </p>
+
+      <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
+        {subtitle}
+      </p>
+    </button>
+  );
+}
+
+function Notice({ type, message, onClose }) {
+  const success = type === "success";
+
+  return (
+    <div
+      role={success ? "status" : "alert"}
+      className={`flex items-start justify-between gap-3 rounded-xl border p-4 text-sm ${success
+        ? "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-200"
+        : "border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300"
+        }`}
+    >
+      <div className="flex items-start gap-2">
+        {success ? (
+          <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
+        ) : (
+          <AlertTriangle size={18} className="mt-0.5 shrink-0" />
+        )}
+        <span className="break-words">{message}</span>
+      </div>
+      <button type="button" onClick={onClose} aria-label="Close message">
+        <X size={16} />
+      </button>
+    </div>
+  );
+}

@@ -122,3 +122,8 @@ hosted DB).
   request-scoped `SecurityContext` and downgrades 403 to 401.
 - `ddl-auto=none`: new entities need matching SQL in `database/schema.sql`
   (e.g. `audit_logs`).
+
+
+
+
+DTOs → repositories → services → controllers → security → API testing,

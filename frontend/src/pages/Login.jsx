@@ -60,6 +60,9 @@ export default function Login({ onLogin, onSignup }) {
 
       sessionStorage.setItem("medistock_token", data.token);
       sessionStorage.setItem("medistock_role", data.role);
+      localStorage.setItem("medistock_token", data.token);
+      localStorage.setItem("medistock_role", data.role);
+      localStorage.setItem("token", data.token);
 
       onLogin(data);
     } catch (err) {

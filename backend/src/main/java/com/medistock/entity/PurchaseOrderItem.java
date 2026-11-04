@@ -1,3 +1,4 @@
+
 package com.medistock.entity;
 
 import jakarta.persistence.*;
@@ -20,6 +21,9 @@ public class PurchaseOrderItem {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "received_quantity", nullable = false)
+    private Integer receivedQuantity = 0;
 
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
@@ -53,6 +57,14 @@ public class PurchaseOrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getReceivedQuantity() {
+        return receivedQuantity;
+    }
+
+    public void setReceivedQuantity(Integer receivedQuantity) {
+        this.receivedQuantity = receivedQuantity;
     }
 
     public BigDecimal getUnitPrice() {

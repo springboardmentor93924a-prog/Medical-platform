@@ -2,8 +2,7 @@ import { API_BASE } from "../../services/api";
 
 import { useCallback, useEffect, useState } from "react";
 import {
-  ShoppingCart,
-  Package,
+  ShoppingCart, 
   Truck,
   Clock,
   CheckCircle2,
@@ -235,8 +234,8 @@ export default function PurchaseOrders() {
   };
 
   return (
-    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 dark:from-slate-900 via-white to-teal-50/40 p-4 md:p-7 lg:p-8">
-      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-teal-50 dark:from-teal-500/10 via-white to-cyan-50 p-6 shadow-sm md:p-8">
+    <div className="min-h-full space-y-7 bg-gradient-to-br from-slate-50 via-white to-teal-50/40 p-4 transition-colors dark:from-slate-950 dark:via-slate-900 dark:to-teal-950/20 md:p-7 lg:p-8">
+      <header className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-r from-white via-teal-50 to-cyan-50 p-6 shadow-sm transition-colors dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-teal-950/40 md:p-8">
         <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full bg-teal-100/70 blur-3xl" />
 
         <div className="relative flex flex-wrap items-center justify-between gap-5">
@@ -317,7 +316,7 @@ export default function PurchaseOrders() {
               value={supplierId}
               onChange={(event) => setSupplierId(event.target.value)}
               required
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             >
               <option value="">Select supplier</option>
               {suppliers
@@ -556,7 +555,7 @@ export default function PurchaseOrders() {
       {/* Order details modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm">
-          <section className="max-h-[85vh] w-full max-w-3xl overflow-hidden rounded-2xl bg-white dark:bg-slate-900 shadow-2xl">
+          <section className="w-full max-w-3xl max-h-[85vh] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
             <header className="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 p-5">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-teal-700 dark:text-teal-300">
@@ -640,11 +639,11 @@ export default function PurchaseOrders() {
 
 function Metric({ title, value, icon: Icon, color }) {
   const themes = {
-    teal: "border-teal-100 from-teal-50 dark:from-teal-500/10 to-white",
-    amber: "border-amber-100 from-amber-50 dark:from-amber-500/10 to-white",
-    blue: "border-blue-100 from-blue-50 dark:from-blue-500/10 to-white",
-    purple: "border-purple-100 from-purple-50 dark:from-purple-500/10 to-white",
-  };
+  teal: "border-teal-200 from-white to-teal-50 dark:border-teal-900 dark:from-slate-900 dark:to-teal-950/40",
+  amber: "border-amber-200 from-white to-amber-50 dark:border-amber-900 dark:from-slate-900 dark:to-amber-950/40",
+  blue: "border-blue-200 from-white to-blue-50 dark:border-blue-900 dark:from-slate-900 dark:to-blue-950/40",
+  purple: "border-purple-200 from-white to-purple-50 dark:border-purple-900 dark:from-slate-900 dark:to-purple-950/40",
+};
 
   const iconThemes = {
     teal: "bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300",

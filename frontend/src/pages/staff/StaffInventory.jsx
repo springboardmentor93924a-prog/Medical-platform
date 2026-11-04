@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Package, RefreshCw, Search } from "lucide-react";
 
-import { apiFetch } from "../services/api";
+import { apiFetch } from "../../services/api";
 
 const dayStart = () => {
   const now = new Date();

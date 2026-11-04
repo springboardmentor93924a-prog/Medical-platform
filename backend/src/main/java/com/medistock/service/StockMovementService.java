@@ -6,9 +6,10 @@ import com.medistock.entity.Inventory;
 import com.medistock.entity.StockLog;
 import com.medistock.repository.InventoryRepository;
 import com.medistock.repository.StockLogRepository;
-import jakarta.transaction.Transactional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -24,6 +25,7 @@ public class StockMovementService {
             StockLogRepository stockLogRepository,
             AuditService auditService,
             NotificationService notificationService) {
+
         this.inventoryRepository = inventoryRepository;
         this.stockLogRepository = stockLogRepository;
         this.auditService = auditService;
@@ -31,65 +33,151 @@ public class StockMovementService {
     }
 
     @Transactional
-    public StockLog recordMovement(StockMovementRequest request, Long userId) {
-        if (request.getInventoryId() == null
+    public StockLog recordMovement(
+            StockMovementRequest request,
+            Long userId) {
+
+        // Validate request
+        if (request == null
+                || request.getInventoryId() == null
                 || request.getChangeQuantity() == null
                 || request.getChangeQuantity() <= 0) {
+
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Inventory ID and a positive movement quantity are required");
+                    "Inventory ID and a positive movement quantity are required"
+            );
         }
 
-        String type = request.getMovementType() == null
-                ? ""
-                : request.getMovementType().trim().toUpperCase();
+        if (userId == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "Authenticated user is required"
+            );
+        }
+
+        if (request.getMovementType() == null
+                || request.getMovementType().isBlank()) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Movement type is required"
+            );
+        }
+
+        String type = request.getMovementType()
+                .trim()
+                .toUpperCase();
 
         if (!type.equals("IN") && !type.equals("OUT")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Movement type must be IN or OUT");
+                    "Movement type must be IN or OUT"
+            );
         }
 
-        Inventory inventory = inventoryRepository
-                .findById(request.getInventoryId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Inventory batch not found"));
-
-        int currentQuantity = inventory.getQuantity();
         int movementQuantity = request.getChangeQuantity();
 
-        if (type.equals("OUT") && movementQuantity > currentQuantity) {
+        // Fetch inventory using a database lock
+        Inventory inventory = inventoryRepository
+                .findByIdForUpdate(request.getInventoryId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Inventory batch not found"
+                ));
+
+        // Validate existing quantity
+        if (inventory.getQuantity() == null
+                || inventory.getQuantity() < 0) {
+
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Insufficient stock for this movement");
+                    HttpStatus.CONFLICT,
+                    "Inventory contains an invalid stock quantity"
+            );
         }
 
-        inventory.setQuantity(type.equals("IN")
-                ? Math.addExact(currentQuantity, movementQuantity)
-                : currentQuantity - movementQuantity);
+        int currentQuantity = inventory.getQuantity();
+        int newQuantity;
 
+        // Calculate new stock quantity
+        if (type.equals("IN")) {
+
+            try {
+                newQuantity = Math.addExact(
+                        currentQuantity,
+                        movementQuantity
+                );
+
+            } catch (ArithmeticException ex) {
+
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Stock quantity exceeds the supported limit"
+                );
+            }
+
+        } else {
+
+            if (movementQuantity > currentQuantity) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Insufficient stock. Available quantity: "
+                                + currentQuantity
+                );
+            }
+
+            newQuantity = currentQuantity - movementQuantity;
+        }
+
+        // Update inventory quantity
+        inventory.setQuantity(newQuantity);
         inventoryRepository.save(inventory);
 
+        // Create stock movement history
         StockLog log = new StockLog();
+
         log.setInventoryId(inventory.getInventoryId());
         log.setUserId(userId);
-        log.setChangeQuantity(type.equals("IN")
-                ? movementQuantity : -movementQuantity);
         log.setMovementType(type);
-        log.setNotes(request.getNotes());
+
+        // IN = positive quantity, OUT = negative quantity
+        log.setChangeQuantity(
+                type.equals("IN")
+                        ? movementQuantity
+                        : -movementQuantity
+        );
+
+        log.setNotes(
+                request.getNotes() == null
+                        ? null
+                        : request.getNotes().trim()
+        );
 
         StockLog saved = stockLogRepository.save(log);
 
+        // Record audit activity
+        String action = type.equals("IN")
+                ? "STOCK_IN"
+                : "STOCK_OUT";
+
+        String description =
+                (type.equals("IN") ? "Received " : "Issued ")
+                        + movementQuantity
+                        + " units of batch "
+                        + inventory.getBatchNumber()
+                        + (request.getNotes() == null
+                        || request.getNotes().isBlank()
+                        ? ""
+                        : " (" + request.getNotes().trim() + ")");
+
         auditService.record(
-                type.equals("IN") ? "STOCK_IN" : "STOCK_OUT",
+                action,
                 "INVENTORY",
                 inventory.getInventoryId(),
-                (type.equals("IN") ? "Received " : "Issued ")
-                        + movementQuantity + " of batch "
-                        + inventory.getBatchNumber()
-                        + (request.getNotes() == null || request.getNotes().isBlank()
-                                ? "" : " (" + request.getNotes().trim() + ")"));
+                description
+        );
 
+        // Check low-stock notification
         notificationService.notifyLowStock(inventory);
 
         return saved;
