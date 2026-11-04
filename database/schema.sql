@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_id       BIGINT       NOT NULL AUTO_INCREMENT,
     full_name     VARCHAR(100) NOT NULL,
     email         VARCHAR(150) NOT NULL,
+    phone         VARCHAR(30)  NULL,
+    profile_picture LONGTEXT   NULL,
     password_hash VARCHAR(255) NOT NULL,
     role_id       BIGINT       NOT NULL,
     active        TINYINT(1)   NOT NULL DEFAULT 1,
@@ -29,6 +31,8 @@ CREATE TABLE IF NOT EXISTS suppliers (
     contact_number VARCHAR(20)  NULL,
     email          VARCHAR(150) NULL,
     address        VARCHAR(255) NULL,
+    medicines      VARCHAR(500) NULL,
+    profile_image_url VARCHAR(500) NULL,
     active         TINYINT(1)   NOT NULL DEFAULT 1,
     PRIMARY KEY (supplier_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -91,6 +95,7 @@ CREATE TABLE IF NOT EXISTS purchase_order_items (
     purchase_order_id BIGINT        NOT NULL,
     medicine_id       BIGINT        NOT NULL,
     quantity          INT           NOT NULL,
+    received_quantity INT           NOT NULL DEFAULT 0,
     unit_price        DECIMAL(12,2) NOT NULL,
     PRIMARY KEY (item_id),
     KEY idx_po_items_order (purchase_order_id),
@@ -154,4 +159,38 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     KEY idx_audit_action (action),
     KEY idx_audit_entity (entity_type, entity_id),
     KEY idx_audit_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS stock_movements (
+    movement_id       BIGINT       NOT NULL AUTO_INCREMENT,
+    inventory_id      BIGINT       NOT NULL,
+    movement_type     VARCHAR(30)  NOT NULL,
+    quantity_changed  INT          NOT NULL,
+    previous_quantity INT          NOT NULL,
+    new_quantity      INT          NOT NULL,
+    reason            VARCHAR(500) NULL,
+    created_at        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (movement_id),
+    KEY idx_movements_inventory (inventory_id),
+    KEY idx_movements_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS stock_check_reports (
+    report_id         BIGINT       NOT NULL AUTO_INCREMENT,
+    inventory_id      BIGINT       NOT NULL,
+    system_quantity   INT          NOT NULL,
+    physical_quantity INT          NOT NULL,
+    difference        INT          NOT NULL,
+    remarks           VARCHAR(500) NULL,
+    reported_by       BIGINT       NOT NULL,
+    status            VARCHAR(20)  NOT NULL DEFAULT 'PENDING',
+    reviewed_by       BIGINT       NULL,
+    reviewed_at       DATETIME     NULL,
+    review_remarks    VARCHAR(500) NULL,
+    reported_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (report_id),
+    KEY idx_scr_inventory (inventory_id),
+    KEY idx_scr_status (status),
+    KEY idx_scr_reported_by (reported_by),
+    KEY idx_scr_reported_at (reported_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

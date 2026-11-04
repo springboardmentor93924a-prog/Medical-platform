@@ -48,7 +48,7 @@ public class SupplierProfileController {
     this.supplierRepository = supplierRepository;
     this.inventoryRepository = inventoryRepository;
 
-    System.out.println(">>> SupplierProfileController initialized!");
+
 }
 
     // ==========================================
@@ -59,10 +59,6 @@ public class SupplierProfileController {
 public Supplier getMyProfile(Authentication authentication) {
 
     Supplier supplier = getSupplier(authentication);
-
-    System.out.println("Profile Supplier ID: " + supplier.getSupplierId());
-    System.out.println("Profile Email: " + supplier.getEmail());
-    System.out.println("Profile Active: " + supplier.getActive());
 
     return supplier;
 }
@@ -355,14 +351,10 @@ public List<String> getMyMedicines(Authentication authentication) {
 
     Supplier supplier = getSupplier(authentication);
 
-    System.out.println("Logged-in Supplier ID: " + supplier.getSupplierId());
-
     List<String> medicines =
             inventoryRepository.findMedicineNamesBySupplierId(
                     supplier.getSupplierId()
             );
-
-    System.out.println("Medicines found: " + medicines);
 
     return medicines;
 }

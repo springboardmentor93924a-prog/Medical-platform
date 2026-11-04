@@ -16,15 +16,5 @@ public class MediStockApplication {
         SpringApplication.run(MediStockApplication.class, args);
     }
 
-    @Bean
-public ApplicationRunner checkSupplierController(
-        ApplicationContext context) {
 
-    return args -> {
-        System.out.println(
-            "SupplierProfileController registered: "
-            + context.containsBean("supplierProfileController")
-        );
-    };
-}
 }

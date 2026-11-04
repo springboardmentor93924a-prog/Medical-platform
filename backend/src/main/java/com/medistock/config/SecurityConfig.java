@@ -94,12 +94,6 @@ public class SecurityConfig {
 
 .requestMatchers("/error").permitAll()
 
-                // Temporary public test endpoint
-                .requestMatchers(
-                        HttpMethod.GET,
-                        "/api/stock-check-reports/test"
-                ).permitAll()
-
                 // Inventory endpoints
                 .requestMatchers(
                         HttpMethod.GET,

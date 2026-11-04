@@ -29,7 +29,7 @@ public class StockCheckReportController {
 
         this.reportService = reportService;
         this.userRepository = userRepository;
-        System.out.println("StockCheckReportController LOADED!");
+
     }
 
     // Staff submits a report.
@@ -100,11 +100,6 @@ public class StockCheckReportController {
         );
     }
 
-
-    @GetMapping("/test")
-public String test() {
-    return "Stock Check Report API is working!";
-}
 
     private User getAuthenticatedUser(Authentication authentication) {
 

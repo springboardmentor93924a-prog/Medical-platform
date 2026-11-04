@@ -57,15 +57,6 @@ public class AuthService {
                         HttpStatus.UNAUTHORIZED,
                         "Invalid email or password"));
 
-        // Debug information
-        System.out.println("Login email: " + user.getEmail());
-        System.out.println("Account active: " + user.getActive());
-        System.out.println("Actual role: " + user.getRole().getRoleName());
-        System.out.println("Selected role: " + request.getRole());
-        System.out.println("Password matches: " +
-                passwordEncoder.matches(
-                        request.getPassword(),
-                        user.getPasswordHash()));
 
         // Check account status and password
         if (!Boolean.TRUE.equals(user.getActive())

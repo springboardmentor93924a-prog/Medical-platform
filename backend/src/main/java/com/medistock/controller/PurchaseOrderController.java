@@ -142,7 +142,7 @@ public List<PurchaseOrder> getSupplierPurchaseOrders(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
+    @PreAuthorize("hasRole('PHARMACIST')")
     public PurchaseOrder createPurchaseOrder(
             @RequestBody PurchaseOrderRequest request,
             Authentication authentication) {
@@ -189,11 +189,12 @@ public List<PurchaseOrder> getSupplierPurchaseOrders(
                 : request.getStatus().trim().toUpperCase();
 
         if (!newStatus.equals("APPROVED")
-                && !newStatus.equals("CANCELLED")) {
+                && !newStatus.equals("CANCELLED")
+                && !newStatus.equals("REJECTED")) {
 
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Status must be APPROVED or CANCELLED"
+                    "Status must be APPROVED, REJECTED or CANCELLED"
             );
         }
 
@@ -212,6 +213,7 @@ public List<PurchaseOrder> getSupplierPurchaseOrders(
         boolean validTransition =
                 (currentStatus.equals("PENDING")
                         && (newStatus.equals("APPROVED")
+                        || newStatus.equals("REJECTED")
                         || newStatus.equals("CANCELLED")))
                 ||
                 (currentStatus.equals("APPROVED")
@@ -278,8 +280,6 @@ return savedOrder;
 public List<PurchaseOrder> getMySupplierOrders(
         Authentication authentication) {
 
-    System.out.println("Logged-in email: " + authentication.getName());
-
     Supplier supplier = supplierRepository
             .findByEmailIgnoreCase(authentication.getName())
             .orElseThrow(() -> new ResponseStatusException(
@@ -287,14 +287,10 @@ public List<PurchaseOrder> getMySupplierOrders(
                     "Supplier account not found"
             ));
 
-    System.out.println("Supplier ID: " + supplier.getSupplierId());
-
     List<PurchaseOrder> orders =
             purchaseOrderService.getSupplierOrders(
                     supplier.getSupplierId()
             );
-
-    System.out.println("Orders found: " + orders.size());
 
     return orders;
 }
