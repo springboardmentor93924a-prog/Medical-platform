@@ -17,8 +17,10 @@ import {
   ImagePlus,
 } from "lucide-react";
 
-const API_URL = "http://localhost:8080/api";
-const SERVER_URL = "http://localhost:8080";
+import { API_BASE } from "../../services/api";
+
+const API_URL = API_BASE;
+const SERVER_URL = API_BASE.replace(/\/api$/, "");
 
 const initialForm = {
   supplierName: "",
@@ -92,25 +94,8 @@ export default function SupplierProfile() {
       }
 
       const data = await response.json();
-      console.log("Logged-in supplier email:", data.email);
-console.log("Supplier ID:", data.supplierId);
-console.log("Active value:", data.active);
-console.log("Active value type:", typeof data.active);
-console.log("Complete supplier profile:", data);
-      console.log("Supplier profile:", data);
-      console.log("Profile image path:", data.profileImageUrl);
-
-      console.log("Supplier profile loaded:", data);
-
       setProfile(data);
       setProfile(data);
-
-console.log("Profile API keys:", Object.keys(data));
-console.log("Supplier ID from API:", data.supplierId);
-console.log("Supplier name from API:", data.supplierName);
-console.log("Email from API:", data.email);
-console.log("Active from API:", data.active);
-
 const medicineResponse = await fetch(
   `${API_URL}/supplier/me/medicines`,
   {
@@ -119,13 +104,7 @@ const medicineResponse = await fetch(
     },
   }
 );
-
-console.log("Medicine API status:", medicineResponse.status);
-
 const medicineData = await medicineResponse.json();
-
-console.log("Medicines received:", medicineData);
-
 setMedicines(
   Array.isArray(medicineData) ? medicineData : []
 );
@@ -139,7 +118,6 @@ setMedicines(
 
       setImageError(false);
     } catch (err) {
-      console.error("Supplier profile error:", err);
       setError(err.message || "Unable to load profile.");
     } finally {
       setLoading(false);
@@ -153,9 +131,6 @@ useEffect(() => {
 
 // Debug profile state whenever it changes
 useEffect(() => {
-  console.log("PROFILE STATE UPDATED:", profile);
-  console.log("PROFILE ID:", profile?.supplierId);
-  console.log("PROFILE ACTIVE:", profile?.active);
 }, [profile]);
 
   // Handle form changes.
@@ -235,9 +210,6 @@ useEffect(() => {
       );
 
       const data = await response.json();
-
-      console.log("Upload response:", data);
-
       if (!response.ok) {
         throw new Error(
           data.message || "Profile picture upload failed."
@@ -247,10 +219,6 @@ useEffect(() => {
       if (!data.profileImageUrl) {
         throw new Error("Image URL is missing from backend response.");
       }
-
-      const imageUrl = getImageUrl(data.profileImageUrl);
-
-      console.log("Complete image URL:", imageUrl);
 
       setProfile((previous) => ({
         ...previous,
@@ -268,7 +236,6 @@ useEffect(() => {
 
       setSuccess("Profile picture uploaded successfully!");
     } catch (err) {
-      console.error("Upload error:", err);
       setError(err.message || "Unable to upload profile picture.");
     } finally {
       setUploading(false);
@@ -346,7 +313,6 @@ useEffect(() => {
       setEditing(false);
       setSuccess("Your profile has been updated successfully.");
     } catch (err) {
-      console.error("Update supplier profile error:", err);
       setError(err.message || "Unable to update profile.");
     } finally {
       setSaving(false);
@@ -437,7 +403,6 @@ useEffect(() => {
                   alt="Supplier profile"
                   className="h-full w-full object-cover"
                   onLoad={() => {
-                    console.log("Supplier profile image loaded:", currentImage);
                   }}
                   onError={() => {
                     console.error(

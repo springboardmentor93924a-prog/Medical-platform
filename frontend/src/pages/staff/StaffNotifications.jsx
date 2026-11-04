@@ -27,9 +27,6 @@ export default function StaffNotifications() {
 
     try {
       const response = await apiFetch("/notifications");
-
-      console.log("Notifications API:", response);
-
       // Support common API response formats.
       const data = Array.isArray(response)
         ? response

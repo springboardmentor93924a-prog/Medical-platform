@@ -24,7 +24,6 @@ const emptyForm = {
 const inputClass =
   "w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-400";
 
-
 function getToken() {
   return sessionStorage.getItem("medistock_token");
 }
@@ -140,8 +139,6 @@ export default function Inventory() {
     return text ? JSON.parse(text) : null;
   }, []);
 
-
-
   const loadData = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -168,7 +165,6 @@ export default function Inventory() {
         const medicineList = getList(results[1].value);
         setMedicines(medicineList);
 
-        console.log("Medicines loaded:", medicineList);
       } else {
         setMedicines([]);
         console.error("Medicine API error:", results[1].reason);
@@ -183,7 +179,6 @@ export default function Inventory() {
         const supplierList = getList(results[2].value);
         setSuppliers(supplierList);
 
-        console.log("Suppliers loaded:", supplierList);
       } else {
         setSuppliers([]);
 
@@ -476,9 +471,6 @@ export default function Inventory() {
             onClose={() => setError("")}
           />
         )}
-
-
-
 
         {/* Summary cards */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

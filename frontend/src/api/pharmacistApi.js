@@ -1,8 +1,10 @@
 
 import axios from "axios";
 
+import { API_BASE } from "../services/api";
+
 const pharmacistApi = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: API_BASE,
 });
 
 // Attach JWT token to every request

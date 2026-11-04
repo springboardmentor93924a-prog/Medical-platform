@@ -66,7 +66,6 @@ export default function ExpiryTracking() {
     loadData();
   }, [loadData]);
 
-
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -161,7 +160,6 @@ export default function ExpiryTracking() {
     </button>
   </div>
 </header>
-
 
       {error && (
         <div

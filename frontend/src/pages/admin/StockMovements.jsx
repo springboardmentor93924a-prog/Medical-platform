@@ -264,8 +264,6 @@ export default function StockMovements() {
         const list = getList(result.value);
 
         endpoint.setter(list);
-
-        console.log(`${endpoint.name} loaded:`, list);
       } else {
         errors.push(
           `${endpoint.name}: ${

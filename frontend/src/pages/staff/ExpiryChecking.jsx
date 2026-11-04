@@ -24,9 +24,6 @@ export default function ExpiryChecking() {
 
     try {
       const inventoryData = await apiFetch("/inventory");
-
-      console.log("Inventory API:", inventoryData);
-
       setInventory(
         Array.isArray(inventoryData) ? inventoryData : []
       );

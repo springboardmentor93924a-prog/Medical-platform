@@ -17,7 +17,6 @@ const PAGE_SIZE = 10;
 
 const emptyForm = { fullName: "", email: "", password: "", role: "STAFF", active: true };
 
-
 export default function Users() {
   const [data, setData] = useState({ content: [], totalElements: 0, totalPages: 0, number: 0 });
   const [page, setPage] = useState(0);

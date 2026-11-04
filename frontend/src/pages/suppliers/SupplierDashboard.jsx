@@ -15,7 +15,9 @@ import {
 
 import AppShell from "../../components/AppShell";
 
-const API_URL = "http://localhost:8080/api";
+import { API_BASE } from "../../services/api";
+
+const API_URL = API_BASE;
 
 const MENU = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
@@ -60,9 +62,6 @@ export default function SupplierDashboard({ onLogout }) {
       }
 
       const result = await response.json();
-
-      console.log("Supplier API response:", result);
-
       const data = Array.isArray(result)
         ? result
         : Array.isArray(result.content)
@@ -74,12 +73,8 @@ export default function SupplierDashboard({ onLogout }) {
               : Array.isArray(result.purchaseOrders)
                 ? result.purchaseOrders
                 : [];
-
-      console.log("Extracted orders:", data);
-
       setOrders(data);
     } catch (err) {
-      console.error("Supplier dashboard error:", err);
       setError(err.message || "Unable to load purchase orders.");
     } finally {
       setLoading(false);

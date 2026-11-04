@@ -12,7 +12,9 @@ import {
   XCircle,
 } from "lucide-react";
 
-const API_URL = "http://localhost:8080/api";
+import { API_BASE } from "../../services/api";
+
+const API_URL = API_BASE;
 
 const SupplierNotifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -96,7 +98,6 @@ const SupplierNotifications = () => {
       setUnreadCount(Number(countData.count ?? 0));
 
     } catch (err) {
-      console.error("Notification fetch error:", err);
       setError(err.message || "Unable to load notifications.");
     } finally {
       setLoading(false);
