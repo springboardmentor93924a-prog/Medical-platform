@@ -14,7 +14,7 @@ INSERT IGNORE INTO users (user_id, full_name, email, password_hash, role_id, act
     (4, 'Supplier User',   'supplier@medistock.local',   '$2b$10$CT1ICbI88HpKKeVV595pe.sq901uxAGbke092u3L3lLS74UAq1sCK', 4, 1);
 
 INSERT IGNORE INTO suppliers (supplier_id, supplier_name, contact_number, email, address, active) VALUES
-    (1, 'MedPlus Distributors',  '9000000001', 'orders@medplus.example',  '12 MG Road, Bengaluru',   1),
+    (1, 'MedPlus Distributors',  '9000000001', 'supplier@medistock.local',  '12 MG Road, Bengaluru',   1),
     (2, 'HealthBridge Supplies', '9000000002', 'sales@healthbridge.example', '45 Park Street, Kolkata', 1),
     (3, 'Apex Pharma Traders',   '9000000003', 'info@apexpharma.example', '78 Anna Salai, Chennai',  1);
 
