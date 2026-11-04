@@ -27,6 +27,10 @@ public class Supplier {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
+    @Column(name = "profile_image_url", length = 500)
+private String profileImageUrl;
+
+
     public Long getSupplierId() {
         return supplierId;
     }
@@ -81,6 +85,14 @@ public class Supplier {
             this.contactNumber = phone;
         }
     }
+
+    public String getProfileImageUrl() {
+    return profileImageUrl;
+}
+
+public void setProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
+}
 
     public void setActive(Boolean active) {
         this.active = active;

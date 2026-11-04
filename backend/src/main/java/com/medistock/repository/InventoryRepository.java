@@ -2,7 +2,10 @@
 package com.medistock.repository;
 
 import com.medistock.entity.Inventory;
+import com.medistock.dto.InventoryMedicineDTO;
+
 import jakarta.persistence.LockModeType;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,6 +51,28 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             @Param("expiryLimit") LocalDate expiryLimit
     );
 
+    // Fetch inventory together with medicine details
+    @Query("""
+        SELECT new com.medistock.dto.InventoryMedicineDTO(
+            i.inventoryId,
+            i.medicineId,
+            m.medicineName,
+            m.category,
+            m.description,
+            i.supplierId,
+            i.batchNumber,
+            i.quantity,
+            i.minimumStock,
+            i.unitPrice,
+            i.manufacturingDate,
+            i.expiryDate
+        )
+        FROM Inventory i
+        JOIN Medicine m ON m.medicineId = i.medicineId
+        ORDER BY i.inventoryId DESC
+    """)
+    List<InventoryMedicineDTO> findInventoryWithMedicineDetails();
+
     // Lock inventory record while updating stock
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
@@ -57,4 +82,17 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     Optional<Inventory> findByIdForUpdate(
             @Param("id") Long id
     );
+
+
+    // Find unique medicines supplied by a supplier
+@Query("""
+    SELECT DISTINCT m.medicineName
+    FROM Inventory i
+    JOIN Medicine m ON m.medicineId = i.medicineId
+    WHERE i.supplierId = :supplierId
+    ORDER BY m.medicineName
+""")
+List<String> findMedicineNamesBySupplierId(
+        @Param("supplierId") Long supplierId
+);
 }

@@ -105,4 +105,6 @@ public interface NotificationRepository
     List<Notification> findByUserIdOrderByNotificationIdDesc(
             Long userId
     );
+
+    List<Notification> findByUserIdOrderByCreatedAtDesc(Long userId);
 }

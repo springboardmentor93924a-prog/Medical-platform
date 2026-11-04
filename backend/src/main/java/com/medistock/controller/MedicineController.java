@@ -32,13 +32,12 @@ public class MedicineController {
         this.auditService = auditService;
     }
 
-    // ================= GET ALL MEDICINES =================
-
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
-    public List<Medicine> getAllMedicines() {
-        return medicineRepository.findAll();
-    }
+    // Staff can view medicines, but cannot modify them
+@GetMapping
+@PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST', 'STAFF')")
+public List<Medicine> getAllMedicines() {
+    return medicineRepository.findAll();
+}
 
     // ================= ADD MEDICINE =================
 

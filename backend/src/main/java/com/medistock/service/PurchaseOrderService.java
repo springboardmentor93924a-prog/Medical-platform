@@ -260,10 +260,16 @@ public class PurchaseOrderService {
                         "Enter valid manufacturing and expiry dates");
             }
 
-            requestedTotals.merge(
-                    receipt.getItemId(),
-                    receipt.getReceivedQuantity(),
-                    Integer::sum);
+            try {
+    requestedTotals.merge(
+            receipt.getItemId(),
+            receipt.getReceivedQuantity(),
+            Math::addExact);
+} catch (ArithmeticException ex) {
+    throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Received quantity is too large");
+}
         }
 
         // Check over-receiving
@@ -281,7 +287,13 @@ public class PurchaseOrderService {
                     ? 0
                     : item.getReceivedQuantity();
 
-            int remaining = item.getQuantity() - alreadyReceived;
+            if (item.getQuantity() == null || item.getQuantity() <= 0) {
+    throw new ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Invalid ordered quantity for medicine " + item.getMedicineId());
+}
+
+int remaining = item.getQuantity() - alreadyReceived;
 
             if (entry.getValue() > remaining) {
 
@@ -327,7 +339,7 @@ public class PurchaseOrderService {
                     oldReceived + receipt.getReceivedQuantity());
         }
 
-        // Save updated purchase order items
+                // Save updated purchase order items
         itemRepository.saveAll(orderItems);
 
         // Check whether order is fully received
@@ -343,4 +355,13 @@ public class PurchaseOrderService {
 
         return orderRepository.save(order);
     }
+
+    // GET APPROVED AND PARTIALLY RECEIVED ORDERS
+    @Transactional(readOnly = true)
+    public List<PurchaseOrder> getOrdersReadyToReceive() {
+
+        return orderRepository.findByStatusInOrderByOrderDateDesc(
+                List.of("APPROVED", "PARTIALLY_RECEIVED"));
+    }
+
 }

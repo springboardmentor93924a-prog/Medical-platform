@@ -1,5 +1,6 @@
 
 package com.medistock.controller;
+import com.medistock.dto.InventoryMedicineDTO;
 
 import com.medistock.entity.Inventory;
 import com.medistock.repository.InventoryRepository;
@@ -25,9 +26,9 @@ public class InventoryController {
     }
 
     @GetMapping
-    public List<Inventory> getAllInventory() {
-        return inventoryRepository.findAll();
-    }
+public List<InventoryMedicineDTO> getAllInventory() {
+    return inventoryRepository.findInventoryWithMedicineDetails();
+}
 
     @GetMapping("/low-stock")
     public List<Inventory> getLowStockItems() {

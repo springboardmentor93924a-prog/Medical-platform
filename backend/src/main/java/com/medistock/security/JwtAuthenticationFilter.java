@@ -9,6 +9,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,10 +21,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -29,9 +36,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserRepository userRepository) {
+
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
+
+
+    @Override
+protected boolean shouldNotFilter(HttpServletRequest request) {
+    return request.getServletPath().startsWith("/uploads/");
+}
 
     @Override
     protected void doFilterInternal(
@@ -42,67 +56,110 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String header = request.getHeader("Authorization");
 
-         
-
+        // No JWT token: continue to the next filter
         if (header == null || !header.startsWith("Bearer ")) {
-            System.out.println("[JWT] Missing Bearer token");
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token = header.substring(7);
-
-        System.out.println("[JWT] Token contains whitespace: "
-                + token.matches(".*\\s+.*"));
+        String token = header.substring(7).trim();
 
         try {
+
+            // Extract email from JWT
             String email = jwtService.extractEmail(token);
 
-            if (jwtService.isTokenValid(token, email)
+            // Validate token
+            if (email != null
+                    && jwtService.isTokenValid(token, email)
                     && SecurityContextHolder.getContext()
                             .getAuthentication() == null) {
 
                 Optional<User> userOptional =
                         userRepository.findByEmail(email);
 
-                if (userOptional.isEmpty()) {
-                    System.out.println(
-                            "[JWT] User not found in database");
-                } else {
+                if (userOptional.isPresent()) {
+
                     User user = userOptional.get();
 
+                    // Check user account status
                     if (!Boolean.TRUE.equals(user.getActive())) {
-                        System.out.println(
-                                "[JWT] User account is inactive");
-                    } else {
-                        String roleName = user.getRole().getRoleName();
+                        logger.warn(
+                                "Inactive user attempted access: {}",
+                                email
+                        );
 
-                        SimpleGrantedAuthority authority =
-                                new SimpleGrantedAuthority(
-                                        "ROLE_" + roleName);
-
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(
-                                        email,
-                                        null,
-                                        List.of(authority));
-
-                        authentication.setDetails(
-                                new WebAuthenticationDetailsSource()
-                                        .buildDetails(request));
-
-                        SecurityContextHolder.getContext()
-                                .setAuthentication(authentication);
-
-                
+                        filterChain.doFilter(request, response);
+                        return;
                     }
+
+                    // Check role
+                    if (user.getRole() == null
+                            || user.getRole().getRoleName() == null) {
+
+                        logger.warn(
+                                "User has no assigned role: {}",
+                                email
+                        );
+
+                        filterChain.doFilter(request, response);
+                        return;
+                    }
+
+                    // Normalize database role
+                    String roleName = user.getRole()
+                            .getRoleName()
+                            .trim()
+                            .toUpperCase(Locale.ROOT);
+
+                    // Avoid duplicate ROLE_ prefix
+                    if (roleName.startsWith("ROLE_")) {
+                        roleName = roleName.substring(5);
+                    }
+
+                    // Create Spring Security authority
+                    SimpleGrantedAuthority authority =
+                            new SimpleGrantedAuthority(
+                                    "ROLE_" + roleName
+                            );
+
+                    // Create authentication object
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    List.of(authority)
+                            );
+
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
+
+                    // Store authentication
+                    SecurityContextHolder.getContext()
+                            .setAuthentication(authentication);
+
+                    logger.info(
+                            "JWT authenticated user: {} | Authority: ROLE_{}",
+                            email,
+                            roleName
+                    );
+
+                } else {
+                    logger.warn(
+                            "JWT user not found in database: {}",
+                            email
+                    );
                 }
             }
+
         } catch (Exception ex) {
-            System.err.println(
-                    "[JWT] Validation failed: "
-                            + ex.getClass().getSimpleName()
-                            + " - " + ex.getMessage());
+
+            logger.error(
+                    "JWT validation failed: {}",
+                    ex.getMessage()
+            );
 
             SecurityContextHolder.clearContext();
         }

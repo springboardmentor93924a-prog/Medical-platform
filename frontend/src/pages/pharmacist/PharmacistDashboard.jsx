@@ -1,23 +1,23 @@
 
 import { useState } from "react";
 
-import AppShell from "../components/AppShell";
-import { Icon } from "../components/icons";
+import AppShell from "../../components/AppShell.jsx";
+import { Icon } from "../../components/icons.jsx";
 
 // Existing medicine and inventory pages
-import Medicines from "./pharmacist/Medicines.jsx";
-import Inventory from "./pharmacist/Inventory.jsx";
-import PurchaseOrders from "./pharmacist/PurchaseOrders.jsx";
-import ExpiryTracking from "./pharmacist/ExpiryTracking.jsx";
-import Reports from "./pharmacist/Reports.jsx";
+import Medicines from "./Medicines.jsx";
+import Inventory from "./Inventory.jsx";
+import PurchaseOrders from "./PurchaseOrders.jsx";
+import ExpiryTracking from "./ExpiryTracking.jsx";
+import Reports from "./Reports.jsx";
 
-import PharmacistNotifications from "./pharmacist/PharmacistNotifications.jsx";
+import PharmacistNotifications from "./PharmacistNotifications.jsx";
 
 // Pharmacist-specific pages
-import Categories from "./pharmacist/Categories";
-import Suppliers from "./pharmacist/Suppliers";
-import MyProfile from "./pharmacist/MyProfile";
-import DashboardOverview from "./pharmacist/DashboardOverview.jsx";
+import Categories from "./Categories.jsx";
+import Suppliers from "./Suppliers.jsx";
+import MyProfile from "./MyProfile.jsx";
+import DashboardOverview from "./DashboardOverview.jsx";
 
 const menu = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },

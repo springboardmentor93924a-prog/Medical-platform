@@ -7,10 +7,12 @@ import com.medistock.dto.LoginResponse;
 
 import com.medistock.entity.Role;
 import com.medistock.entity.User;
+import com.medistock.entity.Supplier;
 
+
+import com.medistock.repository.SupplierRepository;
 import com.medistock.repository.RoleRepository;
 import com.medistock.repository.UserRepository;
-
 import com.medistock.security.JwtService;
 
 import org.springframework.http.HttpStatus;
@@ -27,20 +29,23 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuditService auditService;
+    private final SupplierRepository supplierRepository;
 
     public AuthService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,
-            JwtService jwtService,
-            AuditService auditService) {
+        UserRepository userRepository,
+        RoleRepository roleRepository,
+        SupplierRepository supplierRepository,
+        PasswordEncoder passwordEncoder,
+        JwtService jwtService,
+        AuditService auditService) {
 
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.auditService = auditService;
-    }
+    this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.supplierRepository = supplierRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.jwtService = jwtService;
+    this.auditService = auditService;
+}
 
     // LOGIN
     public LoginResponse login(LoginRequest request) {
@@ -51,6 +56,16 @@ public class AuthService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED,
                         "Invalid email or password"));
+
+        // Debug information
+        System.out.println("Login email: " + user.getEmail());
+        System.out.println("Account active: " + user.getActive());
+        System.out.println("Actual role: " + user.getRole().getRoleName());
+        System.out.println("Selected role: " + request.getRole());
+        System.out.println("Password matches: " +
+                passwordEncoder.matches(
+                        request.getPassword(),
+                        user.getPasswordHash()));
 
         // Check account status and password
         if (!Boolean.TRUE.equals(user.getActive())
@@ -77,63 +92,85 @@ public class AuthService {
 
         // Generate JWT token
         String token = jwtService.generateToken(user.getEmail());
-
         String roleName = user.getRole().getRoleName();
 
         auditService.record("LOGIN", "USER", user.getUserId(),
                 "Logged in as " + roleName, email);
 
-        return new LoginResponse(token, "Bearer",
-                jwtService.getExpirationSeconds(), roleName);
+       return new LoginResponse(
+        token,
+        "Bearer",
+        jwtService.getExpirationSeconds(),
+        roleName,
+        user.getProfilePicture(),
+        user.getFullName()
+);
     }
 
-    // REGISTER
-    @Transactional
-    public String register(RegisterRequest request) {
+    
+   // REGISTER
+@Transactional
+public String register(RegisterRequest request) {
 
-        String email = request.getEmail().trim().toLowerCase();
+    String email = request.getEmail().trim().toLowerCase();
 
-        if (userRepository.existsByEmail(email)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Email is already registered");
-        }
-
-        // Allow only these roles during public registration
-        String requestedRole = request.getRole();
-
-        if (requestedRole == null
-                || (!requestedRole.equalsIgnoreCase("STAFF")
-                && !requestedRole.equalsIgnoreCase("PHARMACIST")
-                && !requestedRole.equalsIgnoreCase("SUPPLIER"))) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Invalid role. Choose STAFF, PHARMACIST, or SUPPLIER");
-        }
-
-        // Find selected role in database
-        Role role = roleRepository.findByRoleName(
-                requestedRole.trim().toUpperCase())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "Selected role not found in database"));
-
-        // Create new user
-        User user = new User();
-
-        user.setFullName(request.getFullName().trim());
-        user.setEmail(email);
-        user.setPasswordHash(
-                passwordEncoder.encode(request.getPassword()));
-        user.setRole(role);
-        user.setActive(true);
-
-        userRepository.save(user);
-
-        auditService.record("REGISTER", "USER", user.getUserId(),
-                "Self-registered with role " + role.getRoleName(), email);
-
-        return "Registration successful";
+    if (userRepository.existsByEmail(email)) {
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Email is already registered");
     }
+
+    String requestedRole = request.getRole();
+
+    if (requestedRole == null
+            || (!requestedRole.equalsIgnoreCase("STAFF")
+            && !requestedRole.equalsIgnoreCase("PHARMACIST")
+            && !requestedRole.equalsIgnoreCase("SUPPLIER"))) {
+
+        throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Invalid role. Choose STAFF, PHARMACIST, or SUPPLIER");
+    }
+
+    Role role = roleRepository.findByRoleName(
+            requestedRole.trim().toUpperCase())
+            .orElseThrow(() -> new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Selected role not found in database"));
+
+    // Create login account
+    User user = new User();
+    user.setFullName(request.getFullName().trim());
+    user.setEmail(email);
+    user.setPasswordHash(
+            passwordEncoder.encode(request.getPassword()));
+    user.setRole(role);
+    user.setActive(true);
+
+    userRepository.save(user);
+
+    // Create supplier profile automatically
+    if ("SUPPLIER".equalsIgnoreCase(role.getRoleName())) {
+
+    Supplier supplier = supplierRepository
+            .findByEmailIgnoreCase(email)
+            .orElseGet(Supplier::new);
+
+    supplier.setSupplierName(request.getFullName().trim());
+    supplier.setEmail(email);
+    supplier.setActive(true);
+
+    supplierRepository.save(supplier);
+}
+
+    auditService.record(
+            "REGISTER",
+            "USER",
+            user.getUserId(),
+            "Self-registered with role " + role.getRoleName(),
+            email
+    );
+
+    return "Registration successful";
+}
 }

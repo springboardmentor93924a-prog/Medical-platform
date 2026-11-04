@@ -1,7 +1,6 @@
 
 package com.medistock.controller;
 
-import com.medistock.entity.Notification;
 import com.medistock.entity.User;
 import com.medistock.service.NotificationService;
 import com.medistock.repository.UserRepository;
@@ -15,9 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Map;
 
+import com.medistock.entity.Notification;
+
 @RestController
 @RequestMapping("/api/notifications")
-@PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST', 'STAFF')")
+@PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST', 'STAFF', 'SUPPLIER')")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -33,8 +34,11 @@ public class NotificationController {
 
     // Get latest 50 notifications for logged-in user
     @GetMapping
-    public List<Notification> getNotifications(Authentication authentication) {
+    public List<Notification> getNotifications(
+            Authentication authentication) {
+
         Long userId = getCurrentUserId(authentication);
+
         return notificationService.getRecent(userId);
     }
 
@@ -44,6 +48,7 @@ public class NotificationController {
             Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
+
         return notificationService.getUnread(userId);
     }
 
@@ -53,12 +58,14 @@ public class NotificationController {
             Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
+
         return notificationService.getRead(userId);
     }
 
     // Get unread notification count
     @GetMapping("/unread-count")
-    public Map<String, Long> unreadCount(Authentication authentication) {
+    public Map<String, Long> getUnreadCount(
+            Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
 
@@ -68,27 +75,30 @@ public class NotificationController {
         );
     }
 
-    // Refresh low-stock, expiry and purchase alerts
+    // Refresh low-stock, expiry and pending-order alerts
+    // Admin and Pharmacist only
     @PostMapping("/refresh")
     @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
-    public Map<String, Object> refresh() {
+    public Map<String, Object> refreshNotifications() {
 
         int created = notificationService.refresh();
 
         return Map.of(
-                "created", created
+                "created", created,
+                "message", "Notifications refreshed successfully"
         );
     }
 
     // Mark one notification as read
     @PostMapping("/{id}/read")
-    public Map<String, String> markRead(
+    public Map<String, String> markNotificationAsRead(
             @PathVariable Long id,
             Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
 
-        boolean updated = notificationService.markRead(id, userId);
+        boolean updated =
+                notificationService.markRead(id, userId);
 
         if (!updated) {
             throw new ResponseStatusException(
@@ -97,18 +107,28 @@ public class NotificationController {
             );
         }
 
-        return Map.of("message", "Marked as read");
+        return Map.of(
+                "message",
+                "Notification marked as read"
+        );
     }
 
-    // Mark all notifications as read
+    // Mark all visible notifications as read
     @PostMapping("/read-all")
-    public Map<String, Object> markAllRead(Authentication authentication) {
+    public Map<String, Object> markAllNotificationsAsRead(
+            Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
 
-        int updated = notificationService.markAllRead(userId);
+        int updated =
+                notificationService.markAllRead(userId);
 
-        return Map.of("updated", updated);
+        return Map.of(
+                "updated",
+                updated,
+                "message",
+                "Notifications marked as read"
+        );
     }
 
     // Delete one notification
@@ -129,22 +149,30 @@ public class NotificationController {
             );
         }
 
-        return Map.of("message", "Notification deleted");
+        return Map.of(
+                "message",
+                "Notification deleted successfully"
+        );
     }
 
-    // Clear all notifications for logged-in user
+    // Clear all visible notifications
+    // Admin and Pharmacist only
     @DeleteMapping("/clear-all")
     @PreAuthorize("hasAnyRole('ADMIN', 'PHARMACIST')")
-    public Map<String, String> clearAll(Authentication authentication) {
+    public Map<String, String> clearAllNotifications(
+            Authentication authentication) {
 
         Long userId = getCurrentUserId(authentication);
 
         notificationService.clearAll(userId);
 
-        return Map.of("message", "All notifications cleared");
+        return Map.of(
+                "message",
+                "All notifications cleared successfully"
+        );
     }
 
-    // Get logged-in user's database ID
+    // Get logged-in user's database ID using authenticated email
     private Long getCurrentUserId(Authentication authentication) {
 
         if (authentication == null ||

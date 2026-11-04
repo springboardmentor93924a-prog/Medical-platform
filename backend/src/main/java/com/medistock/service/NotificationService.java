@@ -5,7 +5,11 @@ import com.medistock.entity.Inventory;
 import com.medistock.entity.Medicine;
 import com.medistock.entity.Notification;
 import com.medistock.entity.PurchaseOrder;
+import com.medistock.entity.Supplier;
+import com.medistock.entity.User;
 
+import com.medistock.repository.SupplierRepository;
+import com.medistock.repository.UserRepository;
 import com.medistock.repository.InventoryRepository;
 import com.medistock.repository.MedicineRepository;
 import com.medistock.repository.NotificationRepository;
@@ -28,17 +32,23 @@ public class NotificationService {
     private final InventoryRepository inventoryRepository;
     private final MedicineRepository medicineRepository;
     private final PurchaseOrderRepository purchaseOrderRepository;
+    private final SupplierRepository supplierRepository;
+private final UserRepository userRepository;
 
     public NotificationService(
             NotificationRepository notificationRepository,
             InventoryRepository inventoryRepository,
             MedicineRepository medicineRepository,
-            PurchaseOrderRepository purchaseOrderRepository
+            PurchaseOrderRepository purchaseOrderRepository,
+            SupplierRepository supplierRepository,
+UserRepository userRepository
     ) {
         this.notificationRepository = notificationRepository;
         this.inventoryRepository = inventoryRepository;
         this.medicineRepository = medicineRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
+        this.supplierRepository = supplierRepository;
+this.userRepository = userRepository;
     }
 
     // Generate low-stock, expiry and pending-order notifications.
@@ -237,6 +247,88 @@ public class NotificationService {
 
         notificationRepository.deleteAll(notifications);
     }
+
+    // Notify the supplier when their purchase order status changes.
+public void notifySupplierOrderStatus(PurchaseOrder order) {
+
+    if (order.getSupplierId() == null) {
+        return;
+    }
+
+    Supplier supplier = supplierRepository
+            .findById(order.getSupplierId())
+            .orElse(null);
+
+    if (supplier == null || supplier.getEmail() == null) {
+        return;
+    }
+
+    User user = userRepository
+            .findByEmail(supplier.getEmail().trim().toLowerCase())
+            .orElse(null);
+
+    // Supplier must have a matching login account.
+    if (user == null || user.getUserId() == null) {
+        return;
+    }
+
+    String status = order.getStatus()
+            .trim()
+            .toUpperCase();
+
+    String type;
+    String message;
+
+    switch (status) {
+
+        case "APPROVED":
+            type = "PURCHASE_ORDER_APPROVED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " has been approved by the admin.";
+            break;
+
+        case "REJECTED":
+            type = "PURCHASE_ORDER_REJECTED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " has been rejected by the admin.";
+            break;
+
+        case "RECEIVED":
+            type = "PURCHASE_ORDER_RECEIVED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " has been successfully received.";
+            break;
+
+        case "PARTIALLY_RECEIVED":
+            type = "PURCHASE_ORDER_PARTIALLY_RECEIVED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " has been partially received.";
+            break;
+
+        case "CANCELLED":
+            type = "PURCHASE_ORDER_CANCELLED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " has been cancelled.";
+            break;
+
+        default:
+            type = "PURCHASE_ORDER_UPDATED";
+            message = "Your purchase order #" +
+                    order.getPurchaseOrderId() +
+                    " status is now " + status + ".";
+    }
+
+    createIfMissing(
+            user.getUserId(),
+            type,
+            message
+    );
+}
 
     // Create notification if an unread duplicate does not exist.
     private int createIfMissing(

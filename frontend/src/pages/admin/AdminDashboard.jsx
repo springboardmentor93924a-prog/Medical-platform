@@ -1,18 +1,19 @@
 import { useState } from "react";
 
-import AppShell from "../components/AppShell";
-import DashboardHome from "./admin/DashboardHome";
-import Users from "./admin/Users";
-import Medicines from "./admin/Medicines";
-import Suppliers from "./admin/Suppliers";
-import Inventory from "./admin/Inventory";
-import PurchaseOrders from "./admin/PurchaseOrders";
-import StockMovements from "./admin/StockMovements";
-import ExpiryTracking from "./admin/ExpiryTracking";
-import Reports from "./admin/Reports";
-import Notifications from "./admin/Notifications";
-import SystemMonitoring from "./admin/SystemMonitoring.jsx";
-import Settings from "./admin/Settings.jsx";
+import AppShell from "../../components/AppShell.jsx";
+import DashboardHome from "./DashboardHome.jsx";
+import Users from "./Users.jsx";
+import Medicines from "./Medicines.jsx";
+import Suppliers from "./Suppliers.jsx";
+import Inventory from "./Inventory.jsx";
+import PurchaseOrders from "./PurchaseOrders.jsx";
+import StockMovements from "./StockMovements.jsx";
+import ExpiryTracking from "./ExpiryTracking.jsx";
+import Reports from "./Reports.jsx";
+import Notifications from "./Notifications.jsx";
+import SystemMonitoring from "./SystemMonitoring.jsx";
+import Settings from "./Settings.jsx";
+
 
 const menu = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
