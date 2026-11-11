@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediStock - Clinical Pharmacy &amp; Inventory Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ================= SIDEBAR NAVIGATION ================= -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-logo" id="logoLink">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <span class="brand-name">MEDISTOCK</span>
+        </a>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li>
+          <a href="#" class="menu-item active" id="navDashboardBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navMessagesBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navMedicinesBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+              <path d="m8.5 8.5 7 7"/>
+            </svg>
+            <span>Medicines</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navExpiryBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Expiry</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navCategoriesBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+              <line x1="7" y1="7" x2="7.01" y2="7"></line>
+            </svg>
+            <span>Categories</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navSuppliersBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 3h15v13H1z"></path>
+              <path d="M16 8h4l3 3v5h-7V8z"></path>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            <span>Suppliers</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navInventoryBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="21 8 21 21 3 21 3 8"></polyline>
+              <rect x="1" y="3" width="22" height="5"></rect>
+              <line x1="10" y1="12" x2="14" y2="12"></line>
+            </svg>
+            <span>Inventory</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navPurchaseOrdersBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            <span>Parcel Tracker</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navBillingPosBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <line x1="2" y1="10" x2="22" y2="10"></line>
+            </svg>
+            <span>Billing / POS</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navSalesHistoryBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 8 14"></polyline>
+            </svg>
+            <span>Sales History</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navUsersRolesBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <polyline points="17 11 19 13 23 9"></polyline>
+            </svg>
+            <span>Users &amp; Roles</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navReportsBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="menu-item" id="navNotificationsBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span>Notifications</span>
+            <span class="menu-badge" id="menuNotificationBadge" hidden>0</span>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- ================= MAIN CONTENT WRAPPER ================= -->
+    <main class="main-wrapper">
+
+      <!-- Top Navbar -->
+      <header class="top-navbar">
+        <div class="page-title-box">
+          <h1 id="topNavTitle">Medicines</h1>
+          <p id="topNavSubtitle" style="display: none;">Clinical Formulary & Inventory Records</p>
+        </div>
+
+        <div class="navbar-actions">
+          <!-- Refresh Synchronizer -->
+          <button class="icon-btn" id="refreshBtn" title="Synchronize with MySQL Database">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6"></path>
+              <path d="M1 20v-6h6"></path>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+            </svg>
+          </button>
+
+          <!-- System Notifications -->
+          <button class="icon-btn" id="topNotificationsBtn" title="System Notifications" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span class="btn-badge" id="topAlertBadge" hidden>0</span>
+          </button>
+
+          <!-- Active Profile Pill with Dropdown Menu -->
+          <div class="user-profile-dropdown-wrapper" id="userProfileDropdownWrapper">
+            <button class="user-profile-pill" id="userProfilePillBtn" aria-expanded="false" title="Account Menu" type="button">
+              <div class="pill-avatar" id="topNavAvatar">AD</div>
+              <div class="pill-text">
+                <div class="pill-title-row">
+                  <span class="pill-title" id="topNavUserName">admin</span>
+                  <span class="pill-caret">&#9660;</span>
+                </div>
+                <span class="pill-subtitle" id="topNavUserRole">Admin</span>
+              </div>
+            </button>
+
+            <!-- Dropdown Menu matching user's image reference -->
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <button class="dropdown-menu-item" id="menuMyProfileBtn" type="button">
+                <svg class="dropdown-item-icon icon-profile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile</span>
+              </button>
+              <button class="dropdown-menu-item item-logout" id="menuLogoutBtn" type="button">
+                <svg class="dropdown-item-icon icon-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ================= VIEW 1: EXECUTIVE DASHBOARD ================= -->
+      <section id="dashboardView" class="view-panel active-view">
+        <div class="dashboard-content">
+
+          <!-- 5 Top Metric Blocks (KPI Grid) -->
+          <div class="kpi-grid">
+
+            <!-- Card 1: Active Medicines -->
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Registered Medicines</span>
+                <div class="kpi-icon-wrapper kpi-icon-cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                    <path d="m8.5 8.5 7 7"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiTotalMedicines">0</div>
+              <a href="#" class="kpi-link link-cyan" id="linkToMedicines">Formulary Catalog &rarr;</a>
+            </div>
+
+            <!-- Card 2: Inventory Valuation -->
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Inventory Valuation</span>
+                <div class="kpi-icon-wrapper kpi-icon-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiInventoryValue">₹0.00</div>
+              <span class="kpi-link link-emerald" style="cursor: default; text-decoration: none;">Acquisition Cost Basis</span>
+            </div>
+
+            <!-- Card 3: Purchase Orders -->
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Purchase Orders</span>
+                <div class="kpi-icon-wrapper kpi-icon-purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiPurchaseOrders">0</div>
+              <span class="kpi-link link-purple" style="cursor: default; text-decoration: none;">Procurement Manifests</span>
+            </div>
+
+            <!-- Card 4: Suppliers -->
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Active Suppliers</span>
+                <div class="kpi-icon-wrapper kpi-icon-amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiSuppliers">0</div>
+              <a href="#" class="kpi-link link-amber" id="linkToSuppliers">Approved Vendors &rarr;</a>
+            </div>
+
+            <!-- Card 5: Low Stock -->
+            <div class="kpi-card">
+              <div class="kpi-top">
+                <span class="kpi-label">Low Stock Alerts</span>
+                <div class="kpi-icon-wrapper kpi-icon-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
+                    <polyline points="17 18 23 18 23 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpiLowStock">0</div>
+              <a href="#" class="kpi-link link-rose" id="linkToReplenishment">Replenishment List &rarr;</a>
+            </div>
+
+          </div>
+
+          <!-- Middle Row: 3 Blocks (Gauge, Expiry, Procurement) -->
+          <div class="middle-grid">
+
+            <!-- Block 1: Stock Status Gauge -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <div>
+                  <h2 class="card-title">Stock Availability</h2>
+                  <p class="card-subtitle">Real-time inventory levels vs. safety reorder thresholds</p>
+                </div>
+              </div>
+
+              <div class="stock-status-body">
+                <div class="donut-chart-container">
+                  <svg class="donut-svg" viewBox="0 0 120 120">
+                    <circle class="donut-bg" cx="60" cy="60" r="45"></circle>
+                    <circle class="donut-fill-green" id="donutGreenCircle" cx="60" cy="60" r="45"></circle>
+                  </svg>
+                  <div class="donut-center-text">
+                    <div class="donut-total-count" id="stockTotalCount">0</div>
+                    <div class="donut-total-label">Total Items</div>
+                  </div>
+                </div>
+
+                <div class="stock-legend-list">
+                  <div class="legend-item">
+                    <div class="legend-indicator">
+                      <span class="dot dot-green"></span>
+                      <span>Adequate Stock</span>
+                    </div>
+                    <span class="legend-val" id="stockInStockVal">0 (0%)</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-indicator">
+                      <span class="dot dot-amber"></span>
+                      <span>Below Reorder Level</span>
+                    </div>
+                    <span class="legend-val" id="stockLowStockVal">0 (0%)</span>
+                  </div>
+                  <div class="legend-item">
+                    <div class="legend-indicator">
+                      <span class="dot dot-red"></span>
+                      <span>Stock Depleted</span>
+                    </div>
+                    <span class="legend-val" id="stockOutStockVal">0 (0%)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="status-callout-badge" id="stockStatusBadge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span id="stockStatusMsg">Database synchronized with MySQL repository.</span>
+              </div>
+            </div>
+
+            <!-- Block 2: Expiry Monitoring -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <div>
+                  <h2 class="card-title">Batch Expiration</h2>
+                  <p class="card-subtitle">Tracking pharmaceutical batches requiring rotation</p>
+                </div>
+              </div>
+
+              <div class="expiry-subcards">
+                <div class="expiry-pill-card">
+                  <div class="expiry-info">
+                    <h4>Near Expiration</h4>
+                    <div class="expiry-number" id="nearExpiryCount">0</div>
+                    <div class="expiry-tag">Expiring within 30 days</div>
+                  </div>
+                  <div class="expiry-icon-circle expiry-icon-amber">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                </div>
+
+                <div class="expiry-pill-card">
+                  <div class="expiry-info">
+                    <h4>Quarantined / Expired</h4>
+                    <div class="expiry-number" id="expiredCount">0</div>
+                    <div class="expiry-tag">Past shelf-life (quarantined)</div>
+                  </div>
+                  <div class="expiry-icon-circle expiry-icon-red">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <a href="#" class="card-action-link" id="linkToExpiryQuarantine" style="margin-top: auto;">Inspect Expiry Quarantine &rarr;</a>
+            </div>
+
+            <!-- Block 3: Recent Procurement Orders -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <div>
+                  <h2 class="card-title">Recent Purchase Orders</h2>
+                  <p class="card-subtitle">Latest procurement orders logged in system</p>
+                </div>
+                <a href="#" class="card-action-link" id="linkToViewAllOrders">View All Orders &rarr;</a>
+              </div>
+
+              <div style="overflow-x: auto;">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>PO Ref</th>
+                      <th>Supplier</th>
+                      <th>Date</th>
+                      <th>Total Value</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentPoTableBody">
+                    <tr>
+                      <td colspan="5" style="text-align: center; color: var(--text-dim); padding: 30px 10px;">
+                        No procurement orders recorded yet. Use Quick Actions to draft a purchase order.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Row: 2 Blocks (Top Formularies & Quick Actions) -->
+          <div class="bottom-grid">
+
+            <!-- Block 1: Most Stocked Formularies -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <div>
+                  <h2 class="card-title">Top Stocked Formularies</h2>
+                  <p class="card-subtitle">Pharmaceuticals with highest quantity in storage</p>
+                </div>
+                <a href="#" class="card-action-link" id="linkToFullInventory">Full Inventory &rarr;</a>
+              </div>
+
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 35px;">#</th>
+                    <th>Formulary Description</th>
+                    <th>Stock Units</th>
+                    <th>Packaging</th>
+                  </tr>
+                </thead>
+                <tbody id="topMedicinesTableBody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-dim); padding: 25px 10px;">
+                      No inventory logged yet. Click "+ Add Medicine" to record your first batch.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Block 2: Operations & Quick Actions -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <div>
+                  <h2 class="card-title">Quick Actions</h2>
+                  <p class="card-subtitle">Execute clinical inventory workflows</p>
+                </div>
+              </div>
+
+              <div class="quick-actions-grid">
+                <button class="action-card-btn" id="openAddMedicineModalBtn" type="button">
+                  <div class="action-icon-circle" style="background: rgba(0, 229, 153, 0.15); color: #00e599;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </div>
+                  <span class="action-btn-title">Add Medicine</span>
+                </button>
+
+                <button class="action-card-btn" id="dashBillingPosBtn" type="button">
+                  <div class="action-icon-circle" style="background: rgba(0, 229, 153, 0.15); color: #00e599;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                      <line x1="2" y1="10" x2="22" y2="10"></line>
+                    </svg>
+                  </div>
+                  <span class="action-btn-title">Billing / POS</span>
+                </button>
+
+                <button class="action-card-btn" id="dashNewOrderBtn" type="button">
+                  <div class="action-icon-circle" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                  </div>
+                  <span class="action-btn-title">New Order</span>
+                </button>
+
+                <button class="action-card-btn" id="dashStockAuditBtn" type="button">
+                  <div class="action-icon-circle" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                      <polyline points="17 1 21 5 17 9"></polyline>
+                      <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                      <polyline points="7 23 3 19 7 15"></polyline>
+                      <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                  </div>
+                  <span class="action-btn-title">Stock Audit</span>
+                </button>
+
+                <button class="action-card-btn" id="dashAuditReportBtn" type="button">
+                  <div class="action-icon-circle" style="background: rgba(244, 63, 94, 0.15); color: #fb7185;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <span class="action-btn-title">Audit Report</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: MEDICINES CATALOG (MATCHING IMAGE 1) ================= -->
+      <section id="medicinesView" class="view-panel">
+        <div class="medicines-page-container">
+
+          <!-- Filter Toolbar (Image 1 Controls) -->
+          <div class="med-toolbar">
+            
+            <!-- Search Medicines Box -->
+            <div class="med-search-wrapper">
+              <svg class="med-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="medSearchInput" class="med-search-input" placeholder="Search medicines by name, code, generic formula...">
+              <span class="med-search-shortcut" title="Search Shortcut">↑</span>
+            </div>
+
+            <!-- Custom Category Dropdown (Matching Image 3) -->
+            <div class="med-dropdown" id="categoryDropdown">
+              <button class="med-dropdown-trigger" id="categoryDropdownBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="categoryDropdownLabel">All Categories</span>
+                <svg class="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              <div class="med-dropdown-menu" id="categoryDropdownMenu" role="listbox">
+                <div class="med-dropdown-item active" data-val="ALL" role="option">All Categories</div>
+              </div>
+            </div>
+
+            <!-- Custom Supplier Dropdown (Matching Image 4) -->
+            <div class="med-dropdown" id="supplierDropdown">
+              <button class="med-dropdown-trigger" id="supplierDropdownBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="supplierDropdownLabel">All Suppliers</span>
+                <svg class="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              <div class="med-dropdown-menu" id="supplierDropdownMenu" role="listbox">
+                <div class="med-dropdown-item active" data-val="ALL" role="option">All Suppliers</div>
+              </div>
+            </div>
+
+            <!-- Custom Stock Status Dropdown (Matching Image 5) -->
+            <div class="med-dropdown" id="stockStatusDropdown">
+              <button class="med-dropdown-trigger" id="stockStatusDropdownBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="stockStatusDropdownLabel">All Stock Status</span>
+                <svg class="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+              <div class="med-dropdown-menu" id="stockStatusDropdownMenu" role="listbox">
+                <div class="med-dropdown-item active" data-val="ALL" role="option">All Stock Status</div>
+                <div class="med-dropdown-item" data-val="AVAILABLE" role="option">Available</div>
+                <div class="med-dropdown-item" data-val="LOW_STOCK" role="option">Low Stock</div>
+                <div class="med-dropdown-item" data-val="OUT_OF_STOCK" role="option">Out Of Stock</div>
+              </div>
+            </div>
+
+            <!-- Reset Filters Button -->
+            <button class="btn-toolbar-ghost" id="medResetFiltersBtn" type="button" title="Reset Filters and Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 4v6h-6"></path>
+                <path d="M1 20v-6h6"></path>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+
+            <!-- Bulk Set Sell Price Button -->
+            <button class="btn-toolbar-ghost" id="openBulkPriceModalBtn" type="button" title="Bulk Update Selling Price">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              <span>Bulk Set Sell Price</span>
+            </button>
+
+            <!-- + Add Medicine Button (Matching Image 1 Primary CTA) -->
+            <button class="btn-toolbar-primary" id="openAddNewMedicineBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Medicine</span>
+            </button>
+
+          </div>
+
+          <!-- Medicines Data Table Container (Matching Image 1 Table Grid) -->
+          <div class="med-catalog-card">
+            <div class="med-table-responsive">
+              <table class="med-catalog-table">
+                <thead>
+                  <tr>
+                    <th style="width: 55px;">No.</th>
+                    <th style="width: 75px;">Code</th>
+                    <th class="sortable-column" data-sort="name">
+                      <div class="th-flex">
+                        <span>Brand Name</span>
+                        <span class="sort-arrows">↕</span>
+                      </div>
+                    </th>
+                    <th>Generic Formula</th>
+                    <th class="sortable-column" data-sort="category">
+                      <div class="th-flex">
+                        <span>Category</span>
+                        <span class="sort-arrows">↕</span>
+                      </div>
+                    </th>
+                    <th>Purchase / Selling Price</th>
+                    <th class="sortable-column" data-sort="stock">
+                      <div class="th-flex">
+                        <span>Stock</span>
+                        <span class="sort-arrows">↕</span>
+                      </div>
+                    </th>
+                    <th>Status</th>
+                    <th class="sortable-column" data-sort="expiry">
+                      <div class="th-flex">
+                        <span>Expiry Date</span>
+                        <span class="sort-arrows">↕</span>
+                      </div>
+                    </th>
+                    <th>Supplier</th>
+                    <th style="text-align: center; width: 95px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="medicinesTableBody">
+                  <!-- Populated dynamically via JavaScript with responsive rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="med-table-footer">
+              <div class="med-footer-count">
+                Showing <strong id="showingMedCount">0</strong> of <strong id="totalMedCount">0</strong> pharmaceuticals in catalog
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= VIEW: EXPIRY RISK & SHELF-LIFE TELEMETRY ================= -->
+      <section id="expiryView" class="view-panel">
+        <div class="expiry-page">
+          <!-- Expiry Header -->
+          <div class="expiry-header">
+            <div class="expiry-title-area">
+              <div class="expiry-clock-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="expiry-title-text">
+                <h2>Expiry Risk &amp; Shelf-Life Telemetry</h2>
+                <p>Monitor medicines reaching expiration within 30, 60, and 90 days or already expired.</p>
+              </div>
+            </div>
+            <button class="expiry-export-btn" id="exportExpiryAuditBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              Export Expiry Audit
+            </button>
+          </div>
+
+          <!-- 4 Stat Cards in a row -->
+          <div class="expiry-stats-grid">
+            <!-- Card 1: Already Expired -->
+            <div class="expiry-stat-card card-already-expired">
+              <div class="expiry-stat-left">
+                <span class="expiry-stat-label">ALREADY EXPIRED</span>
+                <span class="expiry-stat-count" id="statAlreadyExpired">0</span>
+                <span class="expiry-stat-sub">Dispose Immediately</span>
+              </div>
+              <div class="expiry-stat-icon-wrapper icon-expired">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Card 2: Near Expiry (< 30 Days) -->
+            <div class="expiry-stat-card card-near-expiry">
+              <div class="expiry-stat-left">
+                <span class="expiry-stat-label">NEAR EXPIRY (&lt; 30 DAYS)</span>
+                <span class="expiry-stat-count" id="statNearExpiry">0</span>
+                <span class="expiry-stat-sub">Critical Expiry Risk</span>
+              </div>
+              <div class="expiry-stat-icon-wrapper icon-near-expiry">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Card 3: < 60 Days Expiry -->
+            <div class="expiry-stat-card card-60-days">
+              <div class="expiry-stat-left">
+                <span class="expiry-stat-label">&lt; 60 DAYS EXPIRY</span>
+                <span class="expiry-stat-count" id="stat60Days">0</span>
+                <span class="expiry-stat-sub">Warning Threshold</span>
+              </div>
+              <div class="expiry-stat-icon-wrapper icon-warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Card 4: < 90 Days Expiry -->
+            <div class="expiry-stat-card card-90-days">
+              <div class="expiry-stat-left">
+                <span class="expiry-stat-label">&lt; 90 DAYS EXPIRY</span>
+                <span class="expiry-stat-count" id="stat90Days">0</span>
+                <span class="expiry-stat-sub">Attention Horizon</span>
+              </div>
+              <div class="expiry-stat-icon-wrapper icon-attention">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Pills & Search bar -->
+          <div class="expiry-toolbar">
+            <div class="expiry-filter-pills" id="expiryFilterPills">
+              <button class="expiry-pill active" type="button" data-filter="all">All Catalog</button>
+              <button class="expiry-pill" type="button" data-filter="risk90">All Expiry Risks (&lt; 90d)</button>
+              <button class="expiry-pill" type="button" data-filter="near30">&lt; 30 Days (Near Expiry)</button>
+              <button class="expiry-pill" type="button" data-filter="days60">&lt; 60 Days</button>
+              <button class="expiry-pill" type="button" data-filter="days90">&lt; 90 Days</button>
+              <button class="expiry-pill" type="button" data-filter="expired">Already Expired</button>
+            </div>
+            <label class="expiry-search-label" for="expirySearchInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="expirySearchInput" type="search" placeholder="Search medicine, code, or batch..." autocomplete="off">
+            </label>
+          </div>
+
+          <!-- Expiry Table Card -->
+          <div class="expiry-table-card">
+            <div class="expiry-table-scroll">
+              <table class="expiry-table">
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Batch Number</th>
+                    <th>Expiration Date</th>
+                    <th>Days Remaining</th>
+                    <th>Current Stock</th>
+                    <th>Rack Location</th>
+                    <th>Expiry Status Risk</th>
+                  </tr>
+                </thead>
+                <tbody id="expiryTableBody">
+                  <tr><td colspan="7" class="expiry-empty">Loading expiry telemetry from database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="expiryTableFooter" class="expiry-table-footer"></div>
+          </div>
+          <p id="expiryError" class="expiry-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <!-- ================= VIEW: MEDICINE CATEGORIES ================= -->
+      <section id="categoriesView" class="view-panel">
+        <div class="category-page">
+          <div class="category-toolbar">
+            <label class="category-search" for="categorySearchInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="categorySearchInput" type="search" placeholder="Search categories by name or description..." autocomplete="off">
+            </label>
+            <button class="category-primary-btn" id="openAddCategoryBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Category</span>
+            </button>
+          </div>
+          <div class="category-card">
+            <div class="category-table-scroll">
+              <table class="category-table">
+                <thead>
+                  <tr>
+                    <th class="category-id-column">ID</th>
+                    <th>Category Name</th>
+                    <th>Description</th>
+                    <th class="category-actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="categoriesTableBody"></tbody>
+              </table>
+            </div>
+            <div class="category-table-footer">
+              Showing <strong id="showingCategoryCount">0</strong> of <strong id="totalCategoryCount">0</strong> medicine categories
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: SUPPLIERS MANAGEMENT (MATCHING IMAGE 1) ================= -->
+      <section id="suppliersView" class="view-panel">
+        <div class="suppliers-container">
+
+          <!-- Top Action Bar: Search & + Add Supplier Button -->
+          <div class="supplier-toolbar-row">
+            <div class="supplier-search-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="supplierSearchInput" class="supplier-search-input" placeholder="Search suppliers by name, representative, or contact email...">
+            </div>
+
+            <button class="btn-supplier-primary" id="openAddSupplierModalBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>+ Add Supplier</span>
+            </button>
+          </div>
+
+          <!-- Suppliers Table Card Container -->
+          <div class="supplier-catalog-card">
+            <div class="supplier-table-responsive">
+              <table class="supplier-table">
+                <thead>
+                  <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Supplier / Rep</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th style="text-align: center; width: 110px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="suppliersTableBody">
+                  <!-- Populated dynamically via JavaScript & Spring Boot MySQL API -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="supplier-table-footer">
+              <div class="supplier-footer-count">
+                Showing <strong id="showingSupplierCount">0</strong> of <strong id="totalSupplierCount">0</strong> verified suppliers
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section id="inventoryView" class="view-panel">
+        <div class="inventory-page">
+          <div class="inventory-toolbar">
+            <label class="inventory-search" for="inventorySearchInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="inventorySearchInput" type="search" placeholder="Search movements by medicine name, code, batch number or user..." autocomplete="off">
+            </label>
+            <div class="inventory-toolbar-actions">
+              <select id="inventoryActionFilter" aria-label="Filter by stock action">
+                <option value="ALL">All Actions</option>
+                <option value="IN">Stock IN (+)</option>
+                <option value="OUT">Stock OUT (-)</option>
+              </select>
+              <button id="syncInventoryLogsBtn" class="inventory-sync-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 7v5h-5"></path><path d="M4 17v-5h5"></path>
+                  <path d="M5.6 9A7 7 0 0 1 18 6l2 2"></path><path d="M18.4 15A7 7 0 0 1 6 18l-2-2"></path>
+                </svg>
+                <span>Sync Logs</span>
+              </button>
+            </div>
+          </div>
+          <div class="inventory-card">
+            <div class="inventory-table-scroll">
+              <table class="inventory-table">
+                <thead>
+                  <tr><th>Timestamp</th><th>Medicine</th><th>Batch Number</th><th>Action Type</th><th>Quantity</th><th>Actioned By</th></tr>
+                </thead>
+                <tbody id="inventoryMovementsBody"></tbody>
+              </table>
+            </div>
+            <div class="inventory-footer">
+              Showing <strong id="inventoryShowingCount">0</strong> of <strong id="inventoryTotalCount">0</strong> stock movements
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="purchaseOrdersView" class="view-panel">
+        <div class="purchase-orders-page">
+          <div class="parcel-tracker-heading">
+            <div class="parcel-tracker-header-content">
+              <div class="parcel-tracker-icon-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </div>
+              <div>
+                <h2>Parcel Tracker</h2>
+                <p>View all purchase orders, monitor order status, review orders, and approve or reject orders.</p>
+              </div>
+            </div>
+          </div>
+          <div class="purchase-orders-toolbar">
+            <label class="purchase-orders-search" for="purchaseOrderSearchInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="purchaseOrderSearchInput" type="search" placeholder="Search orders by PO number, product name, supplier, or creator..." autocomplete="off">
+            </label>
+            <div class="purchase-orders-toolbar-actions">
+              <select id="purchaseOrderStatusFilter" aria-label="Filter parcel orders by status">
+                <option value="ALL">All Statuses</option>
+                <option value="PENDING">PENDING</option>
+                <option value="APPROVED">APPROVED</option>
+                <option value="REJECTED">REJECTED</option>
+                <option value="PROCESSING">PROCESSING</option>
+                <option value="SHIPPED">SHIPPED</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="RECEIVED">RECEIVED</option>
+                <option value="CANCELLED">CANCELLED</option>
+              </select>
+            </div>
+          </div>
+          <div class="purchase-orders-card">
+            <div class="purchase-orders-table-scroll">
+              <table class="purchase-orders-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th><th>Product Name</th><th>Quantity</th><th>Supplier Vendor</th><th>Purchase Date</th><th>Total Value</th><th>Order Status</th><th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="purchaseOrdersTableBody"></tbody>
+              </table>
+            </div>
+            <div class="purchase-orders-footer">
+              Showing <strong id="purchaseOrdersShowingCount">0</strong> of <strong id="purchaseOrdersTotalCount">0</strong> parcel orders
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="billingPosView" class="view-panel">
+        <div class="pos-page">
+          <div class="pos-page-heading">
+            <h2>Point of Sale</h2>
+            <p>Create customer invoices and update medicine inventory instantly.</p>
+          </div>
+          <div class="pos-layout">
+            <div class="pos-left-column">
+              <section class="pos-panel pos-search-panel">
+                <h3>Add Medicines to Bill</h3>
+                <label class="pos-search-box" for="posMedicineSearch">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input id="posMedicineSearch" type="search" placeholder="Search medicines by name or formula..." autocomplete="off">
+                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 14px 0 8px;">
+                  <span style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">Available In-Stock Medicines (Click to add):</span>
+                  <span id="posAvailableCount" style="color: var(--text-dim); font-size: 0.76rem;">Loading stock...</span>
+                </div>
+                <div id="posMedicineResults" class="pos-medicine-results" style="max-height: 290px; overflow-y: auto;"></div>
+              </section>
+              <section class="pos-panel pos-cart-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                  <h3 style="margin: 0;">Current Invoice Items</h3>
+                  <span id="posCartItemCount" style="color: var(--text-dim); font-size: 0.76rem;">0 items in cart</span>
+                </div>
+                <div id="posCartItems" class="pos-cart-items"></div>
+              </section>
+            </div>
+            <form id="posCheckoutForm" class="pos-panel pos-checkout-panel">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="margin: 0;">Checkout Details</h3>
+                <button type="button" id="posQuickFillBtn" class="pos-quick-fill-btn" title="Auto-fill sample customer details" style="padding: 5px 12px; font-size: 0.78rem; font-weight: 600; border-radius: 6px; border: 1px solid rgba(59,130,246,0.35); background: rgba(59,130,246,0.12); color: #60a5fa; cursor: pointer; transition: all .15s ease;">
+                  ⚡ Quick Fill Info
+                </button>
+              </div>
+              <div class="pos-form-field">
+                <label for="posCustomerName">Customer Name <span>*</span></label>
+                <input id="posCustomerName" type="text" maxlength="150" placeholder="e.g. Rahul Sharma" required>
+              </div>
+              <div class="pos-form-field">
+                <label for="posCustomerPhone">Customer Phone <span>*</span></label>
+                <input id="posCustomerPhone" type="tel" maxlength="30" placeholder="e.g. +91 98765 43210" required>
+              </div>
+              <div class="pos-form-field">
+                <label for="posPaymentMethod">Payment Method</label>
+                <select id="posPaymentMethod" required>
+                  <option value="CASH">Cash Payment</option>
+                  <option value="CARD">Debit / Credit Card</option>
+                  <option value="UPI">UPI Digital Payment</option>
+                </select>
+              </div>
+              <div class="pos-calculation">
+                <div class="pos-subtotal-row"><span>Subtotal:</span><strong id="posSubtotal">&#8377;0.00</strong></div>
+                <label class="pos-discount-row" for="posDiscountAmount">
+                  <span>Discount Amount:</span>
+                  <span class="pos-discount-input"><span>&#8377;</span><input id="posDiscountAmount" type="number" min="0" step="0.01" value="0.00" aria-label="Discount amount"></span>
+                </label>
+                <div class="pos-grand-total-row"><span>Grand Total:</span><strong id="posGrandTotal">&#8377;0.00</strong></div>
+              </div>
+              <button id="posConfirmSaleBtn" class="pos-confirm-btn" type="submit">
+                <span aria-hidden="true">&#8377;</span> Confirm Sale &amp; Print
+              </button>
+              <p id="posErrorMessage" class="pos-error-message" role="alert" hidden></p>
+            </form>
+          </div>
+        </div>
+        <div id="posReceiptPrintArea" class="pos-receipt-print" aria-hidden="true"></div>
+      </section>
+
+      <section id="salesHistoryView" class="view-panel">
+        <div class="sales-history-page">
+          <div class="sales-history-heading">
+            <div>
+              <h2>Sales History</h2>
+              <p>View completed transactions, invoice receipts, and pharmacist audit trails.</p>
+            </div>
+            <button id="salesHistoryRefreshBtn" class="sales-history-refresh" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 7v5h-5"></path><path d="M4 17v-5h5"></path><path d="M5.6 9a7 7 0 0 1 11.7-2L20 12M4 12l2.7 5a7 7 0 0 0 11.7-2"></path>
+              </svg>
+              Refresh
+            </button>
+          </div>
+          <label class="sales-history-search" for="salesHistorySearch">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input id="salesHistorySearch" type="search" placeholder="Search by invoice #, customer name, phone, or staff..." autocomplete="off">
+          </label>
+          <div class="sales-history-card">
+            <div class="sales-history-table-scroll">
+              <table class="sales-history-table">
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Date &amp; Time</th>
+                    <th>Customer</th>
+                    <th>Sold By</th>
+                    <th>Pay Mode</th>
+                    <th class="sales-history-paid-heading">Total Paid</th>
+                  </tr>
+                </thead>
+                <tbody id="salesHistoryTableBody">
+                  <tr><td colspan="6" class="sales-history-empty">Loading sales from the database...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="salesHistoryFooter" class="sales-history-footer" aria-live="polite"></div>
+          </div>
+          <p id="salesHistoryError" class="sales-history-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <section id="usersRolesView" class="view-panel">
+        <div class="users-roles-page">
+          <div class="users-roles-toolbar">
+            <label class="users-roles-search" for="usersRolesSearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input id="usersRolesSearch" type="search" placeholder="Search accounts by username, name, or email..." autocomplete="off">
+            </label>
+            <button class="users-roles-create-btn" id="createUserAccountBtn" type="button">
+              <span aria-hidden="true">+</span> New User Account
+            </button>
+          </div>
+          <div class="users-roles-card">
+            <div class="users-roles-table-scroll">
+              <table class="users-roles-table">
+                <thead><tr><th>ID</th><th>Username</th><th>Full Name</th><th>Email</th><th>Status</th><th>Assigned Roles</th><th>Actions</th></tr></thead>
+                <tbody id="usersRolesTableBody"><tr><td colspan="7" class="users-roles-empty">Loading accounts from the database...</td></tr></tbody>
+              </table>
+            </div>
+            <div id="usersRolesFooter" class="users-roles-footer" aria-live="polite"></div>
+          </div>
+          <p id="usersRolesError" class="users-roles-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <section id="reportsView" class="view-panel">
+        <div class="reports-page">
+          <div class="reports-heading">
+            <div class="reports-heading-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h2>Reports &amp; Analytical Export Center</h2>
+              <p>Generate, download CSV, and print PDF inventory compliance reports.</p>
+            </div>
+          </div>
+          <div class="reports-grid">
+            <article class="report-card report-card-inventory">
+              <div class="report-card-top">
+                <span class="report-icon report-icon-blue" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m12 2 8 4.5v10L12 21l-8-4.5v-10z"></path><path d="m12 12 8-4.5M12 12v9M12 12 4 7.5M8 4.2l8 4.6M8 15.2l8-4.5"></path>
+                  </svg>
+                </span>
+                <span class="report-tag">CORE AUDIT</span>
+              </div>
+              <h3>Full Inventory Telemetry &amp; Asset Report</h3>
+              <p>Comprehensive audit of total medicines, catalogue valuation, available stock, and supplier counts.</p>
+              <div class="report-card-actions">
+                <button type="button" class="report-download-btn" data-report-action="csv" data-report-type="inventory">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Download CSV
+                </button>
+                <button type="button" class="report-print-btn" data-report-action="print" data-report-type="inventory">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print PDF
+                </button>
+              </div>
+            </article>
+            <article class="report-card report-card-low-stock">
+              <div class="report-card-top">
+                <span class="report-icon report-icon-amber" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                </span>
+                <span class="report-tag">ACTION REQUIRED</span>
+              </div>
+              <h3>Low Stock &amp; Restock Priority Audit</h3>
+              <p>Detailed watchlist of items reaching or falling below safety reorder levels.</p>
+              <div class="report-card-actions">
+                <button type="button" class="report-download-btn" data-report-action="csv" data-report-type="low-stock">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Download CSV
+                </button>
+                <button type="button" class="report-print-btn" data-report-action="print" data-report-type="low-stock">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print PDF
+                </button>
+              </div>
+            </article>
+            <article class="report-card report-card-expiry">
+              <div class="report-card-top">
+                <span class="report-icon report-icon-red" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </span>
+                <span class="report-tag">RISK AUDIT</span>
+              </div>
+              <h3>Expiry Risk &amp; Shelf-Life Telemetry Report</h3>
+              <p>Complete breakdown of medicines expiring within 30, 60, 90 days, or already expired.</p>
+              <div class="report-card-actions">
+                <button type="button" class="report-download-btn" data-report-action="csv" data-report-type="expiry">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Download CSV
+                </button>
+                <button type="button" class="report-print-btn" data-report-action="print" data-report-type="expiry">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print PDF
+                </button>
+              </div>
+            </article>
+            <article class="report-card report-card-procurement">
+              <div class="report-card-top">
+                <span class="report-icon report-icon-purple" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg>
+                </span>
+                <span class="report-tag">PROCUREMENT</span>
+              </div>
+              <h3>Purchase Orders &amp; Supplier History Report</h3>
+              <p>Detailed transaction logs of all purchase orders placed with suppliers and delivery statuses.</p>
+              <div class="report-card-actions">
+                <button type="button" class="report-download-btn" data-report-action="csv" data-report-type="procurement">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  Download CSV
+                </button>
+                <button type="button" class="report-print-btn" data-report-action="print" data-report-type="procurement">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  Print PDF
+                </button>
+              </div>
+            </article>
+          </div>
+          <p id="reportsError" class="reports-error" role="alert" hidden></p>
+        </div>
+        <div id="reportPrintContent" class="report-print-content" aria-hidden="true"></div>
+      </section>
+
+      <section id="notificationsView" class="view-panel">
+        <div class="notifications-page">
+          <header class="notifications-header-card">
+            <div class="notifications-header-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M10 21h4"></path>
+              </svg>
+            </div>
+            <div class="notifications-header-copy">
+              <div class="notifications-title-line">
+                <h2>Pharmacy Inventory Notifications (Admin)</h2>
+                <span id="notificationsUnreadBadge" class="notifications-unread-badge" hidden>0 Unread</span>
+              </div>
+              <p>Pharmacy-wide real-time alerts for low stock, out of stock, near-expiry, and expired medicines across all suppliers.</p>
+            </div>
+            <div class="notifications-header-actions">
+              <button id="markAllNotificationsReadBtn" class="notifications-mark-read-btn" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"></path><path d="M21 12a9 9 0 1 1-3-6.7"></path></svg>
+                Mark All Read
+              </button>
+              <button id="refreshNotificationsBtn" class="notifications-refresh-btn" type="button" aria-label="Refresh notifications" title="Refresh notifications">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7v5h-5"></path><path d="M4 17v-5h5"></path><path d="M5.6 9A7 7 0 0 1 18 6l2 2"></path><path d="M18.4 15A7 7 0 0 1 6 18l-2-2"></path></svg>
+              </button>
+            </div>
+          </header>
+          <div class="notifications-toolbar">
+            <label class="notifications-search" for="notificationsSearch">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input id="notificationsSearch" type="search" placeholder="Search alerts by medicine, code, supplier or alert text..." autocomplete="off">
+            </label>
+            <div class="notifications-filters" role="group" aria-label="Filter notifications">
+              <button type="button" class="notifications-filter active" data-notification-filter="all">All (<span id="notificationsAllCount">0</span>)</button>
+              <button type="button" class="notifications-filter" data-notification-filter="critical">Critical (<span id="notificationsCriticalCount">0</span>)</button>
+              <button type="button" class="notifications-filter" data-notification-filter="warning">Warnings (<span id="notificationsWarningCount">0</span>)</button>
+            </div>
+          </div>
+          <div id="notificationsList" class="notifications-list" aria-live="polite">
+            <div class="notifications-empty">Loading pharmacy notifications...</div>
+          </div>
+          <p id="notificationsError" class="notifications-error" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 2: MESSAGES / COMMUNICATIONS (MATCHING IMAGE 1 BLOCKS) ================= -->
+      <section id="messagesView" class="view-panel">
+        <div class="messages-container">
+
+          <!-- Left Column Block: Internal Communication -->
+          <div class="contacts-panel">
+            <div class="contacts-header">
+              <div class="contacts-title-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                  <line x1="4" y1="22" x2="4" y2="15"></line>
+                </svg>
+                <h2>Internal Communication</h2>
+              </div>
+
+              <!-- Search Box -->
+              <div class="search-box-wrapper">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="contactSearchInput" class="search-input" placeholder="Search staff, pharmacist, supplier...">
+              </div>
+
+              <!-- Role Filter Pills -->
+              <div class="role-filter-row">
+                <button class="role-pill active" data-role="ALL">ALL</button>
+                <button class="role-pill" data-role="ADMIN">ADMIN</button>
+                <button class="role-pill" data-role="PHARMACIST">PHARMACIST</button>
+                <button class="role-pill" data-role="STAFF">STAFF</button>
+                <button class="role-pill" data-role="SUPPLIER">SUPPLIER</button>
+              </div>
+            </div>
+
+            <!-- Contacts Dynamic List from MySQL Database -->
+            <ul class="contacts-list" id="contactsList">
+              <!-- Loaded from MySQL users table -->
+            </ul>
+          </div>
+
+          <!-- Right Column Block: Active Chat Window -->
+          <div class="chat-window">
+
+            <!-- Chat Header -->
+            <div class="chat-header">
+              <div class="chat-user-profile">
+                <div class="avatar-circle avatar-ra" id="activeChatAvatar">--</div>
+                <div class="chat-user-info">
+                  <h3 id="activeChatName">Select a user</h3>
+                  <div class="chat-user-sub">
+                    <span class="dot dot-green" style="width:7px; height:7px;"></span>
+                    <span id="activeChatMeta">Verified account</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="direct-channel-pill">DIRECT CHANNEL</div>
+            </div>
+
+            <!-- Chat Messages Body -->
+            <div class="chat-messages-body" id="chatMessagesBody">
+              <div class="chat-empty-state" id="chatEmptyState">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <div class="empty-title" id="emptyTitleText">No previous messages with this contact.</div>
+                <div class="empty-sub">Send a message to initiate communication.</div>
+              </div>
+            </div>
+
+            <!-- Chat Input Footer -->
+            <div class="chat-footer">
+              <form class="chat-form" id="chatSendMessageForm">
+                <input type="text" class="chat-input" id="chatMessageInput" placeholder="Type a message..." autocomplete="off" required>
+                <button type="submit" class="send-btn" title="Send message to MySQL database">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Dashboard Footer -->
+      <footer class="dashboard-footer">
+        <div>&copy; 2026 MediStock - Clinical Pharmacy &amp; Inventory Platform. All rights reserved.</div>
+        <div>Powered by Java Spring Boot &amp; MySQL (medistock.sql)</div>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- ================= ADD / EDIT MEDICINE MODAL (MATCHING IMAGE 2) ================= -->
+  <div class="modal-overlay" id="addMedicineModal">
+    <div class="modal-card modal-card-medicine">
+      <div class="modal-header">
+        <h2 id="medicineModalTitle">Add New Medicine</h2>
+        <button class="modal-close-btn" id="closeModalBtn" type="button" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="addMedicineForm">
+        <input type="hidden" id="editMedicineIndex" value="-1">
+
+        <div class="med-form-grid">
+          <!-- Row 1 -->
+          <div class="form-group">
+            <label for="inputMedName">Brand Name *</label>
+            <input type="text" id="inputMedName" class="med-form-input" placeholder="e.g. Paracetamol, Amoxicillin" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputMedCode">Unique Code *</label>
+            <input type="text" id="inputMedCode" class="med-form-input" placeholder="e.g. MED-0012" required>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="form-group">
+            <label for="inputGenericName">Generic/Chemical Name</label>
+            <input type="text" id="inputGenericName" class="med-form-input" placeholder="e.g. Acetaminophen">
+          </div>
+
+          <div class="form-group">
+            <label for="inputManufacturer">Manufacturer</label>
+            <input type="text" id="inputManufacturer" class="med-form-input" placeholder="e.g. Pfizer, GSK">
+          </div>
+
+          <!-- Row 3 -->
+          <div class="form-group">
+            <label for="inputPurchasePrice">Purchase/Buying Cost (INR)</label>
+            <input type="number" step="0.01" id="inputPurchasePrice" class="med-form-input" placeholder="e.g. 45.00">
+          </div>
+
+          <div class="form-group">
+            <label for="inputSellingPrice">Retail Selling Price (INR) *</label>
+            <input type="number" step="0.01" id="inputSellingPrice" class="med-form-input" placeholder="e.g. 60.00" required>
+          </div>
+
+          <!-- Row 4 -->
+          <div class="form-group">
+            <label for="inputExpiryDate">Expiry Date</label>
+              <input type="date" id="inputExpiryDate" class="med-form-input" placeholder="dd-mm-yyyy" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputCategory">Category Classification</label>
+            <select id="inputCategory" class="med-form-input" required>
+              <option value="">Loading categories...</option>
+            </select>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="form-group">
+            <label for="inputBatchNo">Batch Number</label>
+            <input type="text" id="inputBatchNo" class="med-form-input" placeholder="e.g. BATCH-A99" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputRack">Storage Location (Rack)</label>
+            <input type="text" id="inputRack" class="med-form-input" placeholder="e.g. Rack-B4">
+          </div>
+
+          <!-- Row 6 -->
+          <div class="form-group">
+            <label for="inputSupplier">Default Supplier</label>
+            <select id="inputSupplier" class="med-form-input">
+              <option value="">Loading suppliers...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="inputReorderLevel">Reorder Warning Level</label>
+            <input type="number" id="inputReorderLevel" class="med-form-input" value="10" min="0">
+          </div>
+
+          <!-- Row 7 -->
+          <div class="form-group">
+            <label for="inputQuantity">Initial Quantity</label>
+            <input type="number" id="inputQuantity" class="med-form-input" value="0" min="0">
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: flex-end; padding-bottom: 6px;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 0; color: var(--text-muted); font-size: 0.88rem;">
+              <input type="checkbox" id="inputPrescription" style="width: 18px; height: 18px; accent-color: #2563eb;">
+              <span>Prescription Required</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modal Actions (Matching Image 2 Footer) -->
+        <div class="modal-form-actions">
+          <button type="button" class="btn-med-cancel" id="cancelModalBtn">Cancel</button>
+          <button type="submit" class="btn-med-save" id="saveMedicineBtn">Save Medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= BULK SET SELL PRICE MODAL ================= -->
+  <div class="modal-overlay" id="bulkPriceModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h2>Bulk Set Selling Price by Supplier</h2>
+        <button class="modal-close-btn" id="closeBulkPriceBtn" type="button">&times;</button>
+      </div>
+      <form id="bulkPriceForm" style="padding: 24px;">
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px; line-height: 1.5;">
+          Apply a markup to purchase cost or set a flat selling price for every batch from one supplier.
+        </p>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label for="bulkTargetSupplier">Supplier</label>
+          <select id="bulkTargetSupplier" class="med-form-input" required>
+            <option value="">Select a supplier</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Selling price method</label>
+          <div class="bulk-pricing-modes">
+            <label><input type="radio" name="bulkPricingMode" value="markup" checked> Markup over buying price (%)</label>
+            <label><input type="radio" name="bulkPricingMode" value="flat"> Flat selling price (INR)</label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label for="bulkAdjustmentValue" id="bulkAdjustmentValueLabel">Markup percentage (%) *</label>
+          <input type="number" step="0.01" min="0" id="bulkAdjustmentValue" class="med-form-input" value="15.0" required>
+        </div>
+
+        <div class="modal-form-actions">
+          <button type="button" class="btn-med-cancel" id="cancelBulkPriceBtn">Cancel</button>
+          <button type="submit" class="btn-med-save">Apply Selling Prices</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= DELETE CONFIRMATION MODAL ================= -->
+  <div class="modal-overlay" id="deleteConfirmModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h2 style="color: #ef4444; display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" width="20" height="20">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Delete Formulary
+        </h2>
+        <button class="modal-close-btn" id="closeDeleteModalBtn" type="button">&times;</button>
+      </div>
+      <div style="padding: 24px;">
+        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 20px;">
+          Are you sure you want to remove <strong id="deleteTargetMedName" style="color: #fff;">this medicine</strong>? Medicines linked to stock or transaction history cannot be deleted.
+        </p>
+        <div class="modal-form-actions" style="padding: 0; border: none; background: transparent;">
+          <button type="button" class="btn-med-cancel" id="cancelDeleteBtn">Cancel</button>
+          <button type="button" class="btn-med-save" id="confirmDeleteBtn" style="background: #dc2626;">Confirm Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= REGISTER / EDIT SUPPLIER MODAL (MATCHING IMAGE 2) ================= -->
+  <div class="modal-overlay" id="addSupplierModal">
+    <div class="modal-card modal-card-supplier">
+      <div class="modal-header">
+        <h2 id="supplierModalTitle">Register New Supplier</h2>
+        <button class="modal-close-btn" id="closeSupplierModalBtn" type="button" aria-label="Close modal">&times;</button>
+      </div>
+
+      <form id="addSupplierForm">
+        <input type="hidden" id="editSupplierIndex" value="-1">
+        <input type="hidden" id="editSupplierId" value="">
+
+        <div class="supplier-form-body">
+          <div class="supplier-form-grid">
+            <!-- Row 1 -->
+            <div class="form-group">
+              <label for="inputSupplierName">Supplier Name *</label>
+              <input type="text" id="inputSupplierName" class="med-form-input" maxlength="150" placeholder="e.g. Acme Pharmaceuticals" required>
+            </div>
+
+            <div class="form-group">
+              <label for="inputContactPerson">Representative Person</label>
+              <input type="text" id="inputContactPerson" class="med-form-input" maxlength="150" placeholder="e.g. John Doe">
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-group">
+              <label for="inputSupplierEmail">Email Address</label>
+              <input type="email" id="inputSupplierEmail" class="med-form-input" maxlength="150" placeholder="e.g. contact@acme.com">
+            </div>
+
+            <div class="form-group">
+              <label for="inputSupplierPhone">Phone Number</label>
+              <input type="text" id="inputSupplierPhone" class="med-form-input" maxlength="20" placeholder="e.g. +1-555-0199">
+            </div>
+
+            <!-- Row 3: Postal Address Full Width -->
+            <div class="form-group full-width">
+              <label for="inputSupplierAddress">Postal Address</label>
+              <textarea id="inputSupplierAddress" class="med-form-input supplier-textarea" rows="3" placeholder="e.g. 100 Pharma Way, Suite 400..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-form-actions">
+          <button type="button" class="btn-med-cancel" id="cancelSupplierModalBtn">Cancel</button>
+          <button type="submit" class="btn-med-save" id="saveSupplierBtn">Save Supplier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="categoryModal">
+    <div class="category-modal-card" role="dialog" aria-modal="true" aria-labelledby="categoryModalTitle">
+      <div class="category-modal-header">
+        <h2 id="categoryModalTitle">Create Category</h2>
+        <button class="category-close-btn" id="closeCategoryModalBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+      <form id="categoryForm">
+        <input id="editCategoryId" type="hidden">
+        <div class="category-form-field">
+          <label for="categoryNameInput">Category Name <span>*</span></label>
+          <input id="categoryNameInput" name="categoryName" type="text" maxlength="100" placeholder="e.g. Antibiotics, Analgesics" required>
+        </div>
+        <div class="category-form-field">
+          <label for="categoryDescriptionInput">Description</label>
+          <textarea id="categoryDescriptionInput" name="description" maxlength="255" rows="3" placeholder="Describe the medicine classification or its purpose..."></textarea>
+        </div>
+        <div class="category-modal-actions">
+          <button class="category-cancel-btn" id="cancelCategoryBtn" type="button">Cancel</button>
+          <button class="category-primary-btn" id="saveCategoryBtn" type="submit">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteCategoryModal">
+    <div class="category-modal-card category-delete-card" role="alertdialog" aria-modal="true" aria-labelledby="deleteCategoryTitle">
+      <div class="category-modal-header">
+        <h2 id="deleteCategoryTitle">Delete Category</h2>
+        <button class="category-close-btn" id="closeDeleteCategoryBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p class="category-delete-message">Remove <strong id="deleteCategoryName"></strong> from the category list?</p>
+      <div class="category-modal-actions">
+        <button class="category-cancel-btn" id="cancelDeleteCategoryBtn" type="button">Cancel</button>
+        <button class="category-delete-btn" id="confirmDeleteCategoryBtn" type="button">Delete Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Supplier Confirmation Modal -->
+  <div class="modal-overlay" id="deleteSupplierModal">
+    <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-header">
+        <h2 style="display: flex; align-items: center; gap: 10px; color: #ef4444;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" width="20" height="20">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Delete Supplier
+        </h2>
+        <button class="modal-close-btn" id="closeDeleteSupplierModalBtn" type="button">&times;</button>
+      </div>
+      <div style="padding: 24px;">
+        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 20px;">
+          Are you sure you want to remove <strong id="deleteTargetSupplierName" style="color: #fff;">this supplier</strong> from the directory? It will be removed from your active database.
+        </p>
+        <div class="modal-form-actions" style="padding: 0; border: none; background: transparent;">
+          <button type="button" class="btn-med-cancel" id="cancelDeleteSupplierBtn">Cancel</button>
+          <button type="button" class="btn-med-save" id="confirmDeleteSupplierBtn" style="background: #dc2626;">Confirm Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Profile Modal -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <h2 style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2" width="22" height="22">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Administrator Profile
+        </h2>
+        <button class="btn-close-modal" id="closeProfileModalBtn">&times;</button>
+      </div>
+      <div style="padding: 24px;">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle);">
+          <div style="width: 56px; height: 56px; border-radius: 50%; background: #3b82f6; color: #fff; font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);">AD</div>
+          <div>
+            <div style="font-size: 1.15rem; font-weight: 700; color: #fff;">MediStock Admin</div>
+            <div style="font-size: 0.85rem; color: #00e599; font-weight: 600;">System Administrator</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.9rem;">
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <span style="color: var(--text-dim);">User ID</span>
+            <span style="color: #fff; font-weight: 600;">1 (from medistock.sql)</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <span style="color: var(--text-dim);">Email Address</span>
+            <span style="color: #fff; font-weight: 500;">admin@medistock.com</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <span style="color: var(--text-dim);">Phone</span>
+            <span style="color: #fff; font-weight: 500;">+91 9876543210</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <span style="color: var(--text-dim);">Assigned Role</span>
+            <span class="role-badge badge-admin">Admin</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid var(--border-subtle);">
+            <span style="color: var(--text-dim);">Status</span>
+            <span style="color: #00e599; font-weight: 600;">● Active</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="confirmProfileCloseBtn" style="width: 100%; margin-top: 24px;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="po-modal-overlay" id="viewPurchaseOrderModal" role="dialog" aria-modal="true" aria-labelledby="viewPurchaseOrderTitle">
+    <div class="po-modal-card po-detail-modal">
+      <div class="po-modal-header">
+        <h2 id="viewPurchaseOrderTitle">Purchase Order</h2>
+        <button class="po-close-btn" type="button" data-close-po-modal="viewPurchaseOrderModal" aria-label="Close">&times;</button>
+      </div>
+      <div id="purchaseOrderDetails"></div>
+    </div>
+  </div>
+
+  <div class="po-modal-overlay" id="changePurchaseOrderStatusModal" role="dialog" aria-modal="true" aria-labelledby="changePurchaseOrderStatusTitle">
+    <div class="po-modal-card po-status-modal">
+      <div class="po-modal-header">
+        <h2 id="changePurchaseOrderStatusTitle">Update Order Status</h2>
+        <button class="po-close-btn" type="button" data-close-po-modal="changePurchaseOrderStatusModal" aria-label="Close">&times;</button>
+      </div>
+      <form id="purchaseOrderStatusForm">
+        <div class="po-form-field">
+          <label for="purchaseOrderStatusSelect">Select Order Status</label>
+          <select id="purchaseOrderStatusSelect" required>
+            <option value="PENDING">PENDING</option>
+            <option value="APPROVED">APPROVED</option>
+            <option value="REJECTED">REJECTED</option>
+            <option value="PROCESSING">PROCESSING</option>
+            <option value="SHIPPED">SHIPPED</option>
+            <option value="DELIVERED">DELIVERED</option>
+            <option value="RECEIVED">RECEIVED</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+        </div>
+        <div class="po-modal-actions">
+          <button class="po-secondary-btn" type="button" data-close-po-modal="changePurchaseOrderStatusModal">Cancel</button>
+          <button class="po-primary-btn" id="applyPurchaseOrderStatusBtn" type="submit">Apply Status</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="po-modal-overlay" id="deletePurchaseOrderModal" role="dialog" aria-modal="true" aria-labelledby="deletePurchaseOrderTitle">
+    <div class="po-modal-card po-status-modal">
+      <div class="po-modal-header">
+        <h2 id="deletePurchaseOrderTitle">Delete Purchase Order</h2>
+        <button class="po-close-btn" type="button" data-close-po-modal="deletePurchaseOrderModal" aria-label="Close">&times;</button>
+      </div>
+      <p id="deletePurchaseOrderMessage" style="margin: 16px 0; color: var(--text-muted); font-size: 0.95rem;">Are you sure you want to delete this purchase order?</p>
+      <div class="po-modal-actions">
+        <button class="po-secondary-btn" type="button" data-close-po-modal="deletePurchaseOrderModal">Cancel</button>
+        <button class="po-primary-btn" id="confirmDeletePurchaseOrderBtn" type="button" style="background: #ef4444; border-color: #ef4444;">Delete Order</button>
+      </div>
+    </div>
+  </div>
+
+    <div class="sales-detail-overlay" id="posReceiptModal" role="dialog" aria-modal="true" aria-labelledby="posReceiptModalTitle" hidden>
+    <div class="sales-detail-card" style="max-width: 660px;">
+      <div class="sales-detail-header">
+        <h2 id="posReceiptModalTitle" style="display: flex; align-items: center; gap: 8px;">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#10b981" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+          Bill Confirmed &amp; Receipt Generated
+        </h2>
+        <button class="sales-detail-close" type="button" id="posCloseReceiptModalBtn" aria-label="Close invoice receipt">&times;</button>
+      </div>
+      <div id="posReceiptModalContent"></div>
+    </div>
+  </div>
+
+  <div class="sales-detail-overlay" id="salesDetailModal" role="dialog" aria-modal="true" aria-labelledby="salesDetailTitle" hidden>
+    <div class="sales-detail-card">
+      <div class="sales-detail-header">
+        <h2 id="salesDetailTitle">Invoice Details</h2>
+        <button class="sales-detail-close" type="button" data-close-sales-detail aria-label="Close invoice details">&times;</button>
+      </div>
+      <div id="salesDetailContent"></div>
+    </div>
+  </div>
+
+  <div class="users-modal-overlay" id="userAccountModal" role="dialog" aria-modal="true" aria-labelledby="userAccountModalTitle" hidden>
+    <div class="users-modal-card">
+      <div class="users-modal-header">
+        <h2 id="userAccountModalTitle">Create User Account</h2>
+        <button class="users-modal-close" type="button" data-close-user-modal aria-label="Close user form">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="userAccountForm">
+        <input id="userAccountId" type="hidden">
+        <div class="users-form-grid">
+          <div class="users-form-field">
+            <label for="userAccountUsername">Username <span class="req">*</span></label>
+            <input id="userAccountUsername" name="username" type="text" maxlength="100" autocomplete="username" placeholder="Enter login username" required>
+          </div>
+          <div class="users-form-field">
+            <label for="userAccountEmail">Email Address <span class="req">*</span></label>
+            <input id="userAccountEmail" name="email" type="email" maxlength="150" autocomplete="email" placeholder="Enter contact email" required>
+          </div>
+          <div class="users-form-field">
+            <label for="userAccountName">Full Name</label>
+            <input id="userAccountName" name="name" type="text" maxlength="100" autocomplete="name" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="users-form-field">
+            <label for="userAccountPhone">Phone Number</label>
+            <input id="userAccountPhone" name="phone" type="tel" maxlength="20" autocomplete="tel" placeholder="e.g. +1-555-0100">
+          </div>
+          <div class="users-form-field" id="userPasswordField">
+            <label for="userAccountPassword">Password <span class="req">*</span></label>
+            <input id="userAccountPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" placeholder="••••••••">
+            <small id="userPasswordHelp" hidden>Leave blank to keep current password.</small>
+          </div>
+          <div class="users-form-field users-active-field">
+            <label class="users-active-toggle" for="userAccountActive">
+              <input id="userAccountActive" type="checkbox" checked>
+              <span class="users-active-label">Account Active</span>
+            </label>
+          </div>
+        </div>
+        <div class="users-security-roles-header">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Assign Security Roles (Select all that apply)</span>
+        </div>
+        <div id="userRoleOptions" class="users-role-options">
+          <span class="users-role-loading">Loading available roles...</span>
+        </div>
+        <p id="userFormError" class="users-form-error" role="alert" hidden></p>
+        <div class="users-modal-actions">
+          <button class="users-secondary-btn" type="button" data-close-user-modal>Cancel</button>
+          <button class="users-primary-btn" id="saveUserAccountBtn" type="submit">Save User Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="users-modal-overlay" id="deleteUserModal" role="alertdialog" aria-modal="true" aria-labelledby="deleteUserModalTitle" hidden>
+    <div class="users-modal-card users-delete-card">
+      <div class="users-modal-header">
+        <h2 id="deleteUserModalTitle">Delete User Account</h2>
+        <button class="users-modal-close" type="button" data-close-delete-user aria-label="Close delete confirmation">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <p id="deleteUserMessage" class="users-delete-message">Are you sure you want to delete this account?</p>
+      <p id="deleteUserError" class="users-form-error" role="alert" hidden></p>
+      <div class="users-modal-actions">
+        <button class="users-secondary-btn" type="button" data-close-delete-user>Cancel</button>
+        <button class="users-delete-btn" id="confirmDeleteUserBtn" type="button">Delete User</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/expiry.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/purchase-orders.js"></script>
+  <script src="js/pos.js"></script>
+  <script src="js/sales-history.js"></script>
+  <script src="js/users-roles.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/notifications.js"></script>
+</body>
+</html>
