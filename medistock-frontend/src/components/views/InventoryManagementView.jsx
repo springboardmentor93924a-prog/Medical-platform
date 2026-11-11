@@ -1,340 +1,527 @@
-import React, { useState, useMemo } from 'react';
-import { 
-    Search, 
-    Filter, 
-    Plus, 
-    Pill, 
-    Edit2, 
-    Trash2, 
-    ArrowUpDown, 
-    Download,
+import React, { useMemo, useState } from 'react';
+import { FEFOBatchViewer } from '../modals/FEFOBatchViewer';
+import { Bell } from 'lucide-react';
+import { adminService } from '../../services/adminService';
+
+import {
+    Search,
+    Plus,
     Minus,
-    PlusCircle,
-    PackageOpen
+    Edit,
+    Trash2,
+    Download,
+    PackageOpen,
+    Package,
+    AlertTriangle,
+    CalendarClock,
+    Boxes,
+    ArrowUpRight,
+    ArrowDownRight,
+    X,
+    RefreshCw,
+    SlidersHorizontal,
+    Zap
 } from 'lucide-react';
-import { StatusBadge } from '../common/StatusBadge';
-import { reportService } from '../../services/reportService';
-import { useToast } from '../../context/ToastContext';
 
 export const InventoryManagementView = ({
     medicines = [],
-    suppliers = [],
+    role,
     onOpenAddModal,
     onEditMedicine,
     onDeleteMedicine,
     onAdjustStock
 }) => {
-    const { showToast } = useToast();
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('ALL');
-    const [selectedStatus, setSelectedStatus] = useState('ALL');
-    const [sortField, setSortField] = useState('name');
-    const [sortAsc, setSortAsc] = useState(true);
+    const [statusFilter, setStatusFilter] = useState('ALL');
+    const [fefoViewer, setFefoViewer] = useState(null);
 
-    const categories = [
-        'ALL',
-        'Antibiotics',
-        'Cardiovascular',
-        'Endocrinology / Biologics',
-        'Emergency / Anaphylaxis',
-        'Anesthesia / Critical Care',
-        'Vaccines / Immunology'
+    const safeMedicines = Array.isArray(medicines) ? medicines : [];
+
+    const filteredMeds = useMemo(() => {
+        const query = searchTerm.trim().toLowerCase();
+
+        return safeMedicines.filter((med) => {
+            const matchesSearch =
+                (med.name || '').toLowerCase().includes(query) ||
+                (med.genericName || '').toLowerCase().includes(query) ||
+                (med.batchNumber || '').toLowerCase().includes(query);
+
+            const matchesStatus =
+                statusFilter === 'ALL' || med.status === statusFilter;
+
+            return matchesSearch && matchesStatus;
+        });
+    }, [safeMedicines, searchTerm, statusFilter]);
+
+    const stats = useMemo(() => ({
+        total: safeMedicines.length,
+        inStock: safeMedicines.filter(m => m.status === 'IN_STOCK').length,
+        lowStock: safeMedicines.filter(m => m.status === 'LOW_STOCK').length,
+        attention: safeMedicines.filter(m =>
+            ['OUT_OF_STOCK', 'EXPIRED', 'EXPIRING_SOON'].includes(m.status)
+        ).length
+    }), [safeMedicines]);
+
+    const clearFilters = () => {
+        setSearchTerm('');
+        setStatusFilter('ALL');
+    };
+
+    const exportCSV = () => {
+        if (!filteredMeds.length) return;
+
+        const headers = [
+            'Medicine Name', 'Generic Name', 'Batch Number', 'Quantity',
+            'Minimum Quantity', 'Expiry Date', 'Storage Condition', 'Unit Price', 'Status'
+        ];
+
+        const escapeCSV = (value) =>
+            `"${String(value ?? '').replace(/"/g, '""')}"`;
+
+        const rows = filteredMeds.map(med => [
+            med.name, med.genericName, med.batchNumber, med.quantity,
+            med.minQuantity, med.expiryDate, med.storageCondition, med.unitPrice, med.status
+        ]);
+
+        const csv = [headers, ...rows]
+            .map(row => row.map(escapeCSV).join(','))
+            .join('\n');
+
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = 'medistock-inventory.csv';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+    };
+
+    const getStatusStyle = (status) => {
+        const styles = {
+            IN_STOCK: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/20',
+            LOW_STOCK: 'bg-amber-50 text-amber-700 ring-amber-600/20 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/20',
+            OUT_OF_STOCK: 'bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-400/10 dark:text-rose-300 dark:ring-rose-400/20',
+            EXPIRED: 'bg-slate-100 text-slate-700 ring-slate-500/20 dark:bg-slate-700/50 dark:text-slate-300 dark:ring-slate-500/30',
+            EXPIRING_SOON: 'bg-orange-50 text-orange-700 ring-orange-600/20 dark:bg-orange-400/10 dark:text-orange-300 dark:ring-orange-400/20'
+        };
+        return styles[status] || 'bg-slate-100 text-slate-600 ring-slate-500/20 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-600/30';
+    };
+
+    const formatStatus = (status) =>
+        (status || 'UNKNOWN').replace(/_/g, ' ');
+
+    // Helper: Is this medicine a FEFO priority? (expires within 45 days, not yet expired)
+    const isFefoPriority = (med) => {
+        if (!med.expiryDate) return false;
+        const expiry = new Date(med.expiryDate);
+        const days = Math.ceil((expiry - new Date()) / (1000 * 60 * 60 * 24));
+        return days >= 0 && days <= 45;
+    };
+
+    const statCards = [
+        {
+            label: 'Total Products',
+            value: stats.total,
+            icon: Package,
+            color: 'text-blue-600 dark:text-blue-400',
+            iconBg: 'bg-blue-50 dark:bg-blue-400/10',
+            description: 'Registered medicines'
+        },
+        {
+            label: 'In Stock',
+            value: stats.inStock,
+            icon: Boxes,
+            color: 'text-emerald-600 dark:text-emerald-400',
+            iconBg: 'bg-emerald-50 dark:bg-emerald-400/10',
+            description: 'Available inventory'
+        },
+        {
+            label: 'Low Stock',
+            value: stats.lowStock,
+            icon: AlertTriangle,
+            color: 'text-amber-600 dark:text-amber-400',
+            iconBg: 'bg-amber-50 dark:bg-amber-400/10',
+            description: 'Restock recommended'
+        },
+        {
+            label: 'Needs Attention',
+            value: stats.attention,
+            icon: CalendarClock,
+            color: 'text-rose-600 dark:text-rose-400',
+            iconBg: 'bg-rose-50 dark:bg-rose-400/10',
+            description: 'Expiry or stock issue'
+        }
     ];
 
-    const filteredMedicines = useMemo(() => {
-        return medicines
-            .filter(item => {
-                const term = searchTerm.toLowerCase();
-                const matchesSearch = 
-                    item.name?.toLowerCase().includes(term) ||
-                    item.genericName?.toLowerCase().includes(term) ||
-                    item.batchNumber?.toLowerCase().includes(term) ||
-                    item.ndc?.toLowerCase().includes(term);
-                
-                const matchesCategory = selectedCategory === 'ALL' || item.category === selectedCategory;
-                const matchesStatus = selectedStatus === 'ALL' || item.status === selectedStatus;
-
-                return matchesSearch && matchesCategory && matchesStatus;
-            })
-            .sort((a, b) => {
-                let valA = a[sortField];
-                let valB = b[sortField];
-
-                if (sortField === 'quantity' || sortField === 'unitPrice') {
-                    valA = Number(valA) || 0;
-                    valB = Number(valB) || 0;
-                } else {
-                    valA = (valA || '').toString().toLowerCase();
-                    valB = (valB || '').toString().toLowerCase();
-                }
-
-                if (valA < valB) return sortAsc ? -1 : 1;
-                if (valA > valB) return sortAsc ? 1 : -1;
-                return 0;
-            });
-    }, [medicines, searchTerm, selectedCategory, selectedStatus, sortField, sortAsc]);
-
-    const handleSort = (field) => {
-        if (sortField === field) {
-            setSortAsc(!sortAsc);
-        } else {
-            setSortField(field);
-            setSortAsc(true);
-        }
-    };
-
-    const handleExportCSV = () => {
-        if (filteredMedicines.length === 0) {
-            showToast('Formulary is empty. Nothing to export.', 'info');
-            return;
-        }
-        const rows = filteredMedicines.map(m => ({
-            ID: m.id,
-            Product: m.name,
-            Generic: m.genericName,
-            NDC: m.ndc,
-            Category: m.category,
-            DosageForm: m.dosageForm,
-            Quantity: m.quantity,
-            MinQuantity: m.minQuantity,
-            UnitPriceUSD: m.unitPrice,
-            Batch: m.batchNumber,
-            ExpiryDate: m.expiryDate,
-            Storage: m.storageCondition,
-            Supplier: m.supplierName,
-            Status: m.status
-        }));
-        reportService.exportToCSV(`medistock_formulary_${new Date().toISOString().split('T')[0]}.csv`, rows);
-        showToast(`Exported ${rows.length} formulary rows to CSV`, 'success');
-    };
+    const handleSendLowStockAlert = async () => {
+    if (!window.confirm("Send low-stock alert email to all Admins and Pharmacists?")) return;
+    try {
+        const result = await adminService.triggerLowStockAlert();
+        alert(`✅ ${result.message} (${result.itemsIncluded} items included)`);
+    } catch (err) {
+        alert("Failed: " + (err.response?.data?.error || err.message));
+    }
+};
 
     return (
-        <div className="space-y-6 animate-fadeIn pb-12 bg-white text-slate-900">
-            {/* View Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
-                        <Pill className="text-emerald-600" size={26} />
-                        <span>Formulary & Pharmaceutical Inventory</span>
-                    </h1>
-                    <p className="text-xs text-slate-500 mt-1">
-                        Comprehensive registry of certified pharmaceuticals, NDC barcoding, batch lots, and inventory levels.
-                    </p>
+        <div className="min-h-full space-y-5 bg-slate-50/70 pb-8 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+            {/* Page Header */}
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                <div className="flex items-start gap-3">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 ring-1 ring-emerald-200/70 dark:bg-emerald-400/10 dark:text-emerald-400 dark:ring-emerald-400/20">
+                        <PackageOpen size={25} />
+                    </div>
+                    <div>
+                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-2xl">
+                            Inventory Management
+                        </h1>
+                        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400 sm:text-sm">
+                            Monitor medicine stock, batches and expiry details.
+                        </p>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <div className="flex flex-wrap items-center gap-2">
                     <button
-                        onClick={handleExportCSV}
-                        className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-300 shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+                        type="button"
+                        onClick={exportCSV}
+                        disabled={!filteredMeds.length}
+                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800 sm:text-sm"
                     >
                         <Download size={15} />
-                        <span>Export CSV</span>
+                        Export CSV
                     </button>
+
+{/* Send Low Stock Alert — ADMIN ONLY */}
+{role === 'ADMIN' && (
+    <button
+        type="button"
+        onClick={handleSendLowStockAlert}
+        className="inline-flex items-center justify-center gap-2 rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2.5 text-xs font-semibold text-amber-800 shadow-sm transition hover:bg-amber-100 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300 sm:text-sm"
+    >
+        <Bell size={15} />
+        Send Low Stock Alert
+    </button>
+)}
+
+{/* Send Expiry Alert — ADMIN ONLY */}
+{role === 'ADMIN' && (
+    <button
+        type="button"
+        onClick={async () => {
+            if (!window.confirm("Send expiry alert email to all Admins and Pharmacists?")) return;
+            try {
+                const r = await adminService.triggerExpiryAlert();
+                alert(`✅ ${r.message} (${r.itemsIncluded} items)`);
+            } catch (err) {
+                alert("Failed: " + (err.response?.data?.error || err.message));
+            }
+        }}
+        className="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300 bg-rose-50 px-3.5 py-2.5 text-xs font-semibold text-rose-800 shadow-sm transition hover:bg-rose-100 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300 sm:text-sm"
+    >
+        <Bell size={15} />
+        Send Expiry Alert
+    </button>
+)}
+
                     <button
+                        type="button"
                         onClick={onOpenAddModal}
-                        className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center gap-2 cursor-pointer"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm shadow-emerald-600/20 transition hover:bg-emerald-500 active:scale-[0.98] dark:bg-emerald-500 dark:hover:bg-emerald-400 sm:text-sm"
                     >
-                        <Plus size={16} />
-                        <span>Register Product</span>
+                        <Plus size={16} strokeWidth={2.5} />
+                        Register Product
                     </button>
                 </div>
             </div>
 
-            {/* Filter and Search Bar */}
-            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3">
-                <div className="flex flex-col md:flex-row gap-3">
+            {/* Summary Cards */}
+            <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+                {statCards.map((card) => {
+                    const Icon = card.icon;
+                    return (
+                        <div key={card.label} className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
+                            <div className="flex items-start justify-between gap-2">
+                                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.iconBg}`}>
+                                    <Icon size={19} className={card.color} />
+                                </div>
+                                <span className="rounded-lg bg-slate-50 px-2 py-1 text-[10px] font-medium text-slate-400 dark:bg-slate-800 dark:text-slate-500">Inventory</span>
+                            </div>
+                            <div className="mt-4">
+                                <p className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{card.value}</p>
+                                <p className="mt-1 text-xs font-semibold text-slate-700 dark:text-slate-200">{card.label}</p>
+                                <p className="mt-1 text-[10px] text-slate-500 dark:text-slate-400 sm:text-[11px]">{card.description}</p>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Table Container */}
+            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <div className="flex flex-col gap-3 border-b border-slate-200 p-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+                    <div>
+                        <h2 className="text-sm font-bold text-slate-900 dark:text-white">Medicine Registry</h2>
+                        <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">View and manage your registered medicine batches.</p>
+                    </div>
+                    <div className="inline-flex w-fit items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                        <Package size={14} />
+                        {filteredMeds.length} of {safeMedicines.length} products
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-3 border-b border-slate-100 p-4 dark:border-slate-800 sm:flex-row sm:items-center sm:px-5">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3.5 top-2.5 text-slate-400" size={17} />
+                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
                             type="text"
-                            placeholder="Search by drug name, active ingredient, batch number, or NDC barcode..."
+                            placeholder="Search medicine, generic name or batch..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all"
+                            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-9 text-xs text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-emerald-500 dark:focus:bg-slate-950 sm:text-sm"
                         />
+                        {searchTerm && (
+                            <button
+                                type="button"
+                                onClick={() => setSearchTerm('')}
+                                aria-label="Clear search"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-0.5 text-slate-400 transition hover:bg-slate-200 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
+                            >
+                                <X size={14} />
+                            </button>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-2">
+                        <SlidersHorizontal size={15} className="shrink-0 text-slate-400" />
                         <select
-                            value={selectedStatus}
-                            onChange={e => setSelectedStatus(e.target.value)}
-                            className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 focus:outline-none focus:border-emerald-500"
+                            value={statusFilter}
+                            onChange={e => setStatusFilter(e.target.value)}
+                            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-700 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 sm:min-w-[165px] sm:text-sm"
                         >
                             <option value="ALL">All Statuses</option>
                             <option value="IN_STOCK">In Stock</option>
                             <option value="LOW_STOCK">Low Stock</option>
-                            <option value="EXPIRING_SOON">Expiring Soon</option>
                             <option value="OUT_OF_STOCK">Out of Stock</option>
+                            <option value="EXPIRED">Expired</option>
+                            <option value="EXPIRING_SOON">Expiring Soon</option>
                         </select>
+                        {(searchTerm || statusFilter !== 'ALL') && (
+                            <button
+                                type="button"
+                                onClick={clearFilters}
+                                className="shrink-0 rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                            >
+                                Clear
+                            </button>
+                        )}
                     </div>
                 </div>
 
-                {/* Category Pills */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-                    <span className="text-slate-400 text-[11px] font-semibold shrink-0 uppercase tracking-wider flex items-center gap-1">
-                        <Filter size={12} /> Class:
-                    </span>
-                    {categories.map(cat => (
-                        <button
-                            key={cat}
-                            onClick={() => setSelectedCategory(cat)}
-                            className={`px-3 py-1 rounded-lg shrink-0 font-medium transition-all cursor-pointer ${
-                                selectedCategory === cat
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold'
-                                    : 'text-slate-500 hover:text-slate-800 bg-slate-50 border border-slate-200'
-                            }`}
-                        >
-                            {cat}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Inventory Table */}
-            <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse min-w-[720px]">
-                        <thead>
-                            <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                                <th 
-                                    className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
-                                    onClick={() => handleSort('name')}
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <span>Product & Formulation</span>
-                                        <ArrowUpDown size={12} />
-                                    </div>
-                                </th>
-                                <th className="p-4">NDC & Lot Batch</th>
-                                <th 
-                                    className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
-                                    onClick={() => handleSort('quantity')}
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <span>Current Stock</span>
-                                        <ArrowUpDown size={12} />
-                                    </div>
-                                </th>
-                                <th 
-                                    className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
-                                    onClick={() => handleSort('expiryDate')}
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <span>Expiry Date</span>
-                                        <ArrowUpDown size={12} />
-                                    </div>
-                                </th>
-                                <th className="p-4">Storage Condition</th>
-                                <th 
-                                    className="p-4 cursor-pointer hover:text-slate-800 transition-colors"
-                                    onClick={() => handleSort('unitPrice')}
-                                >
-                                    <div className="flex items-center gap-1.5">
-                                        <span>Unit Price</span>
-                                        <ArrowUpDown size={12} />
-                                    </div>
-                                </th>
-                                <th className="p-4">Status</th>
-                                <th className="p-4 text-right">Actions</th>
+                <div className="w-full overflow-x-auto">
+                    <table className="w-full min-w-[1050px] text-left text-xs">
+                        <thead className="bg-slate-50/90 dark:bg-slate-800/50">
+                            <tr className="border-b border-slate-200 dark:border-slate-800">
+                                {['Medicine', 'Batch / Lot', 'Current Stock', 'Expiry Date', 'Storage', 'Unit Price', 'Status', 'Actions'].map((heading, index) => (
+                                    <th
+                                        key={heading}
+                                        className={`whitespace-nowrap px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 ${
+                                            index === 7 ? 'text-right' : ''
+                                        }`}
+                                    >
+                                        {heading}
+                                    </th>
+                                ))}
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 text-xs">
-                            {filteredMedicines.map(item => (
-                                <tr key={item.id} className="hover:bg-slate-50 transition-colors group">
-                                    <td className="p-4">
-                                        <div className="font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
-                                            {item.name}
-                                        </div>
-                                        <div className="text-[11px] text-slate-500 mt-0.5">
-                                            {item.genericName} • <span className="text-slate-700 font-medium">{item.strength}</span>
-                                        </div>
-                                    </td>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                            {filteredMeds.map((med) => {
+                                const quantity = Number(med.quantity) || 0;
+                                const minQuantity = Number(med.minQuantity) || 0;
+                                const lowStock =
+                                    med.status === 'LOW_STOCK' ||
+                                    med.status === 'OUT_OF_STOCK' ||
+                                    quantity <= minQuantity;
 
-                                    <td className="p-4 font-mono text-[11px]">
-                                        <div className="text-slate-800 font-semibold">{item.ndc}</div>
-                                        <div className="text-slate-400 mt-0.5 text-[10px]">Lot: {item.batchNumber}</div>
-                                    </td>
+                                const expiryDate = med.expiryDate
+                                    ? new Date(med.expiryDate).toLocaleDateString()
+                                    : '—';
 
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                onClick={() => onAdjustStock(item.id, -1, 'Dispensed')}
-                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-                                                title="Dispense 1 unit"
-                                            >
-                                                <Minus size={12} />
-                                            </button>
-                                            <span className="font-bold text-sm text-slate-900 min-w-[28px] text-center">
-                                                {item.quantity}
+                                const fefoBadge = isFefoPriority(med);
+
+                                return (
+                                    <tr key={med.id} className="group transition-colors hover:bg-emerald-50/40 dark:hover:bg-slate-800/60">
+                                        {/* Medicine */}
+                                        <td className="px-5 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 transition group-hover:border-emerald-200 group-hover:bg-emerald-50 group-hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:group-hover:border-emerald-400/20 dark:group-hover:bg-emerald-400/10 dark:group-hover:text-emerald-400">
+                                                    <Package size={17} />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <p className="max-w-[190px] truncate font-semibold text-slate-800 dark:text-slate-100">
+                                                        {med.name || 'Unnamed medicine'}
+                                                    </p>
+                                                    {med.genericName && (
+                                                        <p className="mt-1 max-w-[190px] truncate text-[10px] text-slate-500 dark:text-slate-400">
+                                                            {med.genericName}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {/* Batch — with FEFO Priority Badge */}
+                                        <td className="px-5 py-4">
+                                            <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-[10px] text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                                {med.batchNumber || 'N/A'}
                                             </span>
-                                            <button
-                                                onClick={() => onAdjustStock(item.id, 1, 'Inbound intake')}
-                                                className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
-                                                title="Intake 1 unit"
-                                            >
-                                                <PlusCircle size={12} />
-                                            </button>
-                                            <span className="text-[11px] text-slate-500">
-                                                {item.unit}
+                                            {fefoBadge && (
+                                                <div className="mt-1">
+                                                    <span className="inline-block rounded bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 dark:bg-amber-400/20 dark:text-amber-300">
+                                                        FEFO PRIORITY
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </td>
+
+                                        {/* Stock Controls */}
+                                        <td className="px-5 py-4">
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    type="button"
+                                                    title="Decrease stock by one"
+                                                    aria-label={`Decrease stock for ${med.name}`}
+                                                    disabled={!onAdjustStock || quantity <= 0}
+                                                    onClick={() => onAdjustStock?.(med.id, -1, 'Manual Adjustment')}
+                                                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-rose-400/30 dark:hover:bg-rose-400/10 dark:hover:text-rose-400"
+                                                >
+                                                    <Minus size={13} />
+                                                </button>
+                                                <span className={`min-w-8 text-center text-sm font-bold tabular-nums ${
+                                                    lowStock ? 'text-amber-600 dark:text-amber-400' : 'text-slate-800 dark:text-slate-100'
+                                                }`}>
+                                                    {quantity}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    title="Increase stock by one"
+                                                    aria-label={`Increase stock for ${med.name}`}
+                                                    disabled={!onAdjustStock}
+                                                    onClick={() => onAdjustStock?.(med.id, 1, 'Manual Adjustment')}
+                                                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-emerald-400/30 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-400"
+                                                >
+                                                    <Plus size={13} />
+                                                </button>
+                                            </div>
+                                            <p className="mt-1.5 text-[10px] text-slate-400 dark:text-slate-500">
+                                                Min. {minQuantity}
+                                            </p>
+                                        </td>
+
+                                        {/* Expiry */}
+                                        <td className="px-5 py-4">
+                                            <div className="flex items-center gap-1.5 whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                                <CalendarClock size={13} className="text-slate-400" />
+                                                {expiryDate}
+                                            </div>
+                                        </td>
+
+                                        {/* Storage */}
+                                        <td className="px-5 py-4">
+                                            <span className="whitespace-nowrap text-slate-600 dark:text-slate-300">
+                                                {med.storageCondition || 'Room Temp'}
                                             </span>
-                                        </div>
-                                        <div className="text-[10px] text-slate-400 mt-0.5">
-                                            Min: {item.minQuantity}
-                                        </div>
-                                    </td>
+                                        </td>
 
-                                    <td className="p-4 font-mono text-[11px] text-slate-700">
-                                        {item.expiryDate}
-                                    </td>
+                                        {/* Price */}
+                                        <td className="px-5 py-4">
+                                            <span className="font-semibold tabular-nums text-slate-800 dark:text-slate-100">
+                                                ${Number(med.unitPrice || 0).toFixed(2)}
+                                            </span>
+                                        </td>
 
-                                    <td className="p-4 text-[11px] text-slate-600">
-                                        {item.storageCondition}
-                                    </td>
+                                        {/* Status */}
+                                        <td className="px-5 py-4">
+                                            <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1.5 text-[9px] font-bold ring-1 ring-inset ${getStatusStyle(med.status)}`}>
+                                                <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                                                {formatStatus(med.status)}
+                                            </span>
+                                        </td>
 
-                                    <td className="p-4 font-bold text-slate-900">
-                                        ${Number(item.unitPrice).toFixed(2)}
-                                    </td>
+                                        {/* Actions */}
+                                        <td className="px-5 py-4">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                <button
+                                                   type="button"
+                                                    title="View batches by expiry (FEFO)"
+                                                    onClick={() => setFefoViewer(med)}
+                                                     className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-slate-400 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-600 dark:hover:border-emerald-400/20 dark:hover:bg-emerald-400/10 dark:hover:text-emerald-400"
+                                                      >
+                                                   <Zap size={15} />
+                                              </button>
+                                                <button
+                                                    type="button"
+                                                    title="Edit medicine"
+                                                    aria-label={`Edit ${med.name}`}
+                                                    onClick={() => onEditMedicine?.(med)}
+                                                    disabled={!onEditMedicine}
+                                                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-slate-400 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:border-blue-400/20 dark:hover:bg-blue-400/10 dark:hover:text-blue-400"
+                                                >
+                                                    <Edit size={15} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    title="Delete medicine"
+                                                    aria-label={`Delete ${med.name}`}
+                                                    onClick={() => onDeleteMedicine?.(med)}
+                                                    disabled={!onDeleteMedicine}
+                                                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-transparent text-slate-400 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:border-rose-400/20 dark:hover:bg-rose-400/10 dark:hover:text-rose-400"
+                                                >
+                                                    <Trash2 size={15} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
 
-                                    <td className="p-4">
-                                        <StatusBadge status={item.status} />
-                                    </td>
-
-                                    <td className="p-4 text-right">
-                                        <div className="flex items-center justify-end gap-1.5">
-                                            <button
-                                                onClick={() => onEditMedicine(item)}
-                                                className="p-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-emerald-700 transition-colors cursor-pointer"
-                                                title="Edit record"
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                onClick={() => onDeleteMedicine(item)}
-                                                className="p-2 rounded-lg bg-slate-50 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                                title="Decommission item"
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-
-                            {filteredMedicines.length === 0 && (
+                            {/* Empty State */}
+                            {filteredMeds.length === 0 && (
                                 <tr>
-                                    <td colSpan="8" className="p-12 text-center">
-                                        <div className="max-w-xs mx-auto space-y-2">
-                                            <PackageOpen size={36} className="mx-auto text-slate-300" />
-                                            <p className="text-sm font-bold text-slate-800">No medicines in inventory</p>
-                                            <p className="text-xs text-slate-500">All data is cleared. Register your first pharmaceutical to start managing stock.</p>
+                                    <td colSpan={8} className="px-5 py-16 text-center">
+                                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+                                            <PackageOpen size={25} />
+                                        </div>
+                                        <h3 className="mt-4 text-sm font-bold text-slate-800 dark:text-slate-100">
+                                            No medicines found
+                                        </h3>
+                                        <p className="mx-auto mt-1 max-w-sm text-xs leading-5 text-slate-500 dark:text-slate-400">
+                                            {searchTerm || statusFilter !== 'ALL'
+                                                ? 'Try changing your search or status filter.'
+                                                : 'Your inventory is empty. Register a product to get started.'}
+                                        </p>
+                                        {(searchTerm || statusFilter !== 'ALL') ? (
                                             <button
+                                                type="button"
+                                                onClick={clearFilters}
+                                                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                                            >
+                                                <RefreshCw size={13} />
+                                                Reset filters
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
                                                 onClick={onOpenAddModal}
-                                                className="mt-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition-all inline-flex items-center gap-1.5 cursor-pointer"
+                                                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-500"
                                             >
                                                 <Plus size={14} />
-                                                <span>Register Product</span>
+                                                Register Product
                                             </button>
-                                        </div>
+                                        )}
                                     </td>
                                 </tr>
                             )}
@@ -342,11 +529,25 @@ export const InventoryManagementView = ({
                     </table>
                 </div>
 
-                <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
-                    <span>Showing {filteredMedicines.length} registered products</span>
-                    <span className="font-mono text-[11px]">Pharmacopeia Revision 2026.4</span>
-                </div>
+                {filteredMeds.length > 0 && (
+                    <div className="flex flex-col gap-2 border-t border-slate-200 bg-slate-50/70 px-5 py-3 text-[10px] text-slate-500 dark:border-slate-800 dark:bg-slate-950/50 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+                        <span>
+                            Showing <span className="font-semibold text-slate-700 dark:text-slate-200">{filteredMeds.length}</span> products
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                            Inventory data
+                        </span>
+                    </div>
+                )}
             </div>
+            {fefoViewer && (
+    <FEFOBatchViewer
+        isOpen={!!fefoViewer}
+        onClose={() => setFefoViewer(null)}
+        medicineName={fefoViewer.name}
+    />
+)}
         </div>
     );
 };

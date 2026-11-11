@@ -1,13 +1,35 @@
 @import "tailwindcss";
 
+/* 1. Tell Tailwind to use the .dark class for dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 2. Define your base variables */
+:root {
+  --bg-main: #f8fafc;        /* slate-50 */
+  --bg-card: #ffffff;        /* white */
+  --text-main: #0f172a;      /* slate-900 */
+  --text-muted: #64748b;     /* slate-500 */
+  --border-color: #e2e8f0;   /* slate-200 */
+}
+
+/* 3. Override variables when .dark is active */
+.dark {
+  --bg-main: #0f172a;        /* slate-900 */
+  --bg-card: #1e293b;        /* slate-800 */
+  --text-main: #f8fafc;      /* slate-50 */
+  --text-muted: #94a3b8;     /* slate-400 */
+  --border-color: #334155;   /* slate-700 */
+}
+
 @layer base {
   html, body {
-    background-color: #ffffff;
-    color: #0f172a;
+    background-color: var(--bg-main);
+    color: var(--text-main);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
     padding: 0;
     min-height: 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -16,8 +38,40 @@ input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
     display: none;
 }
-
 input::-ms-reveal,
 input::-ms-clear {
     display: none;
 }
+
+
+/* PHARMACIST THEME VARIABLES */
+:root, [data-theme="light"] {
+  --theme-bg: #F4F7FB;
+  --theme-sidebar: #FFFFFF;
+  --theme-surface: #FFFFFF;
+  --theme-surface-hover: #EAF3F5;
+  --theme-primary: #0F9488;
+  --theme-primary-hover: #0D7F75;
+  --theme-text: #172B3A;
+  --theme-text-muted: #617386;
+  --theme-border: #DFE7EF;
+}
+
+[data-theme="dark"] {
+  --theme-bg: #0B1120;
+  --theme-sidebar: #0D1628;
+  --theme-surface: #131F33;
+  --theme-surface-hover: #1B2A40;
+  --theme-primary: #2DD4BF;
+  --theme-primary-hover: #5EEAD4;
+  --theme-text: #F1F5F9;
+  --theme-text-muted: #A3B3C7;
+  --theme-border: #26364D;
+}
+
+.theme-sidebar-bg { background-color: var(--theme-sidebar); border-color: var(--theme-border); }
+.theme-surface-bg { background-color: var(--theme-surface); border-color: var(--theme-border); }
+.theme-text-main { color: var(--theme-text); }
+.theme-text-muted { color: var(--theme-text-muted); }
+.theme-bg-main { background-color: var(--theme-bg); }
+.theme-hover:hover { background-color: var(--theme-surface-hover); }

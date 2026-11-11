@@ -1,44 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar } from './common/Sidebar';
 import { Navbar } from './common/Navbar';
-import { DashboardOverviewView } from './views/DashboardOverviewView';
+
+// Existing Views
 import { InventoryManagementView } from './views/InventoryManagementView';
 import { ExpiryTrackingView } from './views/ExpiryTrackingView';
 import { SuppliersView } from './views/SuppliersView';
-import { ReportsExportView } from './views/ReportsExportView';
-import { AuditLogsView } from './views/AuditLogsView';
+import { PurchaseOrdersView } from './views/PurchaseOrdersView'; 
+import { PharmacistDashboardView } from './views/PharmacistDashboardView';
 import { ProfileView } from './views/ProfileView';
+import { NotificationsView } from './views/NotificationsView';
+import { WastageReportView } from './views/WastageReportView';
+import { BackupRestoreView } from './views/BackupRestoreView';
 
+
+import { AuditLogsView } from './views/AuditLogsView';
+
+// Pages
+import AdminDashboardPage from '../pages/AdminDashboardPage';
+import MedicinesManagementPage from '../pages/MedicinesManagementPage';
+import CategoriesPage from '../pages/CategoriesPage';
+import ReportsExportView from '../pages/ReportsExportView';
+
+// Specific components
+import { BillingPOSView } from './views/BillingPOSView';
+import { SalesHistoryView } from './views/SalesHistoryView';
+import { UserRolesView } from './views/UserRolesView'; 
+
+// Supplier Views
+import { SupplierDashboard } from '../pages/SupplierDashboard';
+import { SupplierOrdersView } from './views/SupplierOrdersView';
+import { SupplierDeliveryView } from './views/SupplierDeliveryView';
+import { SupplierHistoryView } from './views/SupplierHistoryView';
+import { SupplierBillingView } from './views/SupplierBillingView';
+
+// Modals
 import { AddEditMedicineModal } from './modals/AddEditMedicineModal';
 import { AddSupplierModal } from './modals/AddSupplierModal';
 import { DeleteConfirmModal } from './modals/DeleteConfirmModal';
 
-import { inventoryService } from '../services/inventoryService';
-import { supplierService } from '../services/supplierService';
-import { auditService } from '../services/auditService';
+// Services & Context
+import { adminService } from '../services/adminService'; 
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 
-import AdminDashboardPage from '../pages/AdminDashboardPage';
+//Staff
+import { StaffDashboardView } from './views/StaffDashboardView';
+import { StockCheckingView } from './views/StockCheckingView';
+import { ReceiveMedicinesView } from './views/ReceiveMedicinesView';
+import { TaskManagementView } from './views/TaskManagementView';
 
-
-import { 
-    LayoutDashboard, 
-    Pill, 
-    Snowflake, 
-    Truck, 
-    Menu 
-} from 'lucide-react';
+import { FeedbackButton } from './common/FeedbackButton';
+import { FeedbackManagementView } from './views/FeedbackManagementView';
 
 export const AppLayout = () => {
     const { user } = useAuth();
     const { showToast } = useToast();
+    
+    const role = (user?.role || 'ADMIN').toUpperCase();
 
     const [activeTab, setActiveTab] = useState('dashboard');
-    const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
     const [medicines, setMedicines] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
-    const [auditLogs, setAuditLogs] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     // Modal states
@@ -46,23 +69,24 @@ export const AppLayout = () => {
     const [editingMedicine, setEditingMedicine] = useState(null);
 
     const [supplierModalOpen, setSupplierModalOpen] = useState(false);
+    const [editingSupplier, setEditingSupplier] = useState(null);
 
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
-    const [deleteType, setDeleteType] = useState('medicine'); // 'medicine' | 'supplier'
+    const [deleteType, setDeleteType] = useState('medicine'); 
 
-    // Load Data
-    const loadAllData = async () => {
+        const loadAllData = async () => {
         try {
             setIsLoading(true);
-            const [medsData, suppsData, logsData] = await Promise.all([
-                inventoryService.getAll(),
-                supplierService.getAll(),
-                auditService.getAll()
-            ]);
-            setMedicines(medsData);
-            setSuppliers(suppsData);
-            setAuditLogs(logsData);
+            // Fetch medicines (Staff needs this)
+            const medsData = await adminService.getAllMedicines();
+            setMedicines(medsData || []);
+
+            // Only fetch suppliers for Admin/Pharmacist (Staff doesn't need it)
+            if (['ADMIN', 'PHARMACIST'].includes(role)) {
+                const suppsData = await adminService.getAllSuppliers();
+                setSuppliers(suppsData || []);
+            }
         } catch (err) {
             console.error('Failed to load clinical data:', err);
             showToast('Failed to load repository data', 'error');
@@ -73,17 +97,17 @@ export const AppLayout = () => {
 
     useEffect(() => {
         loadAllData();
-    }, []);
+    }, [role]); // Re-fetch if role changes
 
-    // Medicine handlers
+    // --- HANDLERS ---
     const handleSaveMedicine = async (medicineData) => {
         try {
             if (editingMedicine) {
-                const updated = await inventoryService.update(editingMedicine.id, medicineData, user);
-                showToast(`Updated ${updated.name}`, 'success');
+                await adminService.updateMedicine(editingMedicine.id, medicineData);
+                showToast(`Updated ${medicineData.name}`, 'success');
             } else {
-                const created = await inventoryService.create(medicineData, user);
-                showToast(`Registered ${created.name}`, 'success');
+                await adminService.createMedicine(medicineData);
+                showToast(`Registered ${medicineData.name}`, 'success');
             }
             setMedicineModalOpen(false);
             setEditingMedicine(null);
@@ -95,8 +119,11 @@ export const AppLayout = () => {
 
     const handleAdjustStock = async (id, delta, reason) => {
         try {
-            await inventoryService.adjustStock(id, delta, reason, user);
-            loadAllData();
+            const med = medicines.find(m => m.id === id);
+            if (!med) return;
+            const newQty = Math.max(0, med.quantity + delta);
+            await adminService.updateMedicine(id, { ...med, quantity: newQty });
+            loadAllData(); 
         } catch (err) {
             showToast('Failed to adjust stock', 'error');
         }
@@ -108,16 +135,29 @@ export const AppLayout = () => {
         setDeleteModalOpen(true);
     };
 
-    // Supplier handlers
     const handleSaveSupplier = async (supplierData) => {
         try {
-            const created = await supplierService.create(supplierData, user);
-            showToast(`Registered supplier: ${created.name}`, 'success');
+            if (editingSupplier) {
+                await adminService.updateSupplier(editingSupplier.id, supplierData);
+                showToast(`Updated supplier: ${supplierData.name}`, 'success');
+            } else {
+                const res = await adminService.createSupplier(supplierData);
+                showToast(`Supplier + login created. Share credentials with ${supplierData.email}`, 'success');
+            }
             setSupplierModalOpen(false);
+            setEditingSupplier(null);
             loadAllData();
         } catch (err) {
-            showToast(err.message || 'Failed to add supplier', 'error');
+            showToast(err.response?.data?.message || err.message || 'Failed to save supplier', 'error');
         }
+    };
+
+
+
+    
+    const handleEditSupplier = (supplier) => {
+        setEditingSupplier(supplier);
+        setSupplierModalOpen(true);
     };
 
     const handlePromptDeleteSupplier = (supp) => {
@@ -126,180 +166,139 @@ export const AppLayout = () => {
         setDeleteModalOpen(true);
     };
 
-    // Confirm Delete
     const handleConfirmDelete = async () => {
         if (!itemToDelete) return;
         try {
             if (deleteType === 'medicine') {
-                await inventoryService.delete(itemToDelete.id, user);
-                showToast(`Removed product ${itemToDelete.name}`, 'warning');
+                await adminService.deleteMedicine(itemToDelete.id);
             } else {
-                await supplierService.delete(itemToDelete.id, user);
-                showToast(`Removed supplier ${itemToDelete.name}`, 'warning');
+                await adminService.deleteSupplier(itemToDelete.id);
             }
             setDeleteModalOpen(false);
             setItemToDelete(null);
             loadAllData();
         } catch (err) {
-            showToast('Deletion failed', 'error');
+            showToast(err.message || 'Deletion failed', 'error');
         }
     };
 
-    // Counts for sidebar badges
     const criticalCount = medicines.filter(m => m.status === 'EXPIRING_SOON' || m.status === 'LOW_STOCK' || m.status === 'OUT_OF_STOCK').length;
 
     return (
-        <div className="flex min-h-screen bg-white text-slate-900 font-sans">
-            {/* Sidebar (Responsive Desktop Aside + Mobile Drawer) */}
+        <div className="flex min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans transition-colors duration-300">
             <Sidebar
                 activeTab={activeTab}
                 onSelectTab={setActiveTab}
-                mobileOpen={mobileSidebarOpen}
-                onCloseMobile={() => setMobileSidebarOpen(false)}
-                counts={{
-                    total: medicines.length,
-                    critical: criticalCount,
-                    suppliers: suppliers.length
-                }}
+                counts={{ total: medicines.length, critical: criticalCount, suppliers: suppliers.length }}
             />
 
-            {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
-                {/* Navbar */}
-                <Navbar 
+                <Navbar
                     onOpenProfile={() => setActiveTab('profile')}
-                    onToggleSidebar={() => setMobileSidebarOpen(prev => !prev)}
+                    onNavigate={setActiveTab}
                 />
-
-                {/* View Container */}
                 <main className="flex-1 p-3 sm:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto">
                    
-                   {activeTab === 'admin' && (
-                        <AdminDashboardPage />
-                    )}
-                   
-                   {activeTab === 'dashboard' && (
-                        <DashboardOverviewView
-                            medicines={medicines}
-                            suppliers={suppliers}
-                            auditLogs={auditLogs}
-                            onNavigate={setActiveTab}
-                            onOpenAddMedicine={() => {
-                                setEditingMedicine(null);
-                                setMedicineModalOpen(true);
-                            }}
-                        />
-                    )}
+                    
 
-                    {activeTab === 'inventory' && (
-                        <InventoryManagementView
-                            medicines={medicines}
-                            suppliers={suppliers}
+
+                   {/* DASHBOARD */}
+                   {activeTab === 'dashboard' && role === 'ADMIN' && <AdminDashboardPage onNavigate={setActiveTab} />}
+                   {activeTab === 'dashboard' && role === 'PHARMACIST' && <PharmacistDashboardView medicines={medicines} suppliers={suppliers} onNavigate={setActiveTab} />}
+                   {activeTab === 'dashboard' && role === 'SUPPLIER' && <SupplierDashboard onNavigate={setActiveTab} />}
+                   {activeTab === 'dashboard' && role === 'STAFF' && <StaffDashboardView medicines={medicines} onNavigate={setActiveTab} />}
+                  
+    {/* SUPPLIER PAGES */}
+                   {activeTab === 'orders' && role === 'SUPPLIER' && <SupplierOrdersView />}
+                   {activeTab === 'delivery' && role === 'SUPPLIER' && <SupplierDeliveryView />}
+                   {activeTab === 'history' && role === 'SUPPLIER' && <SupplierHistoryView />}
+                   {activeTab === 'billing' && role === 'SUPPLIER' && <SupplierBillingView />}
+
+                   {/* MEDICINES (Admin & Pharmacist) */}
+                   {activeTab === 'medicines' && ['ADMIN', 'PHARMACIST','STAFF'].includes(role) && (
+                        <MedicinesManagementPage
+                            isAdmin={role === 'ADMIN'}
                             onOpenAddModal={() => {
+                                if (role !== 'ADMIN') return;
                                 setEditingMedicine(null);
                                 setMedicineModalOpen(true);
                             }}
                             onEditMedicine={(med) => {
+                                if (role !== 'ADMIN') return;
                                 setEditingMedicine(med);
                                 setMedicineModalOpen(true);
                             }}
-                            onDeleteMedicine={handlePromptDeleteMedicine}
-                            onAdjustStock={handleAdjustStock}
+                            onDeleteMedicine={role === 'ADMIN' ? handlePromptDeleteMedicine : undefined}
                         />
                     )}
 
+                    {/* CATEGORIES */}
+                    {activeTab === 'categories' && <CategoriesPage />}
+                    
+
+                    {/* INVENTORY / STOCK MONITORING */}
+                    {activeTab === 'inventory' && role === 'STAFF' && (<StockCheckingView medicines={medicines} onRefresh={loadAllData} />)}
+                    {activeTab === 'inventory' && role !== 'STAFF' &&(
+                        <InventoryManagementView
+                            medicines={medicines}
+                            suppliers={suppliers}
+                            role = {role}
+                            onOpenAddModal={() => { setEditingMedicine(null); setMedicineModalOpen(true); }}
+                            onEditMedicine={(med) => { setEditingMedicine(med); setMedicineModalOpen(true); }}
+                            onDeleteMedicine={role === 'ADMIN' ? handlePromptDeleteMedicine : (med) => showToast("Only Admin can delete medicines", "error")}
+                            onAdjustStock={handleAdjustStock}
+                        />
+                    )}
+                     {/* Recieve Mei=dicine - STAFF */}
+                    {activeTab === 'receive' && role === 'STAFF' && <ReceiveMedicinesView />}
+
+                    {/* EXPIRY */}
                     {activeTab === 'expiry' && (
                         <ExpiryTrackingView
                             medicines={medicines}
-                            onAdjustStock={handleAdjustStock}
-                            onDeleteMedicine={handlePromptDeleteMedicine}
+                            onDeleteMedicine={role === 'ADMIN' ? handlePromptDeleteMedicine : undefined}
                         />
                     )}
 
+                    {/* PURCHASE ORDERS */}
+                    {activeTab === 'purchase-orders' && (
+                        <PurchaseOrdersView role={role} />
+                    )}
+
+                    {/* SUPPLIERS (Admin only) */}
                     {activeTab === 'suppliers' && (
                         <SuppliersView
                             suppliers={suppliers}
                             medicines={medicines}
-                            onOpenAddSupplier={() => setSupplierModalOpen(true)}
-                            onDeleteSupplier={handlePromptDeleteSupplier}
+                            role={role}
+                            onOpenAddSupplier={role === 'ADMIN' ? () => { setEditingSupplier(null); setSupplierModalOpen(true); } : undefined}
+                            onEditSupplier={role === 'ADMIN' ? handleEditSupplier : undefined}
+                            onDeleteSupplier={role === 'ADMIN' ? handlePromptDeleteSupplier : undefined}
                         />
                     )}
 
+                    {/* REPORTS */}
                     {activeTab === 'reports' && (
-                        <ReportsExportView
-                            medicines={medicines}
-                            suppliers={suppliers}
-                            auditLogs={auditLogs}
-                        />
+                        <ReportsExportView medicines={medicines} suppliers={suppliers} auditLogs={[]} />
                     )}
 
-                    {activeTab === 'audit' && (
-                        <AuditLogsView
-                            auditLogs={auditLogs}
-                        />
-                    )}
+                    {/* PROFILE */}
+                    {activeTab === 'profile' && <ProfileView />}
 
-                    {activeTab === 'profile' && (
-                        <ProfileView />
-                    )}
+                    {/* ADMIN ONLY PAGES */}
+                    {activeTab === 'users' && role === 'ADMIN' && <UserRolesView />}
+                    {activeTab === 'billing' && role === 'ADMIN' && <BillingPOSView />}
+                    {activeTab === 'sales' && role === 'ADMIN' && <SalesHistoryView />}
+                    {activeTab === 'tasks' && role === 'ADMIN' && <TaskManagementView />}
+                    {activeTab === 'audit' && role === 'ADMIN' && <AuditLogsView />}
+                    {activeTab === 'feedback' && role === 'ADMIN' && <FeedbackManagementView />}
+                    {activeTab === 'wastage' && role === 'ADMIN' && <WastageReportView />}
+                    {activeTab === 'backup' && role === 'ADMIN' && <BackupRestoreView />}
+
+                    
+                    {/* NOTIFICATIONS */}
+                    {activeTab === 'notifications' && <NotificationsView/>}
                 </main>
-
-                {/* Mobile Bottom Navigation Bar (Visible < lg) */}
-                <nav className="lg:hidden fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 px-2 py-1.5 flex items-center justify-around shadow-lg">
-                    <button
-                        onClick={() => setActiveTab('dashboard')}
-                        className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition-all cursor-pointer ${
-                            activeTab === 'dashboard' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-900'
-                        }`}
-                    >
-                        <LayoutDashboard size={19} className={activeTab === 'dashboard' ? 'text-emerald-600' : 'text-slate-400'} />
-                        <span className="text-[10px] mt-0.5">Overview</span>
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('inventory')}
-                        className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition-all relative cursor-pointer ${
-                            activeTab === 'inventory' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-900'
-                        }`}
-                    >
-                        <Pill size={19} className={activeTab === 'inventory' ? 'text-emerald-600' : 'text-slate-400'} />
-                        <span className="text-[10px] mt-0.5">Formulary</span>
-                        {medicines.length > 0 && (
-                            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
-                        )}
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('expiry')}
-                        className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition-all relative cursor-pointer ${
-                            activeTab === 'expiry' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-900'
-                        }`}
-                    >
-                        <Snowflake size={19} className={activeTab === 'expiry' ? 'text-cyan-600' : 'text-slate-400'} />
-                        <span className="text-[10px] mt-0.5">Cold-Chain</span>
-                        {criticalCount > 0 && (
-                            <span className="absolute top-1 right-2 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-white" />
-                        )}
-                    </button>
-
-                    <button
-                        onClick={() => setActiveTab('suppliers')}
-                        className={`flex flex-col items-center justify-center p-1.5 rounded-xl transition-all cursor-pointer ${
-                            activeTab === 'suppliers' ? 'text-emerald-700 font-bold' : 'text-slate-500 hover:text-slate-900'
-                        }`}
-                    >
-                        <Truck size={19} className={activeTab === 'suppliers' ? 'text-teal-600' : 'text-slate-400'} />
-                        <span className="text-[10px] mt-0.5">Vendors</span>
-                    </button>
-
-                    <button
-                        onClick={() => setMobileSidebarOpen(true)}
-                        className="flex flex-col items-center justify-center p-1.5 rounded-xl text-slate-500 hover:text-slate-900 transition-all cursor-pointer"
-                    >
-                        <Menu size={19} className="text-slate-500" />
-                        <span className="text-[10px] mt-0.5">More</span>
-                    </button>
-                </nav>
             </div>
 
             {/* Modals */}
@@ -307,29 +306,27 @@ export const AppLayout = () => {
                 isOpen={medicineModalOpen}
                 initialData={editingMedicine}
                 suppliers={suppliers}
-                onClose={() => {
-                    setMedicineModalOpen(false);
-                    setEditingMedicine(null);
-                }}
+                onClose={() => { setMedicineModalOpen(false); setEditingMedicine(null); }}
                 onSave={handleSaveMedicine}
             />
 
             <AddSupplierModal
                 isOpen={supplierModalOpen}
-                onClose={() => setSupplierModalOpen(false)}
+                initialData={editingSupplier}
+                onClose={() => { setSupplierModalOpen(false); setEditingSupplier(null); }}
                 onSave={handleSaveSupplier}
             />
 
             <DeleteConfirmModal
                 isOpen={deleteModalOpen}
-                onClose={() => {
-                    setDeleteModalOpen(false);
-                    setItemToDelete(null);
-                }}
+                onClose={() => { setDeleteModalOpen(false); setItemToDelete(null); }}
                 onConfirm={handleConfirmDelete}
                 title={deleteType === 'medicine' ? 'Decommission Pharmaceutical Record' : 'Remove Certified Supplier'}
-                message={`Are you sure you want to remove "${itemToDelete?.name}"? An audit trail event will be logged permanently.`}
+                message={`Are you sure you want to remove "${itemToDelete?.name}"?`}
             />
+
+            {/* Floating feedback button — available to ALL roles */}
+            <FeedbackButton />
         </div>
     );
 };
