@@ -21,3 +21,6 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+#backup folder
+backups/

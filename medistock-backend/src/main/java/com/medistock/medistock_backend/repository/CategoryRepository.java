@@ -1,8 +1,4 @@
 package com.medistock.medistock_backend.repository;
-
 import com.medistock.medistock_backend.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-    boolean existsByName(String name);
-}
+public interface CategoryRepository extends JpaRepository<Category, Long> {}

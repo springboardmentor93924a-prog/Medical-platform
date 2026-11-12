@@ -18,12 +18,20 @@ public class Supplier {
     private String email;
     private String address;
     private String licenseNumber;
-    private Integer leadTimeDays;
-    private Double rating;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Added missing fields for the frontend
+    private Integer leadTimeDays = 2;
+    private Double rating = 5.0;
+    private String status = "Active";
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // Explicit Getters and Setters (fixes the NULL issue)
+    // --- GETTERS AND SETTERS ---
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -42,10 +50,19 @@ public class Supplier {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
     public String getLicenseNumber() { return licenseNumber; }
     public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
 
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // ADDED THESE MISSING GETTERS/SETTERS:
+    public Integer getLeadTimeDays() { return leadTimeDays; }
+    public void setLeadTimeDays(Integer leadTimeDays) { this.leadTimeDays = leadTimeDays; }
+
+    public Double getRating() { return rating; }
+    public void setRating(Double rating) { this.rating = rating; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

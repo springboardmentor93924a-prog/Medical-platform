@@ -38,8 +38,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Allow login/register
-                        .anyRequest().authenticated()                // Protect everything else
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // UPDATE THIS LINE: Add SUPPLIER
+                        .requestMatchers("/api/admin/**").hasAnyAuthority(
+                                "ADMIN", "ROLE_ADMIN",
+                                "PHARMACIST", "ROLE_PHARMACIST",
+                                "SUPPLIER", "ROLE_SUPPLIER",
+                                "STAFF", "ROLE_STAFF"
+                        )
+
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

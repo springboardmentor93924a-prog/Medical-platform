@@ -48,10 +48,10 @@ public class MedicineController {
 
     // 4. DELETE: Only ADMIN (Pharmacists usually shouldn't hard-delete medicines)
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')") // Ensure admin has this authority
     public ResponseEntity<String> deleteMedicine(@PathVariable Long id) {
         inventoryService.deleteMedicine(id);
-        return ResponseEntity.ok("Medicine deleted successfully");
+        return ResponseEntity.ok("Medicine deleted");
     }
 
     // 5. Adjust Stock (Pharmacist or Admin)

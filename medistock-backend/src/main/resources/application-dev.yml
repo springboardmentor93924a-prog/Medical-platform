@@ -4,8 +4,6 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      initialization-fail-timeout: 0
 
   jpa:
     hibernate:
@@ -14,10 +12,27 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
 
   jackson:
     default-property-inclusion: non_null
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jobconnectteam31@gmail.com
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+server:
+  port: 8080
 
 app:
   jwt:
@@ -25,7 +40,19 @@ app:
     expiration-ms: 900000
     issuer: medistock
 
+  email:
+    enabled: true
+    from-address: jobconnectteam31@gmail.com
+    from-name: MediStock Notifications
+    admin-email: sanchitnimse145@gmail.com
+
 logging:
   level:
     org.springframework.security: INFO
     com.medistock: DEBUG
+    org.springframework.mail: DEBUG
+    com.sun.mail: DEBUG
+
+backup:
+    directory: ./backups
+    max-backups: 10

@@ -37,4 +37,15 @@ public class Medicine {
 
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    // ============ WASTAGE TRACKING (new) ============
+
+    @Column(name = "wastage_flag", nullable = false)
+    private Boolean wastageFlag = false;
+
+    @Column(name = "wastage_reason", length = 50)
+    private String wastageReason; // EXPIRED, DAMAGED, RECALLED, CONTAMINATED
+
+    @Column(name = "wasted_at")
+    private LocalDateTime wastedAt;
 }

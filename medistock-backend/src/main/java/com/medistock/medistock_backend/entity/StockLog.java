@@ -6,22 +6,31 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "stock_logs")
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor // Ensures the custom constructor works
 public class StockLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "medicine_id")
+    @JoinColumn(name = "medicine_id", nullable = false)
     private Medicine medicine;
 
-    private Integer changeAmount; // +10 or -5
-    private String reason; // "New Stock", "Dispensed", "Expired", "Adjustment"
+    private Integer changeAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User performedBy;
+    // CHANGED: The InventoryService expects a "reason" field
+    private String reason;
 
+    private String performedBy;
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    // Custom constructor for easy logging
+    public StockLog(Medicine medicine, Integer changeAmount, String reason) {
+        this.medicine = medicine;
+        this.changeAmount = changeAmount;
+        this.reason = reason;
+    }
 }

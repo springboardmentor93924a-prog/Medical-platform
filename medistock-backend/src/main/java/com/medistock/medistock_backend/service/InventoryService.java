@@ -81,7 +81,14 @@ public class InventoryService {
         log.setMedicine(med);
         log.setChangeAmount(change);
         log.setReason(reason);
-        log.setPerformedBy(user);
+
+        // FIXED: Extract the email or name from the User object to store as a String
+        String performedByString = (user != null) ? (user.getEmail() != null ? user.getEmail() : user.getFullName()) : "System";
+        log.setPerformedBy(performedByString);
+
+        // Make sure to set the timestamp if it's not auto-generated in the entity
+        log.setTimestamp(LocalDateTime.now());
+
         stockLogRepository.save(log);
     }
 
