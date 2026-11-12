@@ -15,6 +15,8 @@ import com.medistock.repository.MedicineRepository;
 import com.medistock.repository.NotificationRepository;
 import com.medistock.repository.PurchaseOrderRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,9 @@ import java.util.List;
 @Transactional
 public class NotificationService {
 
+    private static final Logger logger =
+            LoggerFactory.getLogger(NotificationService.class);
+
     public static final int EXPIRING_SOON_DAYS = 30;
 
     private final NotificationRepository notificationRepository;
@@ -33,7 +38,8 @@ public class NotificationService {
     private final MedicineRepository medicineRepository;
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final SupplierRepository supplierRepository;
-private final UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final EmailService emailService;
 
     public NotificationService(
             NotificationRepository notificationRepository,
@@ -41,14 +47,16 @@ private final UserRepository userRepository;
             MedicineRepository medicineRepository,
             PurchaseOrderRepository purchaseOrderRepository,
             SupplierRepository supplierRepository,
-UserRepository userRepository
+            UserRepository userRepository,
+            EmailService emailService
     ) {
         this.notificationRepository = notificationRepository;
         this.inventoryRepository = inventoryRepository;
         this.medicineRepository = medicineRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.supplierRepository = supplierRepository;
-this.userRepository = userRepository;
+        this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     // Generate low-stock, expiry and pending-order notifications.
@@ -68,44 +76,48 @@ this.userRepository = userRepository;
                     medicines
             );
 
-            // Low-stock notification.
             if (item.getQuantity() != null
                     && item.getMinimumStock() != null
                     && item.getQuantity() <= item.getMinimumStock()) {
 
-                created += createIfMissing(
-                        null,
+                String message = "Low stock: " + name
+                        + " (batch " + item.getBatchNumber()
+                        + ") has " + item.getQuantity()
+                        + " left, minimum " + item.getMinimumStock();
+
+                created += createSharedAlert(
                         "LOW_STOCK",
-                        "Low stock: " + name
-                                + " (batch " + item.getBatchNumber()
-                                + ") has " + item.getQuantity()
-                                + " left, minimum " + item.getMinimumStock()
+                        "MediStock - Low Stock Alert",
+                        message
                 );
             }
 
-            // Expiry notifications.
             LocalDate expiry = item.getExpiryDate();
 
             if (expiry != null) {
 
                 if (expiry.isBefore(today)) {
 
-                    created += createIfMissing(
-                            null,
+                    String message = "Expired: " + name
+                            + " (batch " + item.getBatchNumber()
+                            + ") expired on " + expiry;
+
+                    created += createSharedAlert(
                             "EXPIRED",
-                            "Expired: " + name
-                                    + " (batch " + item.getBatchNumber()
-                                    + ") expired on " + expiry
+                            "MediStock - Expired Medicine Alert",
+                            message
                     );
 
                 } else if (!expiry.isAfter(horizon)) {
 
-                    created += createIfMissing(
-                            null,
+                    String message = "Expiring soon: " + name
+                            + " (batch " + item.getBatchNumber()
+                            + ") expires on " + expiry;
+
+                    created += createSharedAlert(
                             "EXPIRING_SOON",
-                            "Expiring soon: " + name
-                                    + " (batch " + item.getBatchNumber()
-                                    + ") expires on " + expiry
+                            "MediStock - Expiry Alert",
+                            message
                     );
                 }
             }
@@ -116,17 +128,82 @@ this.userRepository = userRepository;
 
             if ("PENDING".equalsIgnoreCase(order.getStatus())) {
 
-                created += createIfMissing(
-                        null,
+                String message = "Purchase order #"
+                        + order.getPurchaseOrderId()
+                        + " (₹" + order.getTotalAmount()
+                        + ") is awaiting approval";
+
+                created += createSharedAlert(
                         "ORDER_PENDING",
-                        "Purchase order #" + order.getPurchaseOrderId()
-                                + " (₹" + order.getTotalAmount()
-                                + ") is awaiting approval"
+                        "MediStock - Pending Purchase Order",
+                        message
                 );
             }
         }
 
         return created;
+    }
+
+    // Create shared in-app notification and email active Admin/Pharmacist users.
+    private int createSharedAlert(
+            String type,
+            String subject,
+            String message
+    ) {
+
+        int created = createIfMissing(null, type, message);
+
+        if (created > 0) {
+            sendRoleEmails("ADMIN", subject, message);
+            sendRoleEmails("PHARMACIST", subject, message);
+        }
+
+        return created;
+    }
+
+    // Send email to active users with the specified role.
+    private void sendRoleEmails(
+            String roleName,
+            String subject,
+            String message
+    ) {
+
+        List<User> users =
+                userRepository.findByRoleRoleNameIgnoreCaseAndActiveTrue(
+                        roleName
+                );
+
+        for (User user : users) {
+
+            if (user.getEmail() == null || user.getEmail().isBlank()) {
+                continue;
+            }
+
+            try {
+                emailService.sendTextEmail(
+                        user.getEmail(),
+                        subject,
+                        buildEmailBody(user.getFullName(), message)
+                );
+
+            } catch (Exception exception) {
+                logger.warn(
+                        "Could not send {} notification email to {}: {}",
+                        roleName,
+                        user.getEmail(),
+                        exception.getMessage()
+                );
+            }
+        }
+    }
+
+    private String buildEmailBody(String name, String message) {
+
+        return "Hello " + (name == null ? "User" : name) + ",\n\n"
+                + "You have received a new notification from MediStock.\n\n"
+                + message + "\n\n"
+                + "Please log in to MediStock to view more details.\n\n"
+                + "Regards,\nMediStock Team";
     }
 
     // Called after stock IN or OUT.
@@ -144,56 +221,47 @@ this.userRepository = userRepository;
                     .map(Medicine::getMedicineName)
                     .orElse("Medicine #" + item.getMedicineId());
 
-            createIfMissing(
-                    null,
+            String message = "Low stock: " + name
+                    + " (batch " + item.getBatchNumber()
+                    + ") has " + item.getQuantity()
+                    + " left, minimum " + item.getMinimumStock();
+
+            createSharedAlert(
                     "LOW_STOCK",
-                    "Low stock: " + name
-                            + " (batch " + item.getBatchNumber()
-                            + ") has " + item.getQuantity()
-                            + " left, minimum " + item.getMinimumStock()
+                    "MediStock - Low Stock Alert",
+                    message
             );
         }
     }
 
-    // Get latest 50 shared and personal notifications.
     @Transactional(readOnly = true)
     public List<Notification> getRecent(Long userId) {
-
         return notificationRepository.findRecentVisibleToUser(
                 userId,
                 PageRequest.of(0, 50)
         );
     }
 
-    // Get all shared and personal notifications.
     @Transactional(readOnly = true)
     public List<Notification> getAll(Long userId) {
-
         return notificationRepository.findVisibleToUser(userId);
     }
 
-    // Get unread shared and personal notifications.
     @Transactional(readOnly = true)
     public List<Notification> getUnread(Long userId) {
-
         return notificationRepository.findUnreadVisibleToUser(userId);
     }
 
-    // Get read shared and personal notifications.
     @Transactional(readOnly = true)
     public List<Notification> getRead(Long userId) {
-
         return notificationRepository.findReadVisibleToUser(userId);
     }
 
-    // Count unread notifications visible to a user.
     @Transactional(readOnly = true)
     public long unreadCount(Long userId) {
-
         return notificationRepository.countUnreadVisibleToUser(userId);
     }
 
-    // Mark one shared or personal notification as read.
     public boolean markRead(Long id, Long userId) {
 
         return notificationRepository.findById(id)
@@ -208,7 +276,6 @@ this.userRepository = userRepository;
                 .orElse(false);
     }
 
-    // Mark all visible notifications as read.
     public int markAllRead(Long userId) {
 
         List<Notification> unread =
@@ -223,7 +290,6 @@ this.userRepository = userRepository;
         return unread.size();
     }
 
-    // Delete one shared or personal notification.
     public boolean deleteNotification(Long id, Long userId) {
 
         return notificationRepository.findById(id)
@@ -238,8 +304,6 @@ this.userRepository = userRepository;
                 .orElse(false);
     }
 
-    // Delete all notifications visible to this user.
-    // Shared notifications are deleted globally.
     public void clearAll(Long userId) {
 
         List<Notification> notifications =
@@ -248,10 +312,14 @@ this.userRepository = userRepository;
         notificationRepository.deleteAll(notifications);
     }
 
-    // Notify the supplier when their purchase order status changes.
+    // Notify supplier when their purchase-order status changes.
+   
+// Notify supplier when a purchase-order event occurs.
 public void notifySupplierOrderStatus(PurchaseOrder order) {
 
-    if (order.getSupplierId() == null) {
+    if (order == null
+            || order.getSupplierId() == null
+            || order.getStatus() == null) {
         return;
     }
 
@@ -259,76 +327,124 @@ public void notifySupplierOrderStatus(PurchaseOrder order) {
             .findById(order.getSupplierId())
             .orElse(null);
 
-    if (supplier == null || supplier.getEmail() == null) {
+    if (supplier == null
+            || supplier.getEmail() == null
+            || supplier.getEmail().isBlank()) {
+        logger.warn("Supplier email not found for PO #{}",
+                order.getPurchaseOrderId());
         return;
     }
+
+    String supplierEmail = supplier.getEmail().trim();
 
     User user = userRepository
-            .findByEmail(supplier.getEmail().trim().toLowerCase())
+            .findByEmail(supplierEmail.toLowerCase())
             .orElse(null);
 
-    // Supplier must have a matching login account.
-    if (user == null || user.getUserId() == null) {
-        return;
-    }
-
-    String status = order.getStatus()
-            .trim()
-            .toUpperCase();
+    String status = order.getStatus().trim().toUpperCase();
 
     String type;
+    String subject;
     String message;
 
     switch (status) {
 
+        case "PENDING":
+            type = "PURCHASE_ORDER_PLACED";
+            subject = "MediStock - New Purchase Order";
+            message = "A new purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been placed for your supply."
+                    + "\nOrder amount: ₹" + order.getTotalAmount()
+                    + "\nStatus: Pending approval.";
+            break;
+
         case "APPROVED":
             type = "PURCHASE_ORDER_APPROVED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " has been approved by the admin.";
+            subject = "MediStock - Purchase Order Approved";
+            message = "Your purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been approved by the admin."
+                    + "\nOrder amount: ₹" + order.getTotalAmount();
             break;
 
         case "REJECTED":
             type = "PURCHASE_ORDER_REJECTED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " has been rejected by the admin.";
+            subject = "MediStock - Purchase Order Rejected";
+            message = "Your purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been rejected by the admin.";
             break;
 
         case "RECEIVED":
             type = "PURCHASE_ORDER_RECEIVED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " has been successfully received.";
+            subject = "MediStock - Purchase Order Received";
+            message = "Your purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been successfully received by MediStock.";
             break;
 
         case "PARTIALLY_RECEIVED":
             type = "PURCHASE_ORDER_PARTIALLY_RECEIVED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " has been partially received.";
+            subject = "MediStock - Partial Order Received";
+            message = "A partial quantity from your purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been received by MediStock.";
             break;
 
         case "CANCELLED":
             type = "PURCHASE_ORDER_CANCELLED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " has been cancelled.";
+            subject = "MediStock - Purchase Order Cancelled";
+            message = "Your purchase order #"
+                    + order.getPurchaseOrderId()
+                    + " has been cancelled.";
             break;
 
         default:
-            type = "PURCHASE_ORDER_UPDATED";
-            message = "Your purchase order #" +
-                    order.getPurchaseOrderId() +
-                    " status is now " + status + ".";
+            logger.warn("No supplier email template configured for status {}",
+                    status);
+            return;
     }
 
-    createIfMissing(
-            user.getUserId(),
-            type,
-            message
-    );
+    // Create an in-app notification for the supplier account.
+    int created = 0;
+
+    if (user != null && user.getUserId() != null) {
+        created = createIfMissing(
+                user.getUserId(),
+                type,
+                message
+        );
+    }
+
+    // Send the email even if the supplier has no matching User record.
+    // If an in-app notification already exists, avoid resending the email.
+    if (user != null && created == 0) {
+        return;
+    }
+
+    try {
+        emailService.sendTextEmail(
+                supplierEmail,
+                subject,
+                buildEmailBody(supplier.getSupplierName(), message)
+        );
+
+        logger.info(
+                "Purchase-order {} email sent to {}",
+                status,
+                supplierEmail
+        );
+
+    } catch (Exception exception) {
+        logger.error(
+                "Could not send purchase-order email to {}",
+                supplierEmail,
+                exception
+        );
+    }
 }
+
 
     // Create notification if an unread duplicate does not exist.
     private int createIfMissing(
@@ -360,7 +476,6 @@ public void notifySupplierOrderStatus(PurchaseOrder order) {
         return 1;
     }
 
-    // Get medicine name.
     private String medicineName(
             Long medicineId,
             List<Medicine> medicines

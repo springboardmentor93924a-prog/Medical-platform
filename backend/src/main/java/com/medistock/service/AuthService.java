@@ -21,6 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 @Service
 public class AuthService {
 
@@ -31,13 +36,21 @@ public class AuthService {
     private final AuditService auditService;
     private final SupplierRepository supplierRepository;
 
+
+
+        private static final Logger logger =
+        LoggerFactory.getLogger(AuthService.class);
+
+private final EmailService emailService;
+
     public AuthService(
         UserRepository userRepository,
         RoleRepository roleRepository,
         SupplierRepository supplierRepository,
         PasswordEncoder passwordEncoder,
         JwtService jwtService,
-        AuditService auditService) {
+        AuditService auditService,
+        EmailService emailService) {
 
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
@@ -45,6 +58,7 @@ public class AuthService {
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
     this.auditService = auditService;
+      this.emailService = emailService;
 }
 
     // LOGIN
@@ -122,6 +136,9 @@ public String register(RegisterRequest request) {
 
     String requestedRole = request.getRole();
 
+
+    
+
     if (requestedRole == null
             || (!requestedRole.equalsIgnoreCase("STAFF")
             && !requestedRole.equalsIgnoreCase("PHARMACIST")
@@ -164,13 +181,39 @@ public String register(RegisterRequest request) {
 }
 
     auditService.record(
-            "REGISTER",
-            "USER",
-            user.getUserId(),
-            "Self-registered with role " + role.getRoleName(),
-            email
-    );
+        "REGISTER",
+        "USER",
+        user.getUserId(),
+        "Self-registered with role " + role.getRoleName(),
+        email
+);
 
-    return "Registration successful";
+// Send welcome email
+try {
+    String subject = "Welcome to MediStock!";
+
+    String message =
+            "Hello " + user.getFullName() + ",\n\n"
+            + "Welcome to MediStock!\n\n"
+            + "Your account has been successfully created.\n"
+            + "Account email: " + user.getEmail() + "\n"
+            + "Your role: " + role.getRoleName() + "\n\n"
+            + "You can now log in and start using MediStock.\n\n"
+            + "Thank you for joining us!\n"
+            + "MediStock Team";
+
+    emailService.sendTextEmail(email, subject, message);
+
+    logger.info("Welcome email sent to {}", email);
+
+} catch (Exception exception) {
+    logger.error(
+            "Registration succeeded, but welcome email failed for {}",
+            email,
+            exception
+    );
+}
+
+return "Registration successful";
 }
 }

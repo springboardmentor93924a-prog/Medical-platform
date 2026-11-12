@@ -3,6 +3,7 @@ package com.medistock.controller;
 
 import com.medistock.entity.Supplier;
 
+import com.medistock.dto.InventoryMedicineDTO;
 
 import com.medistock.repository.SupplierRepository;
 import com.medistock.repository.InventoryRepository;
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Set;
+import org.springframework.http.ResponseEntity;
 import java.util.UUID;
 
 @RestController
@@ -56,16 +58,16 @@ public class SupplierProfileController {
     // ==========================================
 
    @GetMapping("/me")
-public Supplier getMyProfile(Authentication authentication) {
+    public Supplier getMyProfile(Authentication authentication) {
 
-    Supplier supplier = getSupplier(authentication);
+        Supplier supplier = getSupplier(authentication);
 
-    System.out.println("Profile Supplier ID: " + supplier.getSupplierId());
-    System.out.println("Profile Email: " + supplier.getEmail());
-    System.out.println("Profile Active: " + supplier.getActive());
+        System.out.println("Profile Supplier ID: " + supplier.getSupplierId());
+        System.out.println("Profile Email: " + supplier.getEmail());
+        System.out.println("Profile Active: " + supplier.getActive());
 
-    return supplier;
-}
+        return supplier;
+    }
 
     // ==========================================
     // UPDATE SUPPLIER PROFILE
@@ -109,6 +111,23 @@ public Supplier getMyProfile(Authentication authentication) {
 
         return supplierRepository.save(supplier);
     }
+
+
+    // Get inventory batches belonging only to the logged-in supplier
+    @GetMapping("/me/inventory")
+    public ResponseEntity<List<InventoryMedicineDTO>> getMyInventory(
+            Authentication authentication) {
+
+        Supplier supplier = getSupplier(authentication);
+
+        List<InventoryMedicineDTO> inventory =
+                inventoryRepository.findInventoryWithMedicineDetailsBySupplierId(
+                        supplier.getSupplierId()
+                );
+
+        return ResponseEntity.ok(inventory);
+    }
+
  
 
     // ==========================================

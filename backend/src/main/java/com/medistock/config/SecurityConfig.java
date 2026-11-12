@@ -89,16 +89,49 @@ public class SecurityConfig {
                 .requestMatchers("/api/health").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
 
-// Allow public access to uploaded profile pictures
-.requestMatchers("/uploads/**").permitAll()
+                // Allow public access to uploaded profile pictures
+                .requestMatchers("/uploads/**").permitAll()
 
-.requestMatchers("/error").permitAll()
+                .requestMatchers("/error").permitAll()
 
                 // Temporary public test endpoint
                 .requestMatchers(
                         HttpMethod.GET,
                         "/api/stock-check-reports/test"
                 ).permitAll()
+
+
+                // AI Recommendations - Admin and Pharmacist only
+                .requestMatchers("/api/ai-recommendations/**")
+                .hasAnyRole("ADMIN", "PHARMACIST")
+
+                // =====================================
+                // MEDICINE RETURN ENDPOINTS
+                // =====================================
+
+                // =====================================
+                // MEDICINE RETURN ENDPOINTS
+                // =====================================
+
+                // Pharmacist views all supplier return requests.
+                // Supplier views only their own requests.
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/returns"
+                ).hasAnyRole("PHARMACIST", "SUPPLIER")
+
+                // Only suppliers can submit return requests.
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/returns"
+                ).hasRole("SUPPLIER")
+
+                // Only pharmacists can approve or reject requests.
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/returns/*/decision"
+                ).hasRole("PHARMACIST")
+
 
                 // Inventory endpoints
                 .requestMatchers(
@@ -154,8 +187,8 @@ public class SecurityConfig {
                 ).hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
 
                 // Notifications - all roles can access their own notifications
-.requestMatchers("/api/notifications/**")
-    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF", "SUPPLIER")
+                .requestMatchers("/api/notifications/**")
+                .hasAnyRole("ADMIN", "PHARMACIST", "STAFF", "SUPPLIER")
 
                 // Reports
                 .requestMatchers("/api/reports/**")
@@ -246,6 +279,10 @@ public class SecurityConfig {
                 // Supplier endpoints
                 .requestMatchers("/api/supplier/**")
                     .hasRole("SUPPLIER")
+
+                // FEFO medicine dispensing
+                .requestMatchers("/api/fefo/**")
+                .hasAnyRole("ADMIN", "PHARMACIST")
 
                 // All remaining endpoints require authentication
                 .anyRequest().authenticated()

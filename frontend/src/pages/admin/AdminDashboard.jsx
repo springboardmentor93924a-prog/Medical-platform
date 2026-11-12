@@ -13,6 +13,7 @@ import Reports from "./Reports.jsx";
 import Notifications from "./Notifications.jsx";
 import SystemMonitoring from "./SystemMonitoring.jsx";
 import Settings from "./Settings.jsx";
+import BackupRestore from "./BackupRestore.jsx";
 
 
 const menu = [
@@ -22,6 +23,7 @@ const menu = [
   { id: "suppliers", label: "Supplier Management", icon: "truck" },
   { id: "inventory", label: "Inventory", icon: "boxes" },
   { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
+  { id: "backup-restore", label: "Backup & Restore", icon: "database" },
   { id: "stock-movements", label: "Stock Management", icon: "swap" },
   { id: "expiry", label: "Expiry Tracking", icon: "clock" },
   { id: "reports", label: "Reports & Analytics", icon: "file" },
@@ -38,6 +40,7 @@ const pages = {
   inventory: Inventory,
   "purchase-orders": PurchaseOrders,
   "stock-movements": StockMovements,
+  "backup-restore": BackupRestore,
   expiry: ExpiryTracking,
   reports: Reports,
   notifications: Notifications,
