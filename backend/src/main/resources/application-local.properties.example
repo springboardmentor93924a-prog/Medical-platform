@@ -1,0 +1,27 @@
+# Copy this file to application-local.properties (same folder) and fill in YOUR OWN values.
+# application-local.properties is git-ignored. NEVER commit real passwords or secrets.
+
+# ---------- Required ----------
+spring.datasource.username=root
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+# A random Base64 string of at least 32 bytes. Generate your own (see README).
+app.jwt.secret=GENERATE_YOUR_OWN_SECRET
+
+# The first Admin account, created at startup if it does not exist yet
+app.admin.username=admin
+app.admin.email=admin@example.com
+app.admin.password=CHOOSE_A_STRONG_PASSWORD
+
+# ---------- Optional: real emails (without these, reset links are printed in the console) ----------
+# app.mail.enabled=true
+# app.mail.from=your-sender@gmail.com
+# spring.mail.host=smtp.gmail.com
+# spring.mail.port=587
+# spring.mail.username=your-sender@gmail.com
+# spring.mail.password=YOUR_GMAIL_APP_PASSWORD
+# spring.mail.properties.mail.smtp.auth=true
+# spring.mail.properties.mail.smtp.starttls.enable=true
+# app.alerts.email.enabled=true
+
+
