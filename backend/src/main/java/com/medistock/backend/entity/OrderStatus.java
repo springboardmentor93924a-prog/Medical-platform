@@ -1,0 +1,3 @@
+package com.medistock.backend.entity;
+
+public enum OrderStatus { AWAITING_APPROVAL, PENDING, ACCEPTED, DISPATCHED, PARTIALLY_RECEIVED, RECEIVED, REJECTED, CANCELLED }
