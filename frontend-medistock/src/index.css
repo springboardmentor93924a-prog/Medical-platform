@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #0f2a2b;
+}
+
+body {
+  @apply bg-white font-sans text-ink antialiased;
+}
+
+/* Hide the browser's own password-reveal icon (Edge) so only our always-visible toggle shows */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
