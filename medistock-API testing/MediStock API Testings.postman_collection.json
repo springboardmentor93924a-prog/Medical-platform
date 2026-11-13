@@ -1,0 +1,1962 @@
+{
+  "info": {
+    "_postman_id": "d7baec69-d8ff-4095-bf3e-2fbd0627a52e",
+    "name": "MediStock API Testings",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "59082969",
+    "_collection_link": "https://go.postman.co/collection/59082969-d7baec69-d8ff-4095-bf3e-2fbd0627a52e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Admin login",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@medistock.com\",\r\n  \"password\": \"admin123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 12:19:34 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBtZWRpc3RvY2suY29tIiwiaWF0IjoxNzk0NDg1OTc0LCJleHAiOjE3OTQ0ODY4NzR9.7Out2lE9pHqEKiE1eUXtgvjGff9BQBtyGFvhoxFzcsEoc96op9gubhIGqqryc4lKpU4HEFCk9R_9a2VJgWZXDA\",\n    \"user\": {\n        \"id\": 25,\n        \"fullName\": \"System Admin\",\n        \"email\": \"admin@medistock.com\",\n        \"phone\": \"1234567890\",\n        \"roles\": [\n            \"ADMIN\"\n        ],\n        \"enabled\": true\n    }\n}"
+        },
+        {
+          "name": "Pharmacist Login",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"nimasesant@gmail.com\",\r\n  \"password\": \"Snct1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 12:21:51 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaW1hc2VzYW50QGdtYWlsLmNvbSIsImlhdCI6MTc5NDQ4NjExMSwiZXhwIjoxNzk0NDg3MDExfQ.6-Tj8vPVAKX81Y4IlFFQO5TLtAfS3A9p76aV2YYWGvxUmDU0ZeBp9Mdb2fqyivroSEvZ24Xhors38oHpjsmozA\",\n    \"user\": {\n        \"id\": 13,\n        \"fullName\": \"Sanchit\",\n        \"email\": \"nimasesant@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    }\n}"
+        },
+        {
+          "name": "Profile Retrieved Testing",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 12:28:04 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 25,\n    \"fullName\": \"System Admin\",\n    \"email\": \"admin@medistock.com\",\n    \"phone\": \"1234567890\",\n    \"roles\": [\n        \"ADMIN\"\n    ],\n    \"enabled\": true\n}"
+        },
+        {
+          "name": "Invalid Credentials Testing",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@medistock.com\",\r\n  \"password\": \"wrongpassword\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 12:29:39 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"path\": \"/api/auth/login\",\n    \"error\": \"Unauthorized\",\n    \"message\": \"Invalid email or password\",\n    \"timestamp\": \"2026-11-12T17:59:39.410179300\",\n    \"status\": 401\n}"
+        },
+        {
+          "name": "Registeration User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"fullName\": \"Test Nurse\",\r\n  \"email\": \"nurse@test.com\",\r\n  \"password\": \"nursePassword123\",\r\n  \"phone\": \"9876543210\",\r\n  \"role\": \"STAFF\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:59:51 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJudXJzZUB0ZXN0LmNvbSIsImlhdCI6MTc5NDQ5NTU5MSwiZXhwIjoxNzk0NDk2NDkxfQ.cat-07mlDTsj-v26TvdFIW_FaDgT6EoCroLdJuBzkpKgPnqyh3ZucER5bL115hrs1hnWCB0xlwpfESf4TwufAA\",\n    \"user\": {\n        \"id\": 26,\n        \"fullName\": \"Test Nurse\",\n        \"email\": \"nurse@test.com\",\n        \"phone\": \"9876543210\",\n        \"roles\": [\n            \"STAFF\"\n        ],\n        \"enabled\": true\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "2. Inventory managemant CRUD",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Medicine Created",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Demo Paracetamol 500mg\",\r\n  \"batchNumber\": \"DEMO-BATCH-001\",\r\n  \"category\": \"Analgesic\",\r\n  \"quantity\": 100,\r\n  \"minQuantity\": 20,\r\n  \"manufacturingDate\": \"2025-01-01\",\r\n  \"expiryDate\": \"2027-12-31\",\r\n  \"unitPrice\": 15.50,\r\n  \"supplierId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/medicines",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "medicines"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:20:18 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 22,\n    \"name\": \"Demo Paracetamol 500mg\",\n    \"batchNumber\": \"DEMO-BATCH-001\",\n    \"category\": \"Analgesic\",\n    \"supplierId\": 1,\n    \"supplierName\": \"CiplaV\",\n    \"quantity\": 100,\n    \"minQuantity\": 20,\n    \"manufacturingDate\": \"2025-01-01\",\n    \"expiryDate\": \"2027-12-31\",\n    \"unitPrice\": 15.5,\n    \"status\": \"IN_STOCK\",\n    \"updatedAt\": \"2026-11-12T18:50:18.7671416\",\n    \"genericName\": \"Generic formulation\",\n    \"storageCondition\": \"Room Temperature\",\n    \"unit\": \"units\",\n    \"wastageFlag\": false\n}"
+        },
+        {
+          "name": "Retrieve Medicine List",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Demo Paracetamol 500mg\",\r\n  \"batchNumber\": \"DEMO-BATCH-001\",\r\n  \"category\": \"Analgesic\",\r\n  \"quantity\": 100,\r\n  \"minQuantity\": 20,\r\n  \"manufacturingDate\": \"2025-01-01\",\r\n  \"expiryDate\": \"2027-12-31\",\r\n  \"unitPrice\": 15.50,\r\n  \"supplierId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/medicines",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "medicines"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:27:06 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Paracetamol 900mg\",\n        \"batchNumber\": \"LOT-APIKQ\",\n        \"category\": \"Antibiotics\",\n        \"supplierId\": 8,\n        \"supplierName\": \"Lupin Limited\",\n        \"quantity\": 6,\n        \"minQuantity\": 15,\n        \"expiryDate\": \"2027-10-24\",\n        \"unitPrice\": 20,\n        \"status\": \"LOW_STOCK\",\n        \"updatedAt\": \"2026-11-06T17:46:16.539564\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Amoxicillin 500mg\",\n        \"batchNumber\": \"AMX-EXP-01\",\n        \"category\": \"Antibiotic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 45,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2022-01-01\",\n        \"expiryDate\": \"2023-10-24\",\n        \"unitPrice\": 12.5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-28T21:33:22.509298\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"EXPIRED\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Paracetamol 650mg\",\n        \"batchNumber\": \"PAR-EXP-02\",\n        \"category\": \"Analgesic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 100,\n        \"minQuantity\": 20,\n        \"manufacturingDate\": \"2021-05-15\",\n        \"expiryDate\": \"2024-01-01\",\n        \"unitPrice\": 5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Ibuprofen 400mg\",\n        \"batchNumber\": \"IBU-EXP-03\",\n        \"category\": \"NSAID\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 20,\n        \"minQuantity\": 15,\n        \"manufacturingDate\": \"2022-03-10\",\n        \"expiryDate\": \"2024-05-10\",\n        \"unitPrice\": 8,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-11-05T00:06:38.560008\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Metformin 500mg\",\n        \"batchNumber\": \"MET-OOS-01\",\n        \"category\": \"Antidiabetic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 0,\n        \"minQuantity\": 50,\n        \"manufacturingDate\": \"2023-01-01\",\n        \"expiryDate\": \"2026-12-31\",\n        \"unitPrice\": 15,\n        \"status\": \"OUT_OF_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Atorvastatin 10mg\",\n        \"batchNumber\": \"ATO-OOS-02\",\n        \"category\": \"Cardiovascular\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 0,\n        \"minQuantity\": 30,\n        \"manufacturingDate\": \"2023-06-15\",\n        \"expiryDate\": \"2027-06-15\",\n        \"unitPrice\": 22,\n        \"status\": \"OUT_OF_STOCK\",\n        \"updatedAt\": \"2026-11-02T17:49:31.693051\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 7,\n        \"name\": \"Omeprazole 20mg\",\n        \"batchNumber\": \"OME-OOS-03\",\n        \"category\": \"Gastrointestinal\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 0,\n        \"minQuantity\": 40,\n        \"manufacturingDate\": \"2023-08-20\",\n        \"expiryDate\": \"2027-08-20\",\n        \"unitPrice\": 10.5,\n        \"status\": \"OUT_OF_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Azithromycin 250mg\",\n        \"batchNumber\": \"AZI-LOW-01\",\n        \"category\": \"Antibiotic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 5,\n        \"minQuantity\": 20,\n        \"manufacturingDate\": \"2023-10-01\",\n        \"expiryDate\": \"2026-10-01\",\n        \"unitPrice\": 35,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"RECALLED\"\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Cetirizine 10mg\",\n        \"batchNumber\": \"CET-LOW-02\",\n        \"category\": \"Antihistamine\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 12,\n        \"minQuantity\": 50,\n        \"manufacturingDate\": \"2023-11-01\",\n        \"expiryDate\": \"2026-11-01\",\n        \"unitPrice\": 4.5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"DAMAGED\"\n    },\n    {\n        \"id\": 10,\n        \"name\": \"Losartan 50mg\",\n        \"batchNumber\": \"LOS-LOW-03\",\n        \"category\": \"Cardiovascular\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 8,\n        \"minQuantity\": 25,\n        \"manufacturingDate\": \"2023-12-01\",\n        \"expiryDate\": \"2027-12-01\",\n        \"unitPrice\": 18,\n        \"status\": \"LOW_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Insulin Glargine\",\n        \"batchNumber\": \"INS-EXP-01\",\n        \"category\": \"Endocrinology\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 30,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2024-01-01\",\n        \"expiryDate\": \"2026-11-15\",\n        \"unitPrice\": 120,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Salbutamol Inhaler\",\n        \"batchNumber\": \"SAL-EXP-02\",\n        \"category\": \"Respiratory\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 45,\n        \"minQuantity\": 15,\n        \"manufacturingDate\": \"2024-02-01\",\n        \"expiryDate\": \"2026-11-30\",\n        \"unitPrice\": 45,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 13,\n        \"name\": \"Epinephrine Injection\",\n        \"batchNumber\": \"EPI-EXP-03\",\n        \"category\": \"Emergency\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 20,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2024-03-01\",\n        \"expiryDate\": \"2026-12-05\",\n        \"unitPrice\": 85,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 14,\n        \"name\": \"Ciprofloxacin 500mg\",\n        \"batchNumber\": \"CIP-IN-01\",\n        \"category\": \"Antibiotic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 200,\n        \"minQuantity\": 50,\n        \"manufacturingDate\": \"2024-01-01\",\n        \"expiryDate\": \"2028-01-01\",\n        \"unitPrice\": 25,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 16,\n        \"name\": \"Diclofenac Gel\",\n        \"batchNumber\": \"DIC-IN-03\",\n        \"category\": \"Topical\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 149,\n        \"minQuantity\": 30,\n        \"manufacturingDate\": \"2024-06-01\",\n        \"expiryDate\": \"2028-06-01\",\n        \"unitPrice\": 15.5,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 17,\n        \"name\": \"Augmentine E-504\",\n        \"batchNumber\": \"LOT-I1LHJ\",\n        \"category\": \"Antibiotics\",\n        \"supplierId\": 4,\n        \"supplierName\": \"Novartis AG\",\n        \"quantity\": 1,\n        \"minQuantity\": 15,\n        \"expiryDate\": \"2027-10-24\",\n        \"unitPrice\": 20,\n        \"status\": \"LOW_STOCK\",\n        \"updatedAt\": \"2026-11-04T23:10:31.209826\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 18,\n        \"name\": \"Pantosev\",\n        \"batchNumber\": \"LOT-RPJ6DY\",\n        \"category\": \"Antibiotics\",\n        \"supplierId\": 8,\n        \"supplierName\": \"Lupin Limited\",\n        \"quantity\": 20,\n        \"minQuantity\": 15,\n        \"expiryDate\": \"2027-11-17\",\n        \"unitPrice\": 20,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-10-25T01:17:50.415103\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 19,\n        \"name\": \"Boroplus Gel IP\",\n        \"batchNumber\": \"LOT-C6X7F\",\n        \"category\": \"Antibiotics\",\n        \"supplierId\": 12,\n        \"supplierName\": \"SNCT pharma2\",\n        \"quantity\": 10,\n        \"minQuantity\": 5,\n        \"expiryDate\": \"2028-01-19\",\n        \"unitPrice\": 20,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-10-26T16:28:40.676136\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 20,\n        \"name\": \"Temporary_2\",\n        \"batchNumber\": \"LOT-ZM1C3\",\n        \"category\": \"Cardiovascular\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 30,\n        \"minQuantity\": 15,\n        \"expiryDate\": \"2027-10-27\",\n        \"unitPrice\": 20,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-10-27T17:15:07.042456\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 21,\n        \"name\": \"temp-phrma-2\",\n        \"batchNumber\": \"LOT-OTFTC\",\n        \"category\": \"Vaccines / Immunology\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 50,\n        \"minQuantity\": 15,\n        \"expiryDate\": \"2027-12-31\",\n        \"unitPrice\": 20,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-11-12T11:40:12.998566\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 22,\n        \"name\": \"Demo Paracetamol 500mg\",\n        \"batchNumber\": \"DEMO-BATCH-001\",\n        \"category\": \"Analgesic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 100,\n        \"minQuantity\": 20,\n        \"manufacturingDate\": \"2025-01-01\",\n        \"expiryDate\": \"2027-12-31\",\n        \"unitPrice\": 15.5,\n        \"status\": \"IN_STOCK\",\n        \"updatedAt\": \"2026-11-12T18:50:18.767142\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    }\n]"
+        },
+        {
+          "name": "Medicine Updated",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Demo Paracetamol 500mg\",\r\n  \"batchNumber\": \"DEMO-BATCH-001\",\r\n  \"category\": \"Analgesic\",\r\n  \"quantity\": 75,\r\n  \"minQuantity\": 20,\r\n  \"manufacturingDate\": \"2025-01-01\",\r\n  \"expiryDate\": \"2027-12-31\",\r\n  \"unitPrice\": 15.50,\r\n  \"supplierId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/medicines/22",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "medicines",
+                "22"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:32:14 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 22,\n    \"name\": \"Demo Paracetamol 500mg\",\n    \"batchNumber\": \"DEMO-BATCH-001\",\n    \"category\": \"Analgesic\",\n    \"supplierId\": 1,\n    \"supplierName\": \"CiplaV\",\n    \"quantity\": 75,\n    \"minQuantity\": 20,\n    \"manufacturingDate\": \"2025-01-01\",\n    \"expiryDate\": \"2027-12-31\",\n    \"unitPrice\": 15.5,\n    \"status\": \"IN_STOCK\",\n    \"updatedAt\": \"2026-11-12T19:02:14.867523\",\n    \"genericName\": \"Generic formulation\",\n    \"storageCondition\": \"Room Temperature\",\n    \"unit\": \"units\",\n    \"wastageFlag\": false\n}"
+        },
+        {
+          "name": "Delete Medicine",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Demo Paracetamol 500mg\",\r\n  \"batchNumber\": \"DEMO-BATCH-001\",\r\n  \"category\": \"Analgesic\",\r\n  \"quantity\": 75,\r\n  \"minQuantity\": 20,\r\n  \"manufacturingDate\": \"2025-01-01\",\r\n  \"expiryDate\": \"2027-12-31\",\r\n  \"unitPrice\": 15.50,\r\n  \"supplierId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/medicines/22",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "medicines",
+                "22"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 13 Nov 2026 12:18:23 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cannot delete medicine because it is linked to a Purchase Order.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "3. Purchase Orders",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "PO Created (Pending)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pharmacistToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"supplierId\": 1,\r\n  \"items\": [\r\n    { \"medicineId\": 1, \"quantity\": 50, \"unitPrice\": 12.50 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/purchase-orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "purchase-orders"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:47:28 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Order created successfully\"\n}"
+        },
+        {
+          "name": "Retrieve PO List",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pharmacistToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/purchase-orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "purchase-orders"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:49:24 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"supplierName\": \"CiplaV\",\n        \"totalAmount\": 12550.5,\n        \"orderNumber\": \"PO-2026-1001\",\n        \"id\": 1,\n        \"orderDate\": \"2026-10-25T03:31:12\",\n        \"items\": [],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Pfizer Inc.\",\n        \"totalAmount\": 3400,\n        \"orderNumber\": \"PO-2026-1002\",\n        \"id\": 2,\n        \"orderDate\": \"2026-10-24T03:31:12\",\n        \"items\": [],\n        \"status\": \"ACCEPTED\"\n    },\n    {\n        \"supplierName\": \"Apollo Pharma\",\n        \"totalAmount\": 18750,\n        \"orderNumber\": \"PO-2026-1003\",\n        \"id\": 3,\n        \"orderDate\": \"2026-10-22T03:31:12\",\n        \"items\": [],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"Cipla Ltd.\",\n        \"totalAmount\": 850.75,\n        \"orderNumber\": \"PO-2026-1004\",\n        \"id\": 4,\n        \"orderDate\": \"2026-10-21T03:31:12\",\n        \"items\": [],\n        \"status\": \"CANCELLED\"\n    },\n    {\n        \"supplierName\": \"Lupin Limited\",\n        \"totalAmount\": 6200,\n        \"orderNumber\": \"PO-2026-1005\",\n        \"id\": 5,\n        \"orderDate\": \"2026-10-19T03:31:12\",\n        \"items\": [],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"Abbott Laboratories\",\n        \"totalAmount\": 1000,\n        \"orderNumber\": \"PO-2033-5073\",\n        \"id\": 7,\n        \"orderDate\": \"2026-10-25T22:17:13.019285\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 50,\n                \"medicineName\": \"Paracetamol 900mg\"\n            }\n        ],\n        \"status\": \"REJECTED\"\n    },\n    {\n        \"supplierName\": \"Novartis AG\",\n        \"totalAmount\": 210,\n        \"orderNumber\": \"PO-2029-9986\",\n        \"id\": 8,\n        \"orderDate\": \"2026-10-25T22:38:25.194642\",\n        \"items\": [\n            {\n                \"unitPrice\": 35,\n                \"quantity\": 6,\n                \"medicineName\": \"Azithromycin 250mg\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Sun Pharma\",\n        \"totalAmount\": 62,\n        \"orderNumber\": \"PO-2033-1564\",\n        \"id\": 9,\n        \"orderDate\": \"2026-10-25T22:44:29.771386\",\n        \"items\": [\n            {\n                \"unitPrice\": 15.5,\n                \"quantity\": 4,\n                \"medicineName\": \"Diclofenac Gel\"\n            }\n        ],\n        \"status\": \"CANCELLED\"\n    },\n    {\n        \"supplierName\": \"CiplaV\",\n        \"totalAmount\": 120,\n        \"orderNumber\": \"PO-2034-1031\",\n        \"id\": 10,\n        \"orderDate\": \"2026-10-25T23:04:43.973752\",\n        \"items\": [\n            {\n                \"unitPrice\": 120,\n                \"quantity\": 1,\n                \"medicineName\": \"Insulin Glargine\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"SNCT pharma2\",\n        \"totalAmount\": 90,\n        \"orderNumber\": \"PO-2029-2730\",\n        \"id\": 11,\n        \"orderDate\": \"2026-10-25T23:33:50.17213\",\n        \"items\": [\n            {\n                \"unitPrice\": 4.5,\n                \"quantity\": 20,\n                \"medicineName\": \"Cetirizine 10mg\"\n            }\n        ],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"PHARMA_sn\",\n        \"totalAmount\": 4.5,\n        \"orderNumber\": \"PO-2030-5964\",\n        \"id\": 12,\n        \"orderDate\": \"2026-10-25T23:40:54.323382\",\n        \"items\": [\n            {\n                \"unitPrice\": 4.5,\n                \"quantity\": 1,\n                \"medicineName\": \"Cetirizine 10mg\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Pfizer Inc.\",\n        \"totalAmount\": 40,\n        \"orderNumber\": \"PO-2033-6466\",\n        \"id\": 13,\n        \"orderDate\": \"2026-10-26T16:33:18.280249\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 2,\n                \"medicineName\": \"Pantosev\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Pfizer Inc.\",\n        \"totalAmount\": 300,\n        \"orderNumber\": \"PO-2031-1213\",\n        \"id\": 14,\n        \"orderDate\": \"2026-10-27T00:41:41.00784\",\n        \"items\": [\n            {\n                \"unitPrice\": 25,\n                \"quantity\": 12,\n                \"medicineName\": \"Ciprofloxacin 500mg\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Dr. Reddy's Labs\",\n        \"totalAmount\": 20,\n        \"orderNumber\": \"PO-2026-1722\",\n        \"id\": 16,\n        \"orderDate\": \"2026-10-28T22:17:04.925396\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 1,\n                \"medicineName\": \"Pantosev\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"Pfizer Inc.\",\n        \"totalAmount\": 20,\n        \"orderNumber\": \"PO-2035-8022\",\n        \"id\": 17,\n        \"orderDate\": \"2026-10-29T18:15:06.411814\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 1,\n                \"medicineName\": \"Pantosev\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"Godrej\",\n        \"totalAmount\": 77.5,\n        \"orderNumber\": \"PO-2032-2648\",\n        \"id\": 18,\n        \"orderDate\": \"2026-11-02T16:56:58.754307\",\n        \"items\": [\n            {\n                \"unitPrice\": 15.5,\n                \"quantity\": 5,\n                \"medicineName\": \"Diclofenac Gel\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 90,\n        \"orderNumber\": \"PO-2031-7823\",\n        \"id\": 19,\n        \"orderDate\": \"2026-11-02T17:09:04.732061\",\n        \"items\": [\n            {\n                \"unitPrice\": 4.5,\n                \"quantity\": 20,\n                \"medicineName\": \"Cetirizine 10mg\"\n            }\n        ],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 22.5,\n        \"orderNumber\": \"PO-2030-9609\",\n        \"id\": 20,\n        \"orderDate\": \"2026-11-02T17:52:10.951483\",\n        \"items\": [\n            {\n                \"unitPrice\": 4.5,\n                \"quantity\": 5,\n                \"medicineName\": \"Cetirizine 10mg\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 120,\n        \"orderNumber\": \"PO-2029-3534\",\n        \"id\": 21,\n        \"orderDate\": \"2026-11-03T17:57:16.167524\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 6,\n                \"medicineName\": \"Paracetamol 900mg\"\n            }\n        ],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 160,\n        \"orderNumber\": \"PO-2030-4894\",\n        \"id\": 22,\n        \"orderDate\": \"2026-11-05T00:03:33.938784\",\n        \"items\": [\n            {\n                \"unitPrice\": 8,\n                \"quantity\": 20,\n                \"medicineName\": \"Ibuprofen 400mg\"\n            }\n        ],\n        \"status\": \"RECEIVED\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 400,\n        \"orderNumber\": \"PO-2034-6691\",\n        \"id\": 23,\n        \"orderDate\": \"2026-11-06T19:02:05.776491\",\n        \"items\": [\n            {\n                \"unitPrice\": 20,\n                \"quantity\": 20,\n                \"medicineName\": \"Paracetamol 900mg\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    },\n    {\n        \"supplierName\": \"Test Distributor\",\n        \"totalAmount\": 50,\n        \"orderNumber\": \"PO-2026-8543\",\n        \"id\": 24,\n        \"orderDate\": \"2026-11-07T22:56:32.144529\",\n        \"items\": [\n            {\n                \"unitPrice\": 5,\n                \"quantity\": 10,\n                \"medicineName\": \"Paracetamol 650mg\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"AgroTeck\",\n        \"totalAmount\": 850,\n        \"orderNumber\": \"PO-2026-3480\",\n        \"id\": 25,\n        \"orderDate\": \"2026-11-07T23:50:33.452439\",\n        \"items\": [\n            {\n                \"unitPrice\": 25,\n                \"quantity\": 10,\n                \"medicineName\": \"Ciprofloxacin 500mg\"\n            },\n            {\n                \"unitPrice\": 120,\n                \"quantity\": 5,\n                \"medicineName\": \"Insulin Glargine\"\n            }\n        ],\n        \"status\": \"APPROVED\"\n    },\n    {\n        \"supplierName\": \"CiplaV\",\n        \"totalAmount\": 625,\n        \"orderNumber\": \"PO-2028-1487\",\n        \"id\": 26,\n        \"orderDate\": \"2026-11-12T19:17:28.448581\",\n        \"items\": [\n            {\n                \"unitPrice\": 12.5,\n                \"quantity\": 50,\n                \"medicineName\": \"Paracetamol 900mg\"\n            }\n        ],\n        \"status\": \"PENDING\"\n    }\n]"
+        },
+        {
+          "name": "Approve PO by Admin",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{pharmacistToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/purchase-orders/1/status?status=APPROVED",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "purchase-orders",
+                "1",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "APPROVED"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 13:50:53 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Status updated\"\n}"
+        },
+        {
+          "name": "Admin Cannot Create PO",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"supplierId\": 22,\r\n  \"items\": [\r\n    { \"medicineId\": 5, \"quantity\": 50, \"unitPrice\": 12.50 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/purchase-orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "purchase-orders"
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:27:25 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"path\": \"/api/admin/purchase-orders\",\n    \"error\": \"Internal Server Error\",\n    \"message\": \"Unexpected server error\",\n    \"timestamp\": \"2026-11-12T19:57:25.712325400\",\n    \"status\": 500\n}"
+        }
+      ]
+    },
+    {
+      "name": "4. Analytics & Reports",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Wastage Report",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/reports/wastage",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "reports",
+                "wastage"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:33:37 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"nearExpiryCount\": 3,\n    \"items\": [\n        {\n            \"unitPrice\": 12.5,\n            \"expiryDate\": \"2023-10-24\",\n            \"reason\": \"EXPIRED\",\n            \"quantity\": 45,\n            \"totalLoss\": 562.5,\n            \"flagged\": true,\n            \"name\": \"Amoxicillin 500mg\",\n            \"id\": 2,\n            \"batchNumber\": \"AMX-EXP-01\"\n        },\n        {\n            \"unitPrice\": 5,\n            \"expiryDate\": \"2024-01-01\",\n            \"reason\": \"EXPIRED\",\n            \"quantity\": 100,\n            \"totalLoss\": 500,\n            \"flagged\": false,\n            \"name\": \"Paracetamol 650mg\",\n            \"id\": 3,\n            \"batchNumber\": \"PAR-EXP-02\"\n        },\n        {\n            \"unitPrice\": 35,\n            \"expiryDate\": \"2026-10-01\",\n            \"reason\": \"RECALLED\",\n            \"quantity\": 5,\n            \"totalLoss\": 175,\n            \"flagged\": true,\n            \"name\": \"Azithromycin 250mg\",\n            \"id\": 8,\n            \"batchNumber\": \"AZI-LOW-01\"\n        },\n        {\n            \"unitPrice\": 8,\n            \"expiryDate\": \"2024-05-10\",\n            \"reason\": \"EXPIRED\",\n            \"quantity\": 20,\n            \"totalLoss\": 160,\n            \"flagged\": false,\n            \"name\": \"Ibuprofen 400mg\",\n            \"id\": 4,\n            \"batchNumber\": \"IBU-EXP-03\"\n        },\n        {\n            \"unitPrice\": 4.5,\n            \"expiryDate\": \"2026-11-01\",\n            \"reason\": \"DAMAGED\",\n            \"quantity\": 12,\n            \"totalLoss\": 54,\n            \"flagged\": true,\n            \"name\": \"Cetirizine 10mg\",\n            \"id\": 9,\n            \"batchNumber\": \"CET-LOW-02\"\n        }\n    ],\n    \"monthlyTrend\": [\n        {\n            \"loss\": 0,\n            \"month\": \"Jun 2026\"\n        },\n        {\n            \"loss\": 0,\n            \"month\": \"Jul 2026\"\n        },\n        {\n            \"loss\": 0,\n            \"month\": \"Aug 2026\"\n        },\n        {\n            \"loss\": 0,\n            \"month\": \"Sept 2026\"\n        },\n        {\n            \"loss\": 0,\n            \"month\": \"Oct 2026\"\n        },\n        {\n            \"loss\": 791.5,\n            \"month\": \"Nov 2026\"\n        }\n    ],\n    \"lossByReason\": [\n        {\n            \"reason\": \"EXPIRED\",\n            \"loss\": 1222.5\n        },\n        {\n            \"reason\": \"RECALLED\",\n            \"loss\": 175\n        },\n        {\n            \"reason\": \"DAMAGED\",\n            \"loss\": 54\n        }\n    ],\n    \"nearExpiryRisk\": 7325,\n    \"damagedCount\": 3,\n    \"expiredCount\": 5,\n    \"totalLoss\": 1451.5\n}"
+        },
+        {
+          "name": "Retrieve Dashboard Stats",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/dashboard-stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "dashboard-stats"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:40:43 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"expiredCount\": 5,\n    \"totalInventoryValue\": 19732.5,\n    \"outOfStockCount\": 3,\n    \"totalMedicines\": 21,\n    \"inStockCount\": 10,\n    \"lowStockCount\": 3\n}"
+        }
+      ]
+    },
+    {
+      "name": "5. Audit Logs",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Retreive Audit Trail",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/audit-logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "audit-logs"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:43:29 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 129,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T20:03:05.295028\"\n    },\n    {\n        \"id\": 128,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:55:52.74366\"\n    },\n    {\n        \"id\": 127,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2030-9400 for AgroTeck (₹625.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 28,\n        \"timestamp\": \"2026-11-12T19:54:51.08413\"\n    },\n    {\n        \"id\": 126,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T19:52:23.623632\"\n    },\n    {\n        \"id\": 125,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:44:29.616467\"\n    },\n    {\n        \"id\": 124,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:34:43.743922\"\n    },\n    {\n        \"id\": 123,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:24:24.198086\"\n    },\n    {\n        \"id\": 122,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2028-3335 for CiplaV (₹625.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 27,\n        \"timestamp\": \"2026-11-12T19:22:48.739247\"\n    },\n    {\n        \"id\": 121,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"UPDATE_PO_STATUS\",\n        \"details\": \"PO-2026-1001: PENDING → APPROVED\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-12T19:20:53.707019\"\n    },\n    {\n        \"id\": 120,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2028-1487 for CiplaV (₹625.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 26,\n        \"timestamp\": \"2026-11-12T19:17:28.556389\"\n    },\n    {\n        \"id\": 119,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T19:16:56.85506\"\n    },\n    {\n        \"id\": 118,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_MEDICINE\",\n        \"details\": \"Updated Demo Paracetamol 500mg (qty 75 → 75)\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 22,\n        \"timestamp\": \"2026-11-12T19:13:08.054841\"\n    },\n    {\n        \"id\": 117,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:12:21.294215\"\n    },\n    {\n        \"id\": 116,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T19:09:47.292693\"\n    },\n    {\n        \"id\": 115,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_MEDICINE\",\n        \"details\": \"Updated Demo Paracetamol 500mg (qty 100 → 75)\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 22,\n        \"timestamp\": \"2026-11-12T19:02:14.909225\"\n    },\n    {\n        \"id\": 114,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_MEDICINE\",\n        \"details\": \"Created Demo Paracetamol 500mg (batch DEMO-BATCH-001, qty 100)\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 22,\n        \"timestamp\": \"2026-11-12T18:50:18.862999\"\n    },\n    {\n        \"id\": 113,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T18:47:55.796769\"\n    },\n    {\n        \"id\": 112,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T18:01:39.782679\"\n    },\n    {\n        \"id\": 111,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T17:51:51.507066\"\n    },\n    {\n        \"id\": 110,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T17:49:34.583317\"\n    },\n    {\n        \"id\": 109,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T17:27:57.293489\"\n    },\n    {\n        \"id\": 108,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T17:22:18.201433\"\n    },\n    {\n        \"id\": 107,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T17:17:16.59146\"\n    },\n    {\n        \"id\": 106,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T17:13:34.664156\"\n    },\n    {\n        \"id\": 105,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T17:02:02.959948\"\n    },\n    {\n        \"id\": 104,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T13:34:14.315646\"\n    },\n    {\n        \"id\": 103,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_TASK\",\n        \"details\": \"Deleted task ID 6\",\n        \"entityType\": \"TASK\",\n        \"entityId\": 6,\n        \"timestamp\": \"2026-11-12T12:53:27.898696\"\n    },\n    {\n        \"id\": 102,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T12:44:58.774206\"\n    },\n    {\n        \"id\": 101,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T12:27:35.036385\"\n    },\n    {\n        \"id\": 100,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T12:25:19.703567\"\n    },\n    {\n        \"id\": 99,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T12:08:21.073699\"\n    },\n    {\n        \"id\": 98,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"UPDATE_MEDICINE\",\n        \"details\": \"Updated temp-phrma-2 (qty 50 → 50)\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 21,\n        \"timestamp\": \"2026-11-12T11:40:13.079225\"\n    },\n    {\n        \"id\": 97,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_MEDICINE\",\n        \"details\": \"Created temp-phrma (batch LOT-OTFTC, qty 50)\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 21,\n        \"timestamp\": \"2026-11-12T11:39:54.958225\"\n    },\n    {\n        \"id\": 96,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T11:38:29.508631\"\n    },\n    {\n        \"id\": 95,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T11:38:05.304229\"\n    },\n    {\n        \"id\": 94,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T11:17:29.498284\"\n    },\n    {\n        \"id\": 93,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T11:15:41.842918\"\n    },\n    {\n        \"id\": 92,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-12T10:50:48.523855\"\n    },\n    {\n        \"id\": 91,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T10:47:52.103958\"\n    },\n    {\n        \"id\": 90,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-12T00:48:25.236109\"\n    },\n    {\n        \"id\": 89,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-11T21:15:24.603005\"\n    },\n    {\n        \"id\": 88,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-11T18:02:10.311955\"\n    },\n    {\n        \"id\": 87,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-11T17:43:27.4067\"\n    },\n    {\n        \"id\": 86,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T18:26:42.983087\"\n    },\n    {\n        \"id\": 85,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_BACKUP\",\n        \"details\": \"Created backup: backup_2026-11-10_18-13-01.json (232633 bytes)\",\n        \"entityType\": \"SYSTEM\",\n        \"timestamp\": \"2026-11-10T18:13:01.796257\"\n    },\n    {\n        \"id\": 84,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"FLAG_WASTAGE\",\n        \"details\": \"Flagged Amoxicillin 500mg as EXPIRED\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 2,\n        \"timestamp\": \"2026-11-10T18:12:37.220584\"\n    },\n    {\n        \"id\": 83,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T18:10:27.966807\"\n    },\n    {\n        \"id\": 82,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-10T18:04:17.249355\"\n    },\n    {\n        \"id\": 81,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T17:37:17.14137\"\n    },\n    {\n        \"id\": 80,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-10T17:27:58.97423\"\n    },\n    {\n        \"id\": 79,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-10T16:34:01.49296\"\n    },\n    {\n        \"id\": 78,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T16:33:40.916817\"\n    },\n    {\n        \"id\": 77,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T16:15:53.451958\"\n    },\n    {\n        \"id\": 76,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T14:06:50.169589\"\n    },\n    {\n        \"id\": 75,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by staff@test.com (role: STAFF)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 16,\n        \"timestamp\": \"2026-11-10T14:05:32.061375\"\n    },\n    {\n        \"id\": 74,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-10T14:00:04.520602\"\n    },\n    {\n        \"id\": 73,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-10T13:51:30.560985\"\n    },\n    {\n        \"id\": 72,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T20:28:09.28206\"\n    },\n    {\n        \"id\": 71,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T20:10:16.969762\"\n    },\n    {\n        \"id\": 70,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by staff@test.com (role: STAFF)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 16,\n        \"timestamp\": \"2026-11-08T20:05:17.821878\"\n    },\n    {\n        \"id\": 69,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T19:50:56.046939\"\n    },\n    {\n        \"id\": 68,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T19:32:28.925473\"\n    },\n    {\n        \"id\": 67,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-08T19:30:54.384143\"\n    },\n    {\n        \"id\": 66,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T19:11:04.457125\"\n    },\n    {\n        \"id\": 65,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T18:54:36.458629\"\n    },\n    {\n        \"id\": 64,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"FLAG_WASTAGE\",\n        \"details\": \"Flagged Azithromycin 250mg as RECALLED\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 8,\n        \"timestamp\": \"2026-11-08T18:50:36.978402\"\n    },\n    {\n        \"id\": 63,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"FLAG_WASTAGE\",\n        \"details\": \"Flagged Cetirizine 10mg as DAMAGED\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 9,\n        \"timestamp\": \"2026-11-08T18:50:14.929443\"\n    },\n    {\n        \"id\": 62,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T18:38:47.617459\"\n    },\n    {\n        \"id\": 61,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_BACKUP\",\n        \"details\": \"Created backup: backup_2026-11-08_18-23-05.json (224282 bytes)\",\n        \"entityType\": \"SYSTEM\",\n        \"timestamp\": \"2026-11-08T18:23:05.584087\"\n    },\n    {\n        \"id\": 60,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T18:21:42.615247\"\n    },\n    {\n        \"id\": 59,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UNFLAG_WASTAGE\",\n        \"details\": \"Removed wastage flag from Amoxicillin 500mg\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 2,\n        \"timestamp\": \"2026-11-08T15:29:51.594881\"\n    },\n    {\n        \"id\": 58,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"FLAG_WASTAGE\",\n        \"details\": \"Flagged Amoxicillin 500mg as DAMAGED\",\n        \"entityType\": \"MEDICINE\",\n        \"entityId\": 2,\n        \"timestamp\": \"2026-11-08T15:23:59.204851\"\n    },\n    {\n        \"id\": 57,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T15:22:29.844496\"\n    },\n    {\n        \"id\": 56,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T15:07:00.730457\"\n    },\n    {\n        \"id\": 55,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T13:53:58.646361\"\n    },\n    {\n        \"id\": 54,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-08T13:53:36.870419\"\n    },\n    {\n        \"id\": 53,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-08T13:29:53.948086\"\n    },\n    {\n        \"id\": 52,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-08T13:24:16.712049\"\n    },\n    {\n        \"id\": 51,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-08T00:13:04.358754\"\n    },\n    {\n        \"id\": 50,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_PO_STATUS\",\n        \"details\": \"PO-2026-3480: PENDING → APPROVED\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-07T23:52:15.363053\"\n    },\n    {\n        \"id\": 49,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-07T23:51:51.185274\"\n    },\n    {\n        \"id\": 48,\n        \"userEmail\": \"nimasesant@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2026-3480 for AgroTeck (₹850.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-07T23:50:33.561232\"\n    },\n    {\n        \"id\": 47,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by nimasesant@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T23:50:03.050259\"\n    },\n    {\n        \"id\": 46,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_PO_STATUS\",\n        \"details\": \"PO-2026-8543: PENDING → APPROVED\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 24,\n        \"timestamp\": \"2026-11-07T23:46:05.56018\"\n    },\n    {\n        \"id\": 45,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-07T23:45:44.986056\"\n    },\n    {\n        \"id\": 44,\n        \"userEmail\": \"sanchit31@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"UPDATE_PROFILE\",\n        \"details\": \"Profile updated: nimasesant@gmail.com\",\n        \"entityType\": \"USER\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T23:45:04.250239\"\n    },\n    {\n        \"id\": 43,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T23:42:24.002424\"\n    },\n    {\n        \"id\": 42,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T23:35:32.964691\"\n    },\n    {\n        \"id\": 41,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T23:23:21.344776\"\n    },\n    {\n        \"id\": 40,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 25,\n        \"timestamp\": \"2026-11-07T23:15:48.418105\"\n    },\n    {\n        \"id\": 39,\n        \"userEmail\": \"sanchit31@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2026-8543 for Test Distributor (₹50.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 24,\n        \"timestamp\": \"2026-11-07T22:56:32.206547\"\n    },\n    {\n        \"id\": 38,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-07T22:56:02.712713\"\n    },\n    {\n        \"id\": 37,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchitnimse145@gmail.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-07T22:54:53.83742\"\n    },\n    {\n        \"id\": 36,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-07T14:05:14.64572\"\n    },\n    {\n        \"id\": 35,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (aitempfor@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 23,\n        \"timestamp\": \"2026-11-07T13:47:00.782756\"\n    },\n    {\n        \"id\": 34,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 22,\n        \"timestamp\": \"2026-11-07T13:46:35.095123\"\n    },\n    {\n        \"id\": 33,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (aitempfor@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 22,\n        \"timestamp\": \"2026-11-07T13:42:17.574944\"\n    },\n    {\n        \"id\": 32,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 21,\n        \"timestamp\": \"2026-11-07T13:41:53.76732\"\n    },\n    {\n        \"id\": 31,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-07T13:35:44.118239\"\n    },\n    {\n        \"id\": 30,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (tejalshelwale43@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 21,\n        \"timestamp\": \"2026-11-07T00:31:17.617965\"\n    },\n    {\n        \"id\": 29,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 20,\n        \"timestamp\": \"2026-11-07T00:30:56.24535\"\n    },\n    {\n        \"id\": 28,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (tejalshelwale43@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 20,\n        \"timestamp\": \"2026-11-07T00:26:01.317416\"\n    },\n    {\n        \"id\": 27,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 19,\n        \"timestamp\": \"2026-11-07T00:25:39.211906\"\n    },\n    {\n        \"id\": 26,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (tejalshelwale43@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 19,\n        \"timestamp\": \"2026-11-07T00:22:37.646408\"\n    },\n    {\n        \"id\": 25,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 18,\n        \"timestamp\": \"2026-11-07T00:21:00.230792\"\n    },\n    {\n        \"id\": 24,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (aitempfor@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 18,\n        \"timestamp\": \"2026-11-07T00:20:08.979797\"\n    },\n    {\n        \"id\": 23,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 17,\n        \"timestamp\": \"2026-11-07T00:19:35.320629\"\n    },\n    {\n        \"id\": 22,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-07T00:19:29.461298\"\n    },\n    {\n        \"id\": 21,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (aitempfor@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 17,\n        \"timestamp\": \"2026-11-07T00:08:51.782485\"\n    },\n    {\n        \"id\": 20,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"DELETE_SUPPLIER\",\n        \"details\": \"Deleted AgroTeck\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 16,\n        \"timestamp\": \"2026-11-07T00:08:04.609792\"\n    },\n    {\n        \"id\": 19,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"CREATE_SUPPLIER\",\n        \"details\": \"Registered AgroTeck (aitempfor@gmail.com)\",\n        \"entityType\": \"SUPPLIER\",\n        \"entityId\": 16,\n        \"timestamp\": \"2026-11-07T00:04:36.976736\"\n    },\n    {\n        \"id\": 18,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-07T00:03:09.180268\"\n    },\n    {\n        \"id\": 17,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-06T20:18:58.149992\"\n    },\n    {\n        \"id\": 16,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_FEEDBACK\",\n        \"details\": \"Status → RESOLVED\",\n        \"entityType\": \"FEEDBACK\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T20:18:40.669594\"\n    },\n    {\n        \"id\": 15,\n        \"userEmail\": \"admin@medistock.com\",\n        \"userRole\": \"ADMIN\",\n        \"action\": \"UPDATE_FEEDBACK\",\n        \"details\": \"Status → IN_REVIEW\",\n        \"entityType\": \"FEEDBACK\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T20:18:36.659769\"\n    },\n    {\n        \"id\": 14,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T20:18:07.126216\"\n    },\n    {\n        \"id\": 13,\n        \"userEmail\": \"sanchit31@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"SUBMIT_FEEDBACK\",\n        \"details\": \"Submitted: Search is slow on large inventories (BUG)\",\n        \"entityType\": \"FEEDBACK\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T20:17:56.337255\"\n    },\n    {\n        \"id\": 12,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-06T20:12:28.37698\"\n    },\n    {\n        \"id\": 11,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T20:11:58.418799\"\n    },\n    {\n        \"id\": 10,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T19:47:21.514701\"\n    },\n    {\n        \"id\": 9,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T19:32:12.725312\"\n    },\n    {\n        \"id\": 8,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-06T19:27:30.993378\"\n    },\n    {\n        \"id\": 7,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T19:24:54.646818\"\n    },\n    {\n        \"id\": 6,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-06T19:20:57.787866\"\n    },\n    {\n        \"id\": 5,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T19:19:59.954148\"\n    },\n    {\n        \"id\": 4,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T19:02:16.400841\"\n    },\n    {\n        \"id\": 3,\n        \"userEmail\": \"sanchit31@gmail.com\",\n        \"userRole\": \"PHARMACIST\",\n        \"action\": \"CREATE_PURCHASE_ORDER\",\n        \"details\": \"Created PO-2034-6691 for Test Distributor (₹400.0)\",\n        \"entityType\": \"PURCHASE_ORDER\",\n        \"entityId\": 23,\n        \"timestamp\": \"2026-11-06T19:02:05.879594\"\n    },\n    {\n        \"id\": 2,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by sanchit31@gmail.com (role: PHARMACIST)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 13,\n        \"timestamp\": \"2026-11-06T19:01:22.836906\"\n    },\n    {\n        \"id\": 1,\n        \"userEmail\": \"anonymousUser\",\n        \"userRole\": \"ANONYMOUS\",\n        \"action\": \"LOGIN\",\n        \"details\": \"Successful login by admin@medistock.com (role: ADMIN)\",\n        \"entityType\": \"AUTH\",\n        \"entityId\": 1,\n        \"timestamp\": \"2026-11-06T18:57:24.691072\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "6. Expiry endpoint",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Retrieve Expiring & Expired Medicines",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/inventory/expiring",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "inventory",
+                "expiring"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 12 Nov 2026 14:53:28 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 2,\n        \"name\": \"Amoxicillin 500mg\",\n        \"batchNumber\": \"AMX-EXP-01\",\n        \"category\": \"Antibiotic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 45,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2022-01-01\",\n        \"expiryDate\": \"2023-10-24\",\n        \"unitPrice\": 12.5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-28T21:33:22.509298\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"EXPIRED\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Paracetamol 650mg\",\n        \"batchNumber\": \"PAR-EXP-02\",\n        \"category\": \"Analgesic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 100,\n        \"minQuantity\": 20,\n        \"manufacturingDate\": \"2021-05-15\",\n        \"expiryDate\": \"2024-01-01\",\n        \"unitPrice\": 5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Ibuprofen 400mg\",\n        \"batchNumber\": \"IBU-EXP-03\",\n        \"category\": \"NSAID\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 20,\n        \"minQuantity\": 15,\n        \"manufacturingDate\": \"2022-03-10\",\n        \"expiryDate\": \"2024-05-10\",\n        \"unitPrice\": 8,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-11-05T00:06:38.560008\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Metformin 500mg\",\n        \"batchNumber\": \"MET-OOS-01\",\n        \"category\": \"Antidiabetic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 0,\n        \"minQuantity\": 50,\n        \"manufacturingDate\": \"2023-01-01\",\n        \"expiryDate\": \"2026-12-31\",\n        \"unitPrice\": 15,\n        \"status\": \"OUT_OF_STOCK\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Azithromycin 250mg\",\n        \"batchNumber\": \"AZI-LOW-01\",\n        \"category\": \"Antibiotic\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 5,\n        \"minQuantity\": 20,\n        \"manufacturingDate\": \"2023-10-01\",\n        \"expiryDate\": \"2026-10-01\",\n        \"unitPrice\": 35,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"RECALLED\"\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Cetirizine 10mg\",\n        \"batchNumber\": \"CET-LOW-02\",\n        \"category\": \"Antihistamine\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 12,\n        \"minQuantity\": 50,\n        \"manufacturingDate\": \"2023-11-01\",\n        \"expiryDate\": \"2026-11-01\",\n        \"unitPrice\": 4.5,\n        \"status\": \"EXPIRED\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": true,\n        \"wastageReason\": \"DAMAGED\"\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Insulin Glargine\",\n        \"batchNumber\": \"INS-EXP-01\",\n        \"category\": \"Endocrinology\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 30,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2024-01-01\",\n        \"expiryDate\": \"2026-11-15\",\n        \"unitPrice\": 120,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Salbutamol Inhaler\",\n        \"batchNumber\": \"SAL-EXP-02\",\n        \"category\": \"Respiratory\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 45,\n        \"minQuantity\": 15,\n        \"manufacturingDate\": \"2024-02-01\",\n        \"expiryDate\": \"2026-11-30\",\n        \"unitPrice\": 45,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    },\n    {\n        \"id\": 13,\n        \"name\": \"Epinephrine Injection\",\n        \"batchNumber\": \"EPI-EXP-03\",\n        \"category\": \"Emergency\",\n        \"supplierId\": 1,\n        \"supplierName\": \"CiplaV\",\n        \"quantity\": 20,\n        \"minQuantity\": 10,\n        \"manufacturingDate\": \"2024-03-01\",\n        \"expiryDate\": \"2026-12-05\",\n        \"unitPrice\": 85,\n        \"status\": \"EXPIRING_SOON\",\n        \"updatedAt\": \"2026-10-24T22:32:34\",\n        \"genericName\": \"Generic formulation\",\n        \"storageCondition\": \"Room Temperature\",\n        \"unit\": \"units\",\n        \"wastageFlag\": false\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "7. Supplier Management",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Retrieve Supplier List",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 13 Nov 2026 10:42:31 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"CiplaV\",\n        \"contactPerson\": \"Sanchit\",\n        \"phone\": \"+919556487912\",\n        \"email\": \"empfor@gmail.com\",\n        \"address\": \"Texas, UK\",\n        \"licenseNumber\": \"FDA-DIST-1610\",\n        \"leadTimeDays\": 3,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T16:59:49.522712\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Abbott Laboratories\",\n        \"contactPerson\": \"John Doe\",\n        \"phone\": \"9876543210\",\n        \"email\": \"john@abbott.com\",\n        \"address\": \"Mumbai, India\",\n        \"licenseNumber\": \"FDA-DIST-3662\",\n        \"leadTimeDays\": 2,\n        \"rating\": 4.8,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:32:34\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Pfizer Inc.\",\n        \"contactPerson\": \"Sarah Jenkins\",\n        \"phone\": \"+1-800-555-0101\",\n        \"email\": \"orders@pfizer.com\",\n        \"address\": \"235 E 42nd St, New York, NY\",\n        \"licenseNumber\": \"FDA-DIST-1101\",\n        \"leadTimeDays\": 2,\n        \"rating\": 4.9,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Novartis AG\",\n        \"contactPerson\": \"Rajesh Kumaram\",\n        \"phone\": \"+91-98765-43210\",\n        \"email\": \"supply@novartis.com\",\n        \"address\": \"Hyderabad, Telangana, India\",\n        \"licenseNumber\": \"FDA-DIST-22027\",\n        \"leadTimeDays\": 3,\n        \"rating\": 4.7,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Cipla Ltd.\",\n        \"contactPerson\": \"Anjali Sharma\",\n        \"phone\": \"+91-22-2308-1234\",\n        \"email\": \"b2b@cipla.com\",\n        \"address\": \"Mumbai, Maharashtra, India\",\n        \"licenseNumber\": \"FDA-DIST-3303\",\n        \"leadTimeDays\": 1,\n        \"rating\": 4.8,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Sun Pharma\",\n        \"contactPerson\": \"David Chen\",\n        \"phone\": \"+1-609-555-0199\",\n        \"email\": \"orders@sunpharma.com\",\n        \"address\": \"Princeton, NJ, USA\",\n        \"licenseNumber\": \"FDA-DIST-4404\",\n        \"leadTimeDays\": 4,\n        \"rating\": 4.5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 7,\n        \"name\": \"Dr. Reddy's Labs\",\n        \"contactPerson\": \"Priya Patel\",\n        \"phone\": \"+91-40-4900-2000\",\n        \"email\": \"contact@drreddys.com\",\n        \"address\": \"Hyderabad, Telangana, India\",\n        \"licenseNumber\": \"FDA-DIST-5505\",\n        \"leadTimeDays\": 2,\n        \"rating\": 4.6,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Lupin Limited\",\n        \"contactPerson\": \"Michael Chang\",\n        \"phone\": \"+1-212-555-0144\",\n        \"email\": \"global@lupin.com\",\n        \"address\": \"Baltimore, MD, USA\",\n        \"licenseNumber\": \"FDA-DIST-6606\",\n        \"leadTimeDays\": 3,\n        \"rating\": 4.4,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Aurobindo Pharma\",\n        \"contactPerson\": \"Emily Davis\",\n        \"phone\": \"+91-40-6672-5000\",\n        \"email\": \"sales@aurobindo.com\",\n        \"address\": \"Hyderabad, Telangana, India\",\n        \"licenseNumber\": \"FDA-DIST-7707\",\n        \"leadTimeDays\": 2,\n        \"rating\": 4.3,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-24T22:33:20\"\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Apollo Pharma\",\n        \"phone\": \"1234567890\",\n        \"email\": \"apollo@pharma.com\",\n        \"address\": \"Mumbai\",\n        \"licenseNumber\": \"FDA-123\"\n    },\n    {\n        \"id\": 12,\n        \"name\": \"SNCT pharma2\",\n        \"contactPerson\": \"Harry\",\n        \"phone\": \"9245654587\",\n        \"email\": \"john121@gmail.com\",\n        \"address\": \"USA\",\n        \"licenseNumber\": \"FDA-DIST-6009\",\n        \"leadTimeDays\": 2,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-25T23:33:15.876188\"\n    },\n    {\n        \"id\": 13,\n        \"name\": \"PHARMA_sn\",\n        \"contactPerson\": \"snct\",\n        \"phone\": \"1234567891\",\n        \"email\": \"snct1234@gmail.com\",\n        \"address\": \"UK\",\n        \"licenseNumber\": \"FDA-DIST-7108\",\n        \"leadTimeDays\": 2,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-10-25T23:40:30.771037\"\n    },\n    {\n        \"id\": 14,\n        \"name\": \"Godrej\",\n        \"contactPerson\": \"Sanchit\",\n        \"phone\": \"+919579118974\",\n        \"email\": \"splr2@gmail.com\",\n        \"address\": \"Mumbai\",\n        \"licenseNumber\": \"FDA-DIST-1606\",\n        \"leadTimeDays\": 2,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-11-02T16:52:59.019044\"\n    },\n    {\n        \"id\": 15,\n        \"name\": \"Test Distributor\",\n        \"contactPerson\": \"John\",\n        \"phone\": \"+919579118974\",\n        \"email\": \"splr3@test.com\",\n        \"address\": \"Mumbai\",\n        \"licenseNumber\": \"FDA-DIST-6421\",\n        \"leadTimeDays\": 2,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-11-02T17:07:57.939292\"\n    },\n    {\n        \"id\": 23,\n        \"name\": \"AgroTeck\",\n        \"contactPerson\": \"Sanchit Nimse\",\n        \"phone\": \"9579114393\",\n        \"email\": \"aitempfor@gmail.com\",\n        \"address\": \"Mumbai, Thane\",\n        \"licenseNumber\": \"FDA-DIST-5966\",\n        \"leadTimeDays\": 2,\n        \"rating\": 5,\n        \"status\": \"Active\",\n        \"createdAt\": \"2026-11-07T13:47:00.530775\"\n    }\n]"
+        },
+        {
+          "name": "Register Supplier by Admin",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Demo Pharma Ltd\",\r\n  \"contactPerson\": \"John Demo\",\r\n  \"email\": \"demo@pharma.com\",\r\n  \"password\": \"demoPassword123\",\r\n  \"phone\": \"1122334455\",\r\n  \"address\": \"123 Demo Street, Mumbai\",\r\n  \"licenseNumber\": \"FDA-DEMO-001\",\r\n  \"leadTimeDays\": 3,\r\n  \"rating\": 4.5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/suppliers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "suppliers"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 13 Nov 2026 10:43:39 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"email\": \"demo@pharma.com\",\n    \"supplierId\": 24,\n    \"message\": \"Supplier and login account created successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "8. User Management",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": [
+        {
+          "name": "Retrieve Users Information",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "users"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Method"
+            },
+            {
+              "key": "Vary",
+              "value": "Access-Control-Request-Headers"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 13 Nov 2026 11:03:54 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"fullName\": \"System Admin\",\n        \"email\": \"sanchitnimse145@gmail.com\",\n        \"phone\": \"1234567890\",\n        \"roles\": [\n            \"ADMIN\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 2,\n        \"fullName\": \"Sanchit\",\n        \"email\": \"snctnms14@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 4,\n        \"fullName\": \"Harsh\",\n        \"email\": \"Harsh12@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"STAFF\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 6,\n        \"fullName\": \"Jordan C.\",\n        \"email\": \"jordan12@gmail.com\",\n        \"phone\": \"9145257836\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 10,\n        \"fullName\": \"SRN\",\n        \"email\": \"snct@gmail.com\",\n        \"phone\": \"1245783696\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 11,\n        \"fullName\": \"Arpita\",\n        \"email\": \"ap2005@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 13,\n        \"fullName\": \"Sanchit\",\n        \"email\": \"nimasesant@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"PHARMACIST\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 14,\n        \"fullName\": \"Sanchit Nimse\",\n        \"email\": \"splr@gmail.com\",\n        \"phone\": \"\",\n        \"roles\": [\n            \"SUPPLIER\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 15,\n        \"fullName\": \"John\",\n        \"email\": \"splr3@test.com\",\n        \"phone\": \"+919579118974\",\n        \"roles\": [\n            \"SUPPLIER\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 16,\n        \"fullName\": \"Test Staff\",\n        \"email\": \"staff@test.com\",\n        \"phone\": \"1234567892\",\n        \"roles\": [\n            \"STAFF\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 24,\n        \"fullName\": \"Sanchit Nimse\",\n        \"email\": \"aitempfor@gmail.com\",\n        \"phone\": \"9579114393\",\n        \"roles\": [\n            \"SUPPLIER\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 25,\n        \"fullName\": \"System Admin\",\n        \"email\": \"admin@medistock.com\",\n        \"phone\": \"1234567890\",\n        \"roles\": [\n            \"ADMIN\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 26,\n        \"fullName\": \"Test Nurse\",\n        \"email\": \"nurse@test.com\",\n        \"phone\": \"9876543210\",\n        \"roles\": [\n            \"STAFF\"\n        ],\n        \"enabled\": true\n    },\n    {\n        \"id\": 27,\n        \"fullName\": \"John Demo\",\n        \"email\": \"demo@pharma.com\",\n        \"phone\": \"1122334455\",\n        \"roles\": [\n            \"SUPPLIER\"\n        ],\n        \"enabled\": true\n    }\n]"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
