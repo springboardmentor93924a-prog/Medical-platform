@@ -10,7 +10,6 @@ import Inventory from "./Inventory.jsx";
 import PurchaseOrders from "./PurchaseOrders.jsx";
 import ExpiryTracking from "./ExpiryTracking.jsx";
 import Reports from "./Reports.jsx";
-
 import PharmacistNotifications from "./PharmacistNotifications.jsx";
 
 // Pharmacist-specific pages
@@ -19,12 +18,32 @@ import Suppliers from "./Suppliers.jsx";
 import MyProfile from "./MyProfile.jsx";
 import DashboardOverview from "./DashboardOverview.jsx";
 
+// FEFO page
+import FefoDispensing from "./FefoDispensing.jsx";
+
+// AI Recommendations page
+import AiRecommendations from "./AiRecommendations.jsx";
+
+// Medicine Return Tracking page
+import MedicineReturns from "./MedicineReturns.jsx";
+
 const menu = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
   { id: "medicines", label: "Medicines", icon: "pill" },
   { id: "categories", label: "Categories", icon: "boxes" },
   { id: "stock", label: "Stock Monitoring", icon: "swap" },
+  { id: "fefo", label: "FEFO Dispensing", icon: "pill" },
   { id: "expiry", label: "Expiry Tracking", icon: "clock" },
+  {
+    id: "ai-recommendations",
+    label: "AI Recommendations",
+    icon: "dashboard",
+  },
+  {
+    id: "medicine-returns",
+    label: "Medicine Returns",
+    icon: "swap",
+  },
   { id: "purchase-orders", label: "Purchase Orders", icon: "cart" },
   { id: "suppliers", label: "Suppliers", icon: "boxes" },
   { id: "reports", label: "Inventory Reports", icon: "file" },
@@ -36,7 +55,10 @@ const pages = {
   medicines: Medicines,
   categories: Categories,
   stock: Inventory,
+  fefo: FefoDispensing,
   expiry: ExpiryTracking,
+  "ai-recommendations": AiRecommendations,
+  "medicine-returns": MedicineReturns,
   "purchase-orders": PurchaseOrders,
   suppliers: Suppliers,
   reports: Reports,
@@ -64,11 +86,29 @@ const shortcuts = [
     text: "Review available quantities and stock status.",
   },
   {
+    id: "fefo",
+    icon: "pill",
+    title: "FEFO Dispensing",
+    text: "Dispense medicines using First Expiry, First Out.",
+  },
+  {
     id: "expiry",
     icon: "clock",
     title: "Expiry Tracking",
     text: "Identify expired and near-expiry medicines.",
   },
+  {
+    id: "ai-recommendations",
+    icon: "dashboard",
+    title: "AI Recommendations",
+    text: "Get smart stock alerts, reorder suggestions and demand forecasts.",
+  },
+  {
+  id: "medicine-returns",
+  icon: "swap",
+  title: "Supplier Medicine Returns",
+  text: "Review supplier return requests and approve or reject them.",
+},
   {
     id: "purchase-orders",
     icon: "cart",
@@ -117,8 +157,9 @@ function PharmacistHome({ onSelect }) {
           </h2>
 
           <p className="mt-3 text-sm text-slate-300 sm:text-base">
-            Monitor medicine stock, track expiry dates, manage purchase orders,
-            and review supplier information.
+            Monitor medicine stock, dispense medicines using FEFO,
+            track expiry dates, manage returns and purchase orders,
+            and review suppliers.
           </p>
         </div>
       </section>

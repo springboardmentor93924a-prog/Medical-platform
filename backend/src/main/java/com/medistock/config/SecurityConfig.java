@@ -89,10 +89,30 @@ public class SecurityConfig {
                 .requestMatchers("/api/health").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
 
-// Allow public access to uploaded profile pictures
-.requestMatchers("/uploads/**").permitAll()
+                // Allow public access to uploaded profile pictures
+                .requestMatchers("/uploads/**").permitAll()
 
-.requestMatchers("/error").permitAll()
+                .requestMatchers("/error").permitAll()
+
+                // AI recommendations
+                .requestMatchers("/api/ai-recommendations/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
+
+                // Medicine returns: suppliers submit, pharmacists decide
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/returns"
+                ).hasAnyRole("PHARMACIST", "SUPPLIER")
+
+                .requestMatchers(
+                        HttpMethod.POST,
+                        "/api/returns"
+                ).hasRole("SUPPLIER")
+
+                .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/returns/*/decision"
+                ).hasRole("PHARMACIST")
 
                 // Inventory endpoints
                 .requestMatchers(
@@ -148,8 +168,8 @@ public class SecurityConfig {
                 ).hasAnyRole("ADMIN", "PHARMACIST", "STAFF")
 
                 // Notifications - all roles can access their own notifications
-.requestMatchers("/api/notifications/**")
-    .hasAnyRole("ADMIN", "PHARMACIST", "STAFF", "SUPPLIER")
+                .requestMatchers("/api/notifications/**")
+                .hasAnyRole("ADMIN", "PHARMACIST", "STAFF", "SUPPLIER")
 
                 // Reports
                 .requestMatchers("/api/reports/**")
@@ -240,6 +260,10 @@ public class SecurityConfig {
                 // Supplier endpoints
                 .requestMatchers("/api/supplier/**")
                     .hasRole("SUPPLIER")
+
+                // FEFO medicine dispensing
+                .requestMatchers("/api/fefo/**")
+                .hasAnyRole("ADMIN", "PHARMACIST")
 
                 // All remaining endpoints require authentication
                 .anyRequest().authenticated()

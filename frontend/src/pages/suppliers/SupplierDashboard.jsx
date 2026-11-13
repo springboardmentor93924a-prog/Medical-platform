@@ -1,5 +1,7 @@
-import SupplierProfile from "./SupplierProfile";
-import SupplierNotifications from "./SupplierNotifications";
+import SupplierProfile from "./SupplierProfile.jsx";
+import SupplierNotifications from "./SupplierNotifications.jsx";
+import SupplierMedicineReturns from "./SupplierMedicineReturns.jsx";
+
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -22,6 +24,7 @@ const API_URL = API_BASE;
 const MENU = [
   { id: "dashboard", label: "Dashboard", icon: "dashboard" },
   { id: "orders", label: "My Purchase Orders", icon: "cart" },
+  { id: "returns", label: "Medicine Returns", icon: "package" },
   { id: "notifications", label: "Notifications", icon: "bell" },
   { id: "profile", label: "My Profile", icon: "users" },
 ];
@@ -393,6 +396,7 @@ export default function SupplierDashboard({ onLogout }) {
   const pageTitles = {
     dashboard: "Supplier Dashboard",
     orders: "My Purchase Orders",
+    returns: "Medicine Returns",
     notifications: "Notifications",
     profile: "My Profile",
   };
@@ -407,6 +411,9 @@ export default function SupplierDashboard({ onLogout }) {
 
       case "profile":
         return <ProfilePage />;
+
+      case "returns":
+        return <SupplierMedicineReturns />;
 
       default:
         return <DashboardPage />;

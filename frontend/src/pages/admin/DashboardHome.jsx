@@ -28,6 +28,7 @@ import {
 } from "recharts";
 import { apiFetch } from "../../services/api";
 
+
 const PALETTE = [
   "#0f766e",
   "#f59e0b",
@@ -110,6 +111,38 @@ export default function DashboardHome() {
   const [results, setResults] = useState(null);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState("");
+
+
+  
+const [emailTesting, setEmailTesting] = useState(false);
+const [emailTestResult, setEmailTestResult] = useState(null);
+
+
+  const testEmail = async () => {
+  setEmailTesting(true);
+  setEmailTestResult(null);
+
+  try {
+    const response = await apiFetch("/admin/email-test", {
+      method: "POST",
+    });
+
+    setEmailTestResult({
+      success: true,
+      message:
+        typeof response === "string"
+          ? response
+          : response?.message || "Test email sent successfully.",
+    });
+  } catch (err) {
+    setEmailTestResult({
+      success: false,
+      message: err.message || "Unable to send test email.",
+    });
+  } finally {
+    setEmailTesting(false);
+  }
+};
 
   const loadStats = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
@@ -309,6 +342,51 @@ export default function DashboardHome() {
           </div>
         )}
       </div>
+
+
+        {/* SMTP Email Test */}
+<Panel
+  title="Email Notification Testing"
+  subtitle="Verify that MediStock can send emails through Gmail SMTP."
+>
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+        Gmail SMTP Connection
+      </p>
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        Send a test email to your configured SMTP sender address.
+      </p>
+    </div>
+
+    <button
+      onClick={testEmail}
+      disabled={emailTesting}
+      className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      <RefreshCw
+        size={16}
+        className={emailTesting ? "animate-spin" : ""}
+      />
+      {emailTesting ? "Sending..." : "Send Test Email"}
+    </button>
+  </div>
+
+  {emailTestResult && (
+    <div
+      role="status"
+      className={`mt-4 rounded-xl border p-3 text-sm font-medium ${
+        emailTestResult.success
+          ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300"
+          : "border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300"
+      }`}
+    >
+      {emailTestResult.message}
+    </div>
+  )}
+</Panel>
+
+
 
       {/* KPI cards */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

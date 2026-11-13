@@ -2,12 +2,14 @@
 package com.medistock.repository;
 
 import com.medistock.entity.User;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,6 +19,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     long countByRoleRoleNameAndActiveTrue(String roleName);
+
+    // Find active users by role for email notifications.
+    List<User> findByRoleRoleNameIgnoreCaseAndActiveTrue(String roleName);
 
     @Query("""
         SELECT u FROM User u

@@ -1,23 +1,33 @@
 
-import axios from "axios";
+import { apiFetch } from "../services/api";
 
-import { API_BASE } from "../services/api";
+/**
+ * Small axios-compatible wrapper over apiFetch.
+ * Keeps the `response.data` / `error.response.data` shape used by the
+ * pharmacist pages without pulling in an extra HTTP dependency.
+ */
+async function request(method, path, body) {
+  try {
+    const data = await apiFetch(path, {
+      method,
+      ...(body === undefined
+        ? {}
+        : { body: JSON.stringify(body) }),
+    });
 
-const pharmacistApi = axios.create({
-  baseURL: API_BASE,
-});
-
-// Attach JWT token to every request
-pharmacistApi.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem("medistock_token");
-
-  if (token) {
-    config.headers = config.headers || {};
-    config.headers.Authorization = `Bearer ${token}`;
+    return { data };
+  } catch (error) {
+    error.response = { data: error.data ?? { message: error.message } };
+    throw error;
   }
+}
 
-  return config;
-});
+const pharmacistApi = {
+  get: (path) => request("GET", path),
+  post: (path, body) => request("POST", path, body),
+  put: (path, body) => request("PUT", path, body),
+  delete: (path) => request("DELETE", path),
+};
 
 // Medicines
 export const getMedicines = () =>

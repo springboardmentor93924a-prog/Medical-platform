@@ -158,6 +158,9 @@ public List<PurchaseOrder> getSupplierPurchaseOrders(
                 user.getUserId()
         );
 
+        // Notify supplier that a new purchase order has been placed
+notificationService.notifySupplierOrderStatus(order);
+
         auditService.record(
                 "CREATE",
                 "PURCHASE_ORDER",

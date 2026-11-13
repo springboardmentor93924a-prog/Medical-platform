@@ -10,8 +10,14 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { apiFetch } from "../../services/api";
+import BackupRestore from "./BackupRestore.jsx";
 
 const PAGE_SIZE = 20;
+
+const TABS = [
+  { id: "audit", label: "Audit Logs" },
+  { id: "backups", label: "Backup & Restore" },
+];
 
 const ACTION_STYLES = {
   CREATE: "bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/30",
@@ -44,6 +50,8 @@ const DEFAULT_ACTION_STYLE =
   "bg-slate-100 text-slate-600 ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700";
 
 export default function SystemMonitoring() {
+  const [tab, setTab] = useState("audit");
+
   const [data, setData] = useState({
     content: [],
     totalElements: 0,
@@ -94,6 +102,34 @@ export default function SystemMonitoring() {
 
   const totalPages = Math.max(data.totalPages, 1);
 
+  const tabBar = (
+    <div className="flex flex-wrap gap-2">
+      {TABS.map((item) => (
+        <button
+          key={item.id}
+          type="button"
+          onClick={() => setTab(item.id)}
+          className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+            tab === item.id
+              ? "bg-teal-600 text-white shadow-sm shadow-teal-600/20"
+              : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
+  );
+
+  if (tab === "backups") {
+    return (
+      <div className="min-h-full space-y-6 rounded-3xl bg-slate-50 p-3 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 sm:p-6">
+        {tabBar}
+        <BackupRestore />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-full space-y-6 rounded-3xl bg-slate-50 p-3 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 sm:p-6">
 
@@ -131,6 +167,8 @@ export default function SystemMonitoring() {
           </button>
         </div>
       </header>
+
+      {tabBar}
 
       {/* Statistics */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

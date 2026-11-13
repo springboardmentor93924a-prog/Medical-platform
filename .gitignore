@@ -3,3 +3,6 @@ frontend/node_modules/
 .env
 .env.*
 !.env.example
+
+# runtime database backups (never commit data)
+backend/backups/
