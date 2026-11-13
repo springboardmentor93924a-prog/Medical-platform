@@ -17,6 +17,8 @@ import {
   Wallet,
 } from "lucide-react";
 
+import WastageReport from "../../components/WastageReport.jsx";
+
 const API = API_BASE;
 
 const getList = (data) => {
@@ -220,6 +222,7 @@ export default function Reports() {
     { type: "low-stock", name: "Low stock items" },
     { type: "movements", name: "Stock movements" },
     { type: "orders", name: "Purchase orders" },
+    { type: "wastage", name: "Wastage and expiry loss" },
   ];
 
   const dateFiltered =
@@ -623,6 +626,8 @@ export default function Reports() {
           statusColumn={2}
         />
       </div>
+
+      <WastageReport />
 
       <footer className="rounded-2xl border border-slate-200 bg-white/80 p-4 text-xs leading-6 text-slate-500 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-400">
         <strong className="text-slate-700 dark:text-slate-300">

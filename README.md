@@ -27,7 +27,13 @@ stock tracking, expiry alerts, reports.
 | Stock movements | ✅ (audit + low-stock alerts) | ✅ |
 | Purchase orders | ✅ list/create/items/status (both paths) | ✅ |
 | Expiry tracking | ✅ server flags + alerts | ✅ |
-| Reports | ✅ 6 CSV exports, date filter, history | ✅ download + print |
+| FEFO dispensing | ✅ earliest-expiry batches first | ✅ |
+| AI recommendations | ✅ rule-based low stock / expiry / forecast | ✅ |
+| Assistant chatbot | ✅ built-in, answers from local data | ✅ |
+| Medicine returns | ✅ supplier submits, pharmacist decides | ✅ |
+| Wastage report | ✅ JSON + CSV (expired, near-expiry, returns, FEFO) | ✅ cards + tables |
+| Backup & restore | ✅ admin-only zip backups (restore disabled) | ✅ System Monitoring tab |
+| Reports | ✅ 7 CSV exports, date filter, history | ✅ download + print |
 | Notifications | ✅ scan endpoint + unread count | ✅ badge, filters, mark read |
 | Search | ✅ `GET /api/search?q=` | ✅ dashboard search box |
 | Audit logs | ✅ `audit_logs` table + filter API | ✅ Audit Logs page |

@@ -18,6 +18,7 @@ import com.medistock.repository.UserRepository;
 
 import com.medistock.service.SystemMonitoringService;
 import com.medistock.service.ReportService;
+import com.medistock.service.WastageService;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,7 @@ public class ReportController {
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final SystemMonitoringService systemMonitoringService;
     private final ReportService reportService;
+    private final WastageService wastageService;
 
     public ReportController(
             InventoryRepository inventoryRepository,
@@ -63,7 +65,8 @@ public class ReportController {
             UserRepository userRepository,
             PurchaseOrderRepository purchaseOrderRepository,
             SystemMonitoringService systemMonitoringService,
-            ReportService reportService) {
+            ReportService reportService,
+            WastageService wastageService) {
 
         this.inventoryRepository = inventoryRepository;
         this.medicineRepository = medicineRepository;
@@ -73,6 +76,7 @@ public class ReportController {
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.systemMonitoringService = systemMonitoringService;
         this.reportService = reportService;
+        this.wastageService = wastageService;
     }
 
     // ---------- REPORT TYPES ----------
@@ -85,8 +89,18 @@ public class ReportController {
                 Map.of("type", "expiry", "name", "Expiry status"),
                 Map.of("type", "movements", "name", "Stock movements"),
                 Map.of("type", "orders", "name", "Purchase orders"),
-                Map.of("type", "low-stock", "name", "Low stock items")
+                Map.of("type", "low-stock", "name", "Low stock items"),
+                Map.of("type", "wastage", "name", "Wastage and expiry loss")
         );
+    }
+
+    // ---------- WASTAGE JSON ----------
+
+    @GetMapping("/wastage")
+    public Map<String, Object> wastage(
+            @RequestParam(defaultValue = "90") int days) {
+
+        return wastageService.buildReport(days);
     }
 
     // ---------- DOWNLOAD CSV ----------
@@ -153,6 +167,11 @@ public class ReportController {
             case "low-stock" -> {
                 csv = lowStockCsv();
                 label = "Low stock items";
+            }
+
+            case "wastage" -> {
+                csv = wastageCsv();
+                label = "Wastage and expiry loss";
             }
 
             default -> throw new ResponseStatusException(
@@ -556,6 +575,94 @@ public class ReportController {
 
     private static String nullSafe(String value) {
         return value == null ? "" : value;
+    }
+
+    // ---------- WASTAGE CSV ----------
+
+    private String wastageCsv() {
+
+        Map<String, Object> report =
+                wastageService.buildReport(
+                        WastageService.DEFAULT_NEAR_EXPIRY_DAYS
+                );
+
+        StringBuilder sb = new StringBuilder(
+                "section,medicine,batch,expiry_date,days_to_expiry,"
+                        + "quantity,unit_price,value,action\n"
+        );
+
+        appendWastageRows(
+                sb,
+                "EXPIRED",
+                report.get("expired")
+        );
+
+        appendWastageRows(
+                sb,
+                "NEAR_EXPIRY",
+                report.get("nearExpiry")
+        );
+
+        appendWastageRows(
+                sb,
+                "USE_FIRST",
+                report.get("fefoQueue")
+        );
+
+        Object returns = report.get("wastageReturns");
+
+        if (returns instanceof List<?> rows) {
+
+            for (Object entry : rows) {
+
+                if (!(entry instanceof Map<?, ?> row)) {
+                    continue;
+                }
+
+                sb.append(csv(
+                        "APPROVED_RETURN",
+                        row.get("medicine"),
+                        row.get("batch"),
+                        row.get("returnDate"),
+                        "",
+                        row.get("quantity"),
+                        row.get("unitPrice"),
+                        row.get("value"),
+                        row.get("condition")
+                )).append('\n');
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private void appendWastageRows(
+            StringBuilder sb,
+            String section,
+            Object source) {
+
+        if (!(source instanceof List<?> rows)) {
+            return;
+        }
+
+        for (Object entry : rows) {
+
+            if (!(entry instanceof Map<?, ?> row)) {
+                continue;
+            }
+
+            sb.append(csv(
+                    section,
+                    row.get("medicine"),
+                    row.get("batch"),
+                    row.get("expiryDate"),
+                    row.get("daysToExpiry"),
+                    row.get("quantity"),
+                    row.get("unitPrice"),
+                    row.get("value"),
+                    row.get("action")
+            )).append('\n');
+        }
     }
 
     // ---------- CSV ESCAPING ----------

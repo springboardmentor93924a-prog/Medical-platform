@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Icon } from "./icons";
 import ThemeToggle from "./ThemeToggle";
+import AssistantChat from "./AssistantChat.jsx";
 
 export default function AppShell({
   role,
@@ -15,6 +16,10 @@ export default function AppShell({
   children,
 }) {
   const [open, setOpen] = useState(false);
+
+  const canUseAssistant = ["admin", "pharmacist"].includes(
+    String(role || "").toLowerCase()
+  );
 
   const select = (id) => {
     setOpen(false);
@@ -175,6 +180,8 @@ export default function AppShell({
           </div>
         </main>
       </div>
+
+      {canUseAssistant && <AssistantChat />}
     </div>
   );
 }

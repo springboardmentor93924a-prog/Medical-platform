@@ -98,6 +98,10 @@ public class SecurityConfig {
                 .requestMatchers("/api/ai-recommendations/**")
                     .hasAnyRole("ADMIN", "PHARMACIST")
 
+                // Built-in assistant (answers from local data only)
+                .requestMatchers("/api/assistant/**")
+                    .hasAnyRole("ADMIN", "PHARMACIST")
+
                 // Medicine returns: suppliers submit, pharmacists decide
                 .requestMatchers(
                         HttpMethod.GET,

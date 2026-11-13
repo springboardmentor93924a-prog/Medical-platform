@@ -1,7 +1,6 @@
 import { API_BASE, downloadFile } from "../../services/api";
 
-import { useCallback, useEffect, useState } from "react";
-import {
+import { useCallback, useEffect, useState } from "react";import {
   Activity,
   AlertTriangle,
   Boxes,
@@ -16,6 +15,8 @@ import {
   TrendingUp,
   Wallet,
 } from "lucide-react";
+
+import WastageReport from "../../components/WastageReport.jsx";
 
 const API = `${API_BASE}`;
 
@@ -138,6 +139,7 @@ export default function Reports() {
     { type: "movements", name: "Stock movements" },
     { type: "orders", name: "Purchase orders" },
     { type: "users", name: "User directory" },
+    { type: "wastage", name: "Wastage and expiry loss" },
   ];
 
   const dateFiltered = reportType === "movements" || reportType === "orders";
@@ -507,6 +509,8 @@ export default function Reports() {
           statusColumn={2}
         />
       </div>
+
+      <WastageReport />
 
       <footer className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 p-4 text-xs leading-6 text-slate-500 dark:text-slate-400">
         <strong className="text-slate-700 dark:text-slate-300">Report notes:</strong> Inventory

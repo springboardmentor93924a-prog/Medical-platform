@@ -255,6 +255,10 @@ duplicated. `refresh` is safe to call repeatedly.
 | `movements` | stock_log_id, changed_at, medicine, batch, movement_type, change_quantity, user, notes |
 | `orders` | purchase_order_id, order_date, supplier, status, total_amount, created_by |
 | `users` | user_id, full_name, email, role, active, created_at |
+| `wastage` | section, medicine, batch, expiry_date, days_to_expiry, quantity, unit_price, value, action |
+
+`GET /api/reports/wastage?days=90` returns the same data as JSON, with
+`summary`, `expired`, `nearExpiry`, `wastageReturns` and `fefoQueue`.
 
 `from`/`to` apply to `movements` and `orders` only. Each download writes a
 `reports` row and a `REPORT_GENERATED` audit entry.
@@ -263,6 +267,23 @@ duplicated. `refresh` is safe to call repeatedly.
 curl -H "Authorization: Bearer $TOKEN" \
   "http://localhost:8080/api/reports/stock.csv" -o stock.csv
 ```
+
+---
+
+## Assistant — ADMIN, PHARMACIST
+
+`POST /api/assistant/chat`
+
+```json
+{"message": "Which items are low on stock?"}
+```
+
+Returns `intent`, `answer`, `rows` and `suggestions`. Intent matching covers
+low stock, near-expiry, expired batches, FEFO order, wastage, returns,
+reordering, stock overview and medicine lookup. Answers are computed from the
+local database; no external AI service or API key is used.
+
+`GET /api/assistant/suggestions` → starter questions.
 
 ---
 
