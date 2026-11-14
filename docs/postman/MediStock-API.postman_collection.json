@@ -1,0 +1,1598 @@
+{
+    "variable":  [
+
+                 ],
+    "info":  {
+                 "description":  "Import this collection, pick the \"MediStock - Production (Render)\" environment, then run it with the Collection Runner.\n\n49 requests covering:\n  01 Auth and login (success for 4 roles, 401 x2, 400)\n  02 Role-based access matrix across admin / pharmacist / staff / supplier\n  03 One happy-path route per module, including JSON and CSV responses\n  04 404 and method-level role errors\n\nTokens are stored automatically after a successful login, and the collection pre-request script fetches any missing token so folders can be run individually.\n\nDemo password for all seeded accounts: Password@123",
+                 "name":  "MediStock API - Role-Based Test Suite",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+                 "_postman_id":  "da6ce309-a52f-4d4e-b21c-493f5549d4ac"
+             },
+    "event":  [
+                  {
+                      "script":  {
+                                     "exec":  [
+                                                  "// Auto-fetch any missing role tokens so every folder can be run on its own.",
+                                                  "const env = pm.environment;",
+                                                  "const missing = [",
+                                                  "  { key: \"adminToken\", email: env.get(\"adminEmail\"), role: \"ADMIN\" },",
+                                                  "  { key: \"pharmacistToken\", email: env.get(\"pharmacistEmail\"), role: \"PHARMACIST\" },",
+                                                  "  { key: \"staffToken\", email: env.get(\"staffEmail\"), role: \"STAFF\" },",
+                                                  "  { key: \"supplierToken\", email: env.get(\"supplierEmail\"), role: \"SUPPLIER\" }",
+                                                  "];",
+                                                  "",
+                                                  "missing.forEach((item) =\u003e {",
+                                                  "  if (!env.get(item.key)) {",
+                                                  "    pm.sendRequest(",
+                                                  "      {",
+                                                  "        url: env.get(\"baseUrl\") + \"/api/auth/login\",",
+                                                  "        method: \"POST\",",
+                                                  "        header: { \"Content-Type\": \"application/json\" },",
+                                                  "        body: {",
+                                                  "          mode: \"raw\",",
+                                                  "          raw: JSON.stringify({",
+                                                  "            email: item.email,",
+                                                  "            password: env.get(\"demoPassword\"),",
+                                                  "            role: item.role",
+                                                  "          })",
+                                                  "        }",
+                                                  "      },",
+                                                  "      (err, res) =\u003e {",
+                                                  "        if (!err \u0026\u0026 res.code === 200) {",
+                                                  "          env.set(item.key, res.json().token);",
+                                                  "        }",
+                                                  "      }",
+                                                  "    );",
+                                                  "  }",
+                                                  "});"
+                                              ],
+                                     "type":  "text/javascript"
+                                 },
+                      "listen":  "prerequest"
+                  }
+              ],
+    "item":  [
+                 {
+                     "description":  "Login success for all four roles plus 401/400 failure cases. Tokens are saved to the environment automatically.",
+                     "name":  "01 - Auth \u0026 Login",
+                     "item":  [
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/health",
+                                                      "description":  "No token needed. Proves the API is up before running the rest.",
+                                                      "header":  [
+
+                                                                 ]
+                                                  },
+                                      "name":  "Health check (public)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"plain text response\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/plain\"));",
+                                                                                "pm.test(\"service is running\", () =\u003e pm.expect(pm.response.text()).to.include(\"running\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{adminEmail}}\",\"password\":\"{{demoPassword}}\",\"role\":\"ADMIN\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - Admin (success)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const data = pm.response.json();",
+                                                                                "pm.test(\"JWT token returned\", () =\u003e pm.expect(data.token).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.test(\"role is ADMIN\", () =\u003e pm.expect(data.role).to.eql(\"ADMIN\"));",
+                                                                                "pm.test(\"full name returned\", () =\u003e pm.expect(data.fullName).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.environment.set(\"adminToken\", data.token);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{pharmacistEmail}}\",\"password\":\"{{demoPassword}}\",\"role\":\"PHARMACIST\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - Pharmacist (success)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const data = pm.response.json();",
+                                                                                "pm.test(\"JWT token returned\", () =\u003e pm.expect(data.token).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.test(\"role is PHARMACIST\", () =\u003e pm.expect(data.role).to.eql(\"PHARMACIST\"));",
+                                                                                "pm.test(\"full name returned\", () =\u003e pm.expect(data.fullName).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.environment.set(\"pharmacistToken\", data.token);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{staffEmail}}\",\"password\":\"{{demoPassword}}\",\"role\":\"STAFF\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - Staff (success)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const data = pm.response.json();",
+                                                                                "pm.test(\"JWT token returned\", () =\u003e pm.expect(data.token).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.test(\"role is STAFF\", () =\u003e pm.expect(data.role).to.eql(\"STAFF\"));",
+                                                                                "pm.test(\"full name returned\", () =\u003e pm.expect(data.fullName).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.environment.set(\"staffToken\", data.token);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{supplierEmail}}\",\"password\":\"{{demoPassword}}\",\"role\":\"SUPPLIER\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - Supplier (success)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const data = pm.response.json();",
+                                                                                "pm.test(\"JWT token returned\", () =\u003e pm.expect(data.token).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.test(\"role is SUPPLIER\", () =\u003e pm.expect(data.role).to.eql(\"SUPPLIER\"));",
+                                                                                "pm.test(\"full name returned\", () =\u003e pm.expect(data.fullName).to.be.a(\"string\").and.not.empty);",
+                                                                                "pm.environment.set(\"supplierToken\", data.token);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{adminEmail}}\",\"password\":\"WrongPass1\",\"role\":\"ADMIN\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - wrong password (401)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"401 Unauthorized\", () =\u003e pm.response.to.have.status(401));",
+                                                                                "pm.test(\"invalid credentials message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Invalid\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"{{adminEmail}}\",\"password\":\"{{demoPassword}}\",\"role\":\"STAFF\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - role mismatch (401)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"401 Unauthorized\", () =\u003e pm.response.to.have.status(401));",
+                                                                                "pm.test(\"role mismatch message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"role\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"email\":\"\",\"password\":\"\",\"role\":\"\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/auth/login",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Login - missing fields (400)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"400 Bad Request\", () =\u003e pm.response.to.have.status(400));",
+                                                                                "pm.test(\"validation errors returned\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"object\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  }
+                              ]
+                 },
+                 {
+                     "description":  "Same endpoints called with different roles. 403 = authenticated but not allowed; 401 = no/invalid token.",
+                     "name":  "02 - Role-Based Access (RBAC)",
+                     "item":  [
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/users?page=0\u0026size=5",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Admin -\u003e list users (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "pm.test(\"paged user list\", () =\u003e pm.expect(pm.response.json().content).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/users",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e list users (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/users",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e list users (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"supplierId\":1,\"items\":[{\"medicineId\":1,\"quantity\":1,\"unitPrice\":2.50}]}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders",
+                                                      "description":  "Business rule: only pharmacists create POs, even though admins can approve them.",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Admin -\u003e create purchase order (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"admin cannot raise POs\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e list purchase orders (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON array\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e list purchase orders (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{supplierToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Supplier -\u003e list purchase orders (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders/my-orders",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{supplierToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Supplier -\u003e own purchase orders (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"supplier order list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/returns",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Admin -\u003e list returns (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/returns",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e list returns (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"returns array is populated\", () =\u003e {",
+                                                                                "  const rows = pm.response.json();",
+                                                                                "  pm.expect(rows).to.be.an(\"array\");",
+                                                                                "  pm.expect(rows.length).to.be.above(0);",
+                                                                                "});"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/returns",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e list returns (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/returns",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{supplierToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Supplier -\u003e list returns (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"supplier sees returns\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/stock-check-reports/all",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e view all stock checks (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/stock-check-reports/all",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e view all stock checks (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"stock check list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/reports/wastage",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e wastage report (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"message\":\"show me low stock medicines\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/assistant/chat",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff -\u003e assistant chat (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/users",
+                                                      "header":  [
+
+                                                                 ]
+                                                  },
+                                      "name":  "No token -\u003e protected route (401)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"401 Unauthorized\", () =\u003e pm.response.to.have.status(401));",
+                                                                                "pm.test(\"auth required message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Authentication required\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/users",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer not.a.real.token"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Invalid token -\u003e protected route (401)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"401 Unauthorized\", () =\u003e pm.response.to.have.status(401));",
+                                                                                "pm.test(\"auth required message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Authentication required\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  }
+                              ]
+                 },
+                 {
+                     "description":  "Representative route from every module. Shows JSON payloads plus one CSV export.",
+                     "name":  "03 - Core API Routes (happy path)",
+                     "item":  [
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/dashboard/stats",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Admin dashboard stats (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const body = pm.response.json();",
+                                                                                "pm.test(\"KPI block present\", () =\u003e pm.expect(body.kpis).to.be.an(\"object\"));",
+                                                                                "pm.test(\"medicines seeded\", () =\u003e pm.expect(body.kpis.totalMedicines).to.be.above(0));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/inventory",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Inventory list (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"inventory array\", () =\u003e {",
+                                                                                "  const rows = pm.response.json();",
+                                                                                "  pm.expect(rows).to.be.an(\"array\");",
+                                                                                "  pm.expect(rows.length).to.be.above(0);",
+                                                                                "});"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/inventory/low-stock",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Low stock inventory (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/medicines",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Medicines catalogue as staff (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"medicine list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/suppliers",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Suppliers list (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"supplier list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders/ready-to-receive",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Orders ready to receive as staff (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"ready-to-receive list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders/{{samplePoId}}/items",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Purchase order items (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"items list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"supplierId\":1,\"items\":[{\"medicineId\":1,\"quantity\":1,\"unitPrice\":2.50}]}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders",
+                                                      "description":  "Mutating request: creates one small PENDING order per run. Skip this request if you want read-only testing.",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e create purchase order (201)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"201 Created\", () =\u003e pm.response.to.have.status(201));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const order = pm.response.json();",
+                                                                                "pm.test(\"new order is pending\", () =\u003e pm.expect(order.status).to.eql(\"PENDING\"));",
+                                                                                "pm.test(\"order id returned\", () =\u003e pm.expect(order.purchaseOrderId).to.be.a(\"number\"));",
+                                                                                "pm.environment.set(\"createdPoId\", order.purchaseOrderId);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/reports/wastage?days=90",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Wastage report JSON (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const body = pm.response.json();",
+                                                                                "pm.test(\"summary block present\", () =\u003e pm.expect(body.summary).to.be.an(\"object\"));",
+                                                                                "pm.test(\"expired + near expiry rows\", () =\u003e {",
+                                                                                "  pm.expect(body.expired).to.be.an(\"array\");",
+                                                                                "  pm.expect(body.nearExpiry).to.be.an(\"array\");",
+                                                                                "  pm.expect(body.fefoQueue).to.be.an(\"array\");",
+                                                                                "});"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/reports/wastage.csv",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Wastage report CSV (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"CSV content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/csv\"));",
+                                                                                "pm.test(\"CSV header row\", () =\u003e pm.expect(pm.response.text()).to.include(\"section,medicine,batch\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/ai-recommendations",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "AI recommendations (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "const body = pm.response.json();",
+                                                                                "pm.test(\"recommendation blocks present\", () =\u003e {",
+                                                                                "  pm.expect(body.lowStockItems).to.be.an(\"array\");",
+                                                                                "  pm.expect(body.reorderSuggestions).to.be.an(\"array\");",
+                                                                                "  pm.expect(body.expiryRisks).to.be.an(\"array\");",
+                                                                                "});"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"message\":\"show me low stock medicines\"}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/assistant/chat",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Assistant chat (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"JSON content type\", () =\u003e pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"));",
+                                                                                "const body = pm.response.json();",
+                                                                                "pm.test(\"intent detected\", () =\u003e pm.expect(body.intent).to.eql(\"low_stock\"));",
+                                                                                "pm.test(\"answer returned\", () =\u003e pm.expect(body.answer).to.be.a(\"string\").and.not.empty);"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/notifications",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Notifications list (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"notification array\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/notifications/unread-count",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Unread notification count (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"count returned\", () =\u003e pm.expect(pm.response.json().count).to.be.a(\"number\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/audit-logs?page=0\u0026size=5",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Audit logs (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "const body = pm.response.json();",
+                                                                                "pm.test(\"paged audit list\", () =\u003e pm.expect(body.content).to.be.an(\"array\"));",
+                                                                                "pm.test(\"total elements present\", () =\u003e pm.expect(body.totalElements).to.be.a(\"number\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/profile",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff profile (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"profile object\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"object\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/search?q=para",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Global search (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"search payload\", () =\u003e pm.expect(pm.response.json().query).to.be.a(\"string\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/admin/categories",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Categories list (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"category list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/stock-check-reports/my",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{staffToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Staff own stock checks (200)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"report list\", () =\u003e pm.expect(pm.response.json()).to.be.an(\"array\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  }
+                              ]
+                 },
+                 {
+                     "description":  "Not-found and method-level role checks.",
+                     "name":  "04 - Error Handling",
+                     "item":  [
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/purchase-orders/{{missingPoId}}",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Unknown purchase order (404)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"404 Not Found\", () =\u003e pm.response.to.have.status(404));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{baseUrl}}/api/inventory/{{missingPoId}}",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Unknown inventory batch (404)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"404 Not Found\", () =\u003e pm.response.to.have.status(404));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{\"returnType\":\"SUPPLIER_RETURN\",\"inventoryId\":1,\"returnQuantity\":1,\"returnReason\":\"Postman role test\",\"medicineCondition\":\"SEALED\",\"restockEligible\":true}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/returns",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{pharmacistToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Pharmacist -\u003e submit return (403)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"403 Forbidden\", () =\u003e pm.response.to.have.status(403));",
+                                                                                "pm.test(\"role denial message\", () =\u003e pm.expect(pm.response.json().message).to.include(\"Access denied\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  },
+                                  {
+                                      "request":  {
+                                                      "body":  {
+                                                                   "raw":  "{}",
+                                                                   "options":  {
+                                                                                   "raw":  {
+                                                                                               "language":  "json"
+                                                                                           }
+                                                                               },
+                                                                   "mode":  "raw"
+                                                               },
+                                                      "method":  "POST",
+                                                      "url":  "{{baseUrl}}/api/assistant/chat",
+                                                      "header":  [
+                                                                     {
+                                                                         "key":  "Authorization",
+                                                                         "type":  "text",
+                                                                         "value":  "Bearer {{adminToken}}"
+                                                                     },
+                                                                     {
+                                                                         "key":  "Content-Type",
+                                                                         "type":  "text",
+                                                                         "value":  "application/json"
+                                                                     }
+                                                                 ]
+                                                  },
+                                      "name":  "Assistant with empty message (200 help)",
+                                      "event":  {
+                                                    "script":  {
+                                                                   "exec":  [
+                                                                                "pm.test(\"200 OK\", () =\u003e pm.response.to.have.status(200));",
+                                                                                "pm.test(\"falls back to help intent\", () =\u003e pm.expect(pm.response.json().intent).to.eql(\"help\"));"
+                                                                            ],
+                                                                   "type":  "text/javascript"
+                                                               },
+                                                    "listen":  "test"
+                                                },
+                                      "response":  [
+
+                                                   ]
+                                  }
+                              ]
+                 }
+             ]
+}

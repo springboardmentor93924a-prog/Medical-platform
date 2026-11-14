@@ -76,6 +76,7 @@ Frontend API base URL: `VITE_API_URL` env at build time
 
 - [`backend/README.md`](backend/README.md) — backend setup, config, structure, gotchas
 - [`backend/API.md`](backend/API.md) — full endpoint reference with roles and examples
+- [`docs/POSTMAN-TESTING.md`](docs/POSTMAN-TESTING.md) — Postman collection for login, RBAC and module smoke tests (49 requests)
 
 ## Hosting (live)
 
