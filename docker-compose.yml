@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service (Dev Profile)
+  mysql-db:
+    image: mysql:8.0
+    container_name: medistock-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: medistock_db
+      MYSQL_USER: medistock_user
+      MYSQL_PASSWORD: medistock_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medistock-network
+
+  # PostgreSQL Database Service (Prod Profile)
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: medistock-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medistock_db
+      POSTGRES_USER: medistock_user
+      POSTGRES_PASSWORD: medistock_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medistock_user -d medistock_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medistock-network
+
+  # Spring Boot Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: medistock-backend
+    restart: unless-stopped
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_HOST: mysql-db
+      DB_PORT: 3306
+      DB_NAME: medistock_db
+      DB_USER: medistock_user
+      DB_PASSWORD: medistock_password
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      JWT_EXPIRATION_MS: 86400000
+      ADMIN_BOOTSTRAP_ENABLED: "true"
+      ADMIN_BOOTSTRAP_EMAIL: admin@medistock.com
+      ADMIN_BOOTSTRAP_PASSWORD: Admin@MediStock2026!
+      ADMIN_SETUP_KEY: MediStockAdminSecretSetupKey2026!
+      CORS_ALLOWED_ORIGINS: http://localhost:80,http://localhost:3000,http://localhost:5173
+    ports:
+      - "8080:8080"
+    networks:
+      - medistock-network
+
+  # React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: medistock-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - medistock-network
+
+networks:
+  medistock-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  postgres_data:
