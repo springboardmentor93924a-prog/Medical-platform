@@ -9,6 +9,7 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 RUN addgroup -S app && adduser -S app -G app
 COPY --from=build /build/target/medistock-backend-0.0.1-SNAPSHOT.jar app.jar
+RUN mkdir -p /app/backups && chown -R app:app /app
 USER app
 EXPOSE 8080
 ENTRYPOINT ["java", "-Xmx350m", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-jar", "/app/app.jar"]

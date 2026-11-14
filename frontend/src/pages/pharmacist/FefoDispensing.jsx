@@ -204,11 +204,11 @@ export default function FefoDispensing() {
             </div>
 
             <h1 className="text-2xl font-bold sm:text-3xl">
-              FEFO Dispensing
+              Dispatch Medicine
             </h1>
 
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-blue-100">
-              First Expiry, First Out. Dispense medicines from
+              First Expiry, First Out (FEFO). Dispatch medicines from
               batches with the earliest eligible expiry dates first.
             </p>
           </div>

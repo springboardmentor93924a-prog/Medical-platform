@@ -32,7 +32,7 @@ const menu = [
   { id: "medicines", label: "Medicines", icon: "pill" },
   { id: "categories", label: "Categories", icon: "boxes" },
   { id: "stock", label: "Stock Monitoring", icon: "swap" },
-  { id: "fefo", label: "FEFO Dispensing", icon: "pill" },
+  { id: "fefo", label: "Dispatch Medicine", icon: "pill" },
   { id: "expiry", label: "Expiry Tracking", icon: "clock" },
   {
     id: "ai-recommendations",
@@ -88,8 +88,8 @@ const shortcuts = [
   {
     id: "fefo",
     icon: "pill",
-    title: "FEFO Dispensing",
-    text: "Dispense medicines using First Expiry, First Out.",
+    title: "Dispatch Medicine",
+    text: "Dispatch medicines using First Expiry, First Out.",
   },
   {
     id: "expiry",

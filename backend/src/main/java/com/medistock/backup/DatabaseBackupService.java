@@ -39,14 +39,58 @@ public class DatabaseBackupService {
         this.dataSource = dataSource;
         this.mapper = mapper;
 
-        this.backupDirectory = Path.of(
-                System.getProperty("user.dir"),
-                "backups"
-        ).toAbsolutePath().normalize();
+        this.backupDirectory = resolveBackupDirectory();
 
         System.out.println(
                 "BACKUP DIRECTORY: " + backupDirectory
         );
+    }
+
+    /**
+     * Prefer ./backups, but fall back to the temp directory when the
+     * working directory is read-only (for example a locked-down container).
+     */
+    private static Path resolveBackupDirectory() {
+
+        Path preferred = Path.of(
+                System.getProperty("user.dir"),
+                "backups"
+        ).toAbsolutePath().normalize();
+
+        try {
+
+            Files.createDirectories(preferred);
+
+            if (Files.isWritable(preferred)) {
+                return preferred;
+            }
+
+        } catch (IOException ignored) {
+            // Fall through to the temp directory below.
+        }
+
+        Path fallback = Path.of(
+                System.getProperty("java.io.tmpdir"),
+                "medistock-backups"
+        ).toAbsolutePath().normalize();
+
+        try {
+
+            Files.createDirectories(fallback);
+
+        } catch (IOException exception) {
+
+            throw new IllegalStateException(
+                    "Unable to create a backup directory",
+                    exception
+            );
+        }
+
+        return fallback;
+    }
+
+    public Path getBackupDirectory() {
+        return backupDirectory;
     }
 
     // --------------------------------------------------

@@ -43,10 +43,7 @@ public class DatabaseBackupController {
 
         this.backupService = backupService;
 
-        this.backupDirectory = Path.of(
-                System.getProperty("user.dir"),
-                "backups"
-        ).toAbsolutePath().normalize();
+        this.backupDirectory = backupService.getBackupDirectory();
     }
 
     // --------------------------------------------------
