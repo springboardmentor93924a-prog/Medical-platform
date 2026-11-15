@@ -1,5 +1,7 @@
 
 import React, { useEffect, useState } from "react";
+import { RefreshCw } from "lucide-react";
+import { apiFetch } from "../../services/api";
 
 const initialSettings = {
   companyName: "MediStock",
@@ -79,6 +81,35 @@ export default function Settings() {
   });
 
   const [saved, setSaved] = useState(false);
+
+  const [emailTesting, setEmailTesting] = useState(false);
+  const [emailResult, setEmailResult] = useState(null);
+
+  const handleTestEmail = async () => {
+    setEmailTesting(true);
+    setEmailResult(null);
+
+    try {
+      const response = await apiFetch("/admin/email-test", {
+        method: "POST",
+      });
+
+      setEmailResult({
+        success: true,
+        message:
+          typeof response === "string"
+            ? response
+            : response?.message || "Test email sent successfully.",
+      });
+    } catch (err) {
+      setEmailResult({
+        success: false,
+        message: err.message || "Unable to send test email.",
+      });
+    } finally {
+      setEmailTesting(false);
+    }
+  };
 
   useEffect(() => {
     setSaved(false);
@@ -295,6 +326,49 @@ export default function Settings() {
                 updateSetting("expiryNotifications", value)
               }
             />
+          </Section>
+
+          {/* Email / SMTP */}
+          <Section
+            title="Email / SMTP Testing"
+            description="Verify that MediStock can send email through the configured SMTP account."
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-medium text-slate-800 dark:text-slate-100">
+                  SMTP connection
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  Sends a test message to the configured sender address.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleTestEmail}
+                disabled={emailTesting}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 transition"
+              >
+                <RefreshCw
+                  size={16}
+                  className={emailTesting ? "animate-spin" : ""}
+                />
+                {emailTesting ? "Sending..." : "Send Test Email"}
+              </button>
+            </div>
+
+            {emailResult && (
+              <div
+                role="status"
+                className={`mt-4 rounded-lg border p-3 text-sm font-medium ${
+                  emailResult.success
+                    ? "border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400"
+                    : "border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400"
+                }`}
+              >
+                {emailResult.message}
+              </div>
+            )}
           </Section>
 
           {/* Permissions */}
