@@ -218,6 +218,7 @@ public class DashboardStats {
 
         Map<String, Object> kpis = new LinkedHashMap<>();
         kpis.put("totalMedicines", medicines.size());
+        kpis.put("totalSuppliers", (long) supplierById.size());
         kpis.put("totalBatches", inventory.size());
         kpis.put("totalUnits", totalUnits);
         kpis.put("stockValue", stockValue);

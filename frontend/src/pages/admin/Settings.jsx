@@ -84,14 +84,26 @@ export default function Settings() {
 
   const [emailTesting, setEmailTesting] = useState(false);
   const [emailResult, setEmailResult] = useState(null);
+  const [testRecipient, setTestRecipient] = useState("");
 
   const handleTestEmail = async () => {
+    const recipient = testRecipient.trim();
+
+    if (!recipient) {
+      setEmailResult({
+        success: false,
+        message: "Enter the email address that should receive the test message.",
+      });
+      return;
+    }
+
     setEmailTesting(true);
     setEmailResult(null);
 
     try {
       const response = await apiFetch("/admin/email-test", {
         method: "POST",
+        body: JSON.stringify({ recipient }),
       });
 
       setEmailResult({
@@ -333,15 +345,24 @@ export default function Settings() {
             title="Email / SMTP Testing"
             description="Verify that MediStock can send email through the configured SMTP account."
           >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="font-medium text-slate-800 dark:text-slate-100">
-                  SMTP connection
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Sends a test message to the configured sender address.
-                </p>
-              </div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <label className="flex-1">
+                <span className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                  Send test email to
+                </span>
+
+                <input
+                  type="email"
+                  value={testRecipient}
+                  onChange={(event) => setTestRecipient(event.target.value)}
+                  placeholder="you@example.com"
+                  className={inputClass}
+                />
+
+                <span className="mt-1 block text-xs text-slate-500 dark:text-slate-400">
+                  Uses the SMTP account configured on the server.
+                </span>
+              </label>
 
               <button
                 type="button"
