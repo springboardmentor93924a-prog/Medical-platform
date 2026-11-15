@@ -54,7 +54,14 @@ async function fetchWithWake(url, options = {}) {
     try {
       const response = await fetch(url, options);
 
-      const serverIsStarting = [502, 503, 504].includes(response.status);
+      const contentType = response.headers.get("content-type") || "";
+
+      // Render's cold-start proxy replies with an HTML 502/503/504 and no
+      // JSON body. A JSON error is a real API answer, so return it at once
+      // instead of retrying for two minutes.
+      const serverIsStarting =
+        [502, 503, 504].includes(response.status) &&
+        !contentType.includes("application/json");
 
       if (
         serverIsStarting &&
