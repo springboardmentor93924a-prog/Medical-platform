@@ -277,24 +277,22 @@ return savedOrder;
 
 
     // GET PURCHASE ORDERS FOR LOGGED-IN SUPPLIER
-// GET PURCHASE ORDERS FOR LOGGED-IN SUPPLIER
 @GetMapping("/my-orders")
 @PreAuthorize("hasRole('SUPPLIER')")
 public List<PurchaseOrder> getMySupplierOrders(
         Authentication authentication) {
 
+    String email = authentication.getName().trim();
+
     Supplier supplier = supplierRepository
-            .findByEmailIgnoreCase(authentication.getName())
+            .findByEmailIgnoreCaseAndActiveTrue(email)
             .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Supplier account not found"
+                    "Active supplier account not found"
             ));
 
-    List<PurchaseOrder> orders =
-            purchaseOrderService.getSupplierOrders(
-                    supplier.getSupplierId()
-            );
-
-    return orders;
+    return purchaseOrderService.getSupplierOrders(
+            supplier.getSupplierId()
+    );
 }
 }

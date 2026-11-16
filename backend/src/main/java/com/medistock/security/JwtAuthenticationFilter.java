@@ -106,30 +106,28 @@ protected boolean shouldNotFilter(HttpServletRequest request) {
                         return;
                     }
 
-                    // Normalize database role
-                    String roleName = user.getRole()
-                            .getRoleName()
-                            .trim()
-                            .toUpperCase(Locale.ROOT);
+                   // Normalize database role
+String roleName = user.getRole()
+        .getRoleName()
+        .trim()
+        .toUpperCase(Locale.ROOT);
 
-                    // Avoid duplicate ROLE_ prefix
-                    if (roleName.startsWith("ROLE_")) {
-                        roleName = roleName.substring(5);
-                    }
+// Avoid duplicate ROLE_ prefix
+if (roleName.startsWith("ROLE_")) {
+    roleName = roleName.substring(5);
+}
 
-                    // Create Spring Security authority
-                    SimpleGrantedAuthority authority =
-                            new SimpleGrantedAuthority(
-                                    "ROLE_" + roleName
-                            );
+// Create Spring Security authority
+SimpleGrantedAuthority authority =
+        new SimpleGrantedAuthority("ROLE_" + roleName);
 
-                    // Create authentication object
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    email,
-                                    null,
-                                    List.of(authority)
-                            );
+// Create authentication object
+UsernamePasswordAuthenticationToken authentication =
+        new UsernamePasswordAuthenticationToken(
+                email,
+                null,
+                List.of(authority)
+        );
 
                     authentication.setDetails(
                             new WebAuthenticationDetailsSource()

@@ -1,19 +1,18 @@
+
 package com.medistock.controller;
 
 import com.medistock.dto.ChatRequest;
 import com.medistock.service.AssistantService;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Built-in inventory assistant. Answers from the local database only.
+ * Built-in inventory assistant.
+ * Answers using local database information with role-based access.
  */
 @RestController
 @RequestMapping("/api/assistant")
@@ -26,21 +25,22 @@ public class AssistantController {
     }
 
     @PostMapping("/chat")
-    public Map<String, Object> chat(@RequestBody ChatRequest request) {
+    public Map<String, Object> chat(
+            @RequestBody ChatRequest request,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+
         return assistantService.answer(
-                request == null ? null : request.message()
+                request == null ? null : request.message(),
+                email
         );
     }
 
     @GetMapping("/suggestions")
-    public List<String> suggestions() {
-        return List.of(
-                "Which items are low on stock?",
-                "What expires in the next 90 days?",
-                "Show expired batches",
-                "What is our total wastage?",
-                "Which batch should I dispense first?",
-                "Show pending returns"
-        );
+    public List<String> suggestions(Authentication authentication) {
+        String email = authentication.getName();
+
+        return assistantService.getSuggestions(email);
     }
 }
