@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import api, { errorOf } from "../api/client.js";
-import { PageHeader, Stat, TableWrap, Tag, btn, fld, td, th } from "../components/ui.jsx";
+import { PageHeader, Stat, TableWrap, Tag, btn, fld, td, th, money } from "../components/ui.jsx";
 import { ClipboardList, PackageCheck, IndianRupee } from "lucide-react";
 
 const STATUSES = ["Pending", "Accepted", "Dispatched", "Partially received", "Received", "Cancelled"];
