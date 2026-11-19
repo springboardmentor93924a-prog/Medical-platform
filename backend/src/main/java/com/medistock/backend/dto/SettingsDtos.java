@@ -7,7 +7,7 @@ public final class SettingsDtos {
 
     public record SettingsResponse(String organisationName, int defaultReorderLevel,
                                    boolean requireOrderApproval, boolean dailyAlertEmail,
-                                   boolean emailNotifications, boolean smsNotifications) {}
+                                   boolean emailNotifications) {}
 
     public record SettingsRequest(
         @NotBlank(message = "Organisation name is required")
@@ -18,8 +18,7 @@ public final class SettingsDtos {
         Integer defaultReorderLevel,
         @NotNull(message = "Required") Boolean requireOrderApproval,
         @NotNull(message = "Required") Boolean dailyAlertEmail,
-        @NotNull(message = "Required") Boolean emailNotifications,
-        @NotNull(message = "Required") Boolean smsNotifications) {}
+        @NotNull(message = "Required") Boolean emailNotifications) {}
 
     /** The few settings every signed-in user needs: the sidebar name, form defaults and the approval note. */
     public record PublicSettings(String organisationName, int defaultReorderLevel, boolean requireOrderApproval) {}
