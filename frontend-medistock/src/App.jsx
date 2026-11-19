@@ -23,6 +23,7 @@ import AuditLogs from "./pages/AuditLogs.jsx";
 import Wastage from "./pages/Wastage.jsx";
 import Returns from "./pages/Returns.jsx";
 import Recommendations from "./pages/Recommendations.jsx";
+import Backup from "./pages/Backup.jsx";
 import ViewMedicines from "./pages/ViewMedicines.jsx";
 import SearchMedicines from "./pages/SearchMedicines.jsx";
 import StockChecking from "./pages/StockChecking.jsx";
@@ -30,7 +31,7 @@ import SupplierNotifications from "./pages/SupplierNotifications.jsx";
 import SupplierReports from "./pages/SupplierReports.jsx";
 
 const PAGES = {
-  "/dashboard": Dashboard, "/inventory": Inventory, "/categories": Categories, "/expiry": Expiry, "/stock": StockMonitoring, "/monitoring": SystemMonitoring, "/settings": SettingsPage, "/audit": AuditLogs, "/wastage": Wastage, "/returns": Returns, "/recommendations": Recommendations, "/view-medicines": ViewMedicines, "/search-medicines": SearchMedicines, "/stock-checking": StockChecking, "/supplier-notifications": SupplierNotifications, "/supplier-reports": SupplierReports, "/suppliers": Suppliers,
+  "/dashboard": Dashboard, "/inventory": Inventory, "/categories": Categories, "/expiry": Expiry, "/stock": StockMonitoring, "/monitoring": SystemMonitoring, "/settings": SettingsPage, "/audit": AuditLogs, "/wastage": Wastage, "/returns": Returns, "/recommendations": Recommendations, "/backup": Backup, "/view-medicines": ViewMedicines, "/search-medicines": SearchMedicines, "/stock-checking": StockChecking, "/supplier-notifications": SupplierNotifications, "/supplier-reports": SupplierReports, "/suppliers": Suppliers,
   "/orders": Orders, "/alerts": Alerts, "/reports": Reports, "/users": Users,
 };
 
