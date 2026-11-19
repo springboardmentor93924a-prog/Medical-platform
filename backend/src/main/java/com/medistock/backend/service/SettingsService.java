@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SettingsService {
     private static final String ORG = "organisationName", REORDER = "defaultReorderLevel",
-        APPROVAL = "requireOrderApproval", DIGEST = "dailyAlertEmail", EVENT_EMAIL = "emailNotifications", EVENT_SMS = "smsNotifications";
+        APPROVAL = "requireOrderApproval", DIGEST = "dailyAlertEmail", EVENT_EMAIL = "emailNotifications";
 
     private final AppSettingRepository repo;
     private final boolean digestDefault;
@@ -32,10 +32,8 @@ public class SettingsService {
 
     public boolean eventEmails() { return Boolean.parseBoolean(get(EVENT_EMAIL, "true")); }
 
-    public boolean eventSms() { return Boolean.parseBoolean(get(EVENT_SMS, "false")); }
-
     public SettingsResponse all() {
-        return new SettingsResponse(organisationName(), defaultReorderLevel(), requireOrderApproval(), dailyAlertEmail(), eventEmails(), eventSms());
+        return new SettingsResponse(organisationName(), defaultReorderLevel(), requireOrderApproval(), dailyAlertEmail(), eventEmails());
     }
 
     public PublicSettings publicSettings() {
@@ -49,7 +47,6 @@ public class SettingsService {
         put(APPROVAL, String.valueOf(r.requireOrderApproval()), username);
         put(DIGEST, String.valueOf(r.dailyAlertEmail()), username);
         put(EVENT_EMAIL, String.valueOf(r.emailNotifications()), username);
-        put(EVENT_SMS, String.valueOf(r.smsNotifications()), username);
         return all();
     }
 
