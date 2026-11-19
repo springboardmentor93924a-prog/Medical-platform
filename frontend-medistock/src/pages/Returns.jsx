@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { IndianRupee, PackageCheck, Plus, RotateCcw, Truck } from "lucide-react";
 import { useApp } from "../context/AppContext.jsx";
 import api, { errorOf } from "../api/client.js";
-import { Badge, Modal, PageHeader, Stat, TableWrap, btn, fld, ghost, td, th } from "../components/ui.jsx";
+import { Badge, Modal, PageHeader, Stat, TableWrap, btn, fld, ghost, td, th, money } from "../components/ui.jsx";
 
-const money = (v) => `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 const TONE = { Requested: "amber", "Sent to supplier": "blue", Credited: "green", Cancelled: "slate" };
 const REASONS = [["DAMAGED", "Damaged"], ["EXPIRED", "Expired"], ["WRONG_ITEM", "Wrong item"], ["QUALITY_ISSUE", "Quality issue"], ["OVERSTOCK", "Overstock"]];
 
