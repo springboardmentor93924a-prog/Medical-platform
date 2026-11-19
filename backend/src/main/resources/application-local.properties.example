@@ -2,7 +2,7 @@
 # application-local.properties is git-ignored. NEVER commit real passwords or secrets.
 
 # ---------- Required ----------
-spring.datasource.username=root
+spring.datasource.username=YOUR_USERNAME
 spring.datasource.password=YOUR_MYSQL_PASSWORD
 
 # A random Base64 string of at least 32 bytes. Generate your own (see README).
@@ -23,5 +23,7 @@ app.admin.password=CHOOSE_A_STRONG_PASSWORD
 # spring.mail.properties.mail.smtp.auth=true
 # spring.mail.properties.mail.smtp.starttls.enable=true
 # app.alerts.email.enabled=true
+app.ai.gemini.key=ADD_YOUR_GEMINI_KEY
+app.ai.gemini.model=gemini-3.5-flash-lite
 
 
