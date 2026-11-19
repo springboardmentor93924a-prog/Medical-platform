@@ -64,27 +64,16 @@ export const Row = ({ left, sub, right }) => (
 );
 export const Empty = ({ text }) => <p className="py-4 text-center text-sm text-slate-500">{text}</p>;
 
-export const BarList = ({ items, max }) => {
-  const top = max ?? Math.max(...items.map((i) => i.value), 1);
-  return (
-    <ul className="space-y-3">
-      {items.map((i) => (
-        <li key={i.label}>
-          <div className="mb-1 flex justify-between text-sm">
-            <span>{i.label}</span><span className="font-semibold">{i.text ?? i.value}</span>
-          </div>
-          <div className="h-2 rounded-full bg-teal-100">
-            <div className="h-2 rounded-full bg-teal-600" style={{ width: `${(i.value / top) * 100}%` }} />
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-export const Label = ({ text, children }) => (
-  <label className="block text-sm font-medium">{text}<div className="mt-1">{children}</div></label>
+export const FormField = ({ label, error, children }) => (
+  <label className="block text-sm font-medium">
+    {label}
+    <div className="mt-1">{children}</div>
+    {error && <p role="alert" className="mt-1 text-sm font-medium text-red-600">{error}</p>}
+  </label>
 );
+
+export const money = (v) => `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+
 
 export const Modal = ({ title, onClose, children }) => (
   <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/50 p-4" onClick={onClose}>
