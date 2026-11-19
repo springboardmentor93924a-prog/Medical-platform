@@ -5,7 +5,6 @@ import { PageHeader, Stat, TableWrap, Tag, btn, fld, td, th } from "../component
 import { ClipboardList, PackageCheck, IndianRupee } from "lucide-react";
 
 const STATUSES = ["Pending", "Accepted", "Dispatched", "Partially received", "Received", "Cancelled"];
-const money = (v) => `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 const cell = (v) => { const t = String(v); return `"${(/^[=+@]/.test(t) ? `'${t}` : t).replace(/"/g, '""')}"`; };
 
 export default function SupplierReports() {
