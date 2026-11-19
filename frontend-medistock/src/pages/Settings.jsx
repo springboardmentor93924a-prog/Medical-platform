@@ -86,9 +86,6 @@ export default function Settings() {
             <Toggle id="emailEvents" checked={form.emailNotifications} onChange={(e) => set("emailNotifications", e.target.checked)}
               label="Email people about order events"
               help="Order placed, approved, rejected, accepted and dispatched. Each message goes to the people it concerns." />
-            <Toggle id="smsEvents" checked={form.smsNotifications} onChange={(e) => set("smsNotifications", e.target.checked)}
-              label="Also send text messages (SMS)"
-              help="Uses the phone number on each account. Needs a Twilio account on the server. Without one, messages are only written to the server log." />
             <button type="button" onClick={sendTest} className="text-sm font-semibold text-teal-700 underline-offset-4 hover:underline">Send me a test notification</button>
           </div>
         </Card>
