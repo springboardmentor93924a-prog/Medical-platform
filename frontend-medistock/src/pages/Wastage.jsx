@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { IndianRupee, ListChecks, Plus, Trash2 } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import api, { errorOf } from "../api/client.js";
-import { Badge, Card, Empty, Modal, PageHeader, Row, Stat, TableWrap, btn, fld, td, th } from "../components/ui.jsx";
+import { Badge, Card, Empty, Modal, PageHeader, Row, Stat, TableWrap, btn, fld, td, th, money } from "../components/ui.jsx";
 
-const money = (v) => `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 const COLORS = { Expired: "#ef4444", Damaged: "#f59e0b", "Lost or stolen": "#8b5cf6", Other: "#64748b" };
 const tip = { borderRadius: 12, border: "1px solid #e2e8f0", fontSize: 13 };
 const REASONS = [["DAMAGED", "Damaged"], ["LOST", "Lost or stolen"], ["OTHER", "Other"]];
