@@ -4,22 +4,13 @@ import { Mail, MapPin, Pencil, Phone, Plus } from "lucide-react";
 import api, { errorOf } from "../api/client.js";
 import { useApp } from "../context/AppContext.jsx";
 import { titleFor } from "../menus.js";
-import { Badge, Card, Modal, PageHeader, Row, Tag, btn, fld, ghost } from "../components/ui.jsx";
+import { Badge, Card, Modal, PageHeader, Row, Tag, btn, fld, ghost, money } from "../components/ui.jsx";
 
 const FIELDS = [
   ["name", "Supplier name", "text"], ["phone", "Contact number", "tel"],
   ["email", "Email", "email"], ["address", "Address", "text"],
 ];
 
-const money = (v) => `₹${Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
-
-const FormField = ({ label, error, children }) => (
-  <label className="block text-sm font-medium">
-    {label}
-    <div className="mt-1">{children}</div>
-    {error && <p role="alert" className="mt-1 text-sm font-medium text-red-600">{error}</p>}
-  </label>
-);
 
 // Order count, money spent and on-time delivery rate for one supplier
 function summarise(orders) {
