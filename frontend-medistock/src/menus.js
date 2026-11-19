@@ -1,4 +1,4 @@
-import { Bell, Boxes, CalendarClock, ClipboardCheck, ClipboardList, FileBarChart, Gauge, History, LayoutDashboard, Pill, RotateCcw, Search, Settings, Sparkles, Tags, Trash2, Truck, Users } from "lucide-react";
+import { Bell, Boxes, CalendarClock, ClipboardCheck, ClipboardList, FileBarChart, Gauge, HardDrive, History, LayoutDashboard, Pill, RotateCcw, Search, Settings, Sparkles, Tags, Trash2, Truck, Users } from "lucide-react";
 
 // One sidebar per role. Each list holds only what that role may open, in that role's own words.
 export const MENUS = {
@@ -19,6 +19,7 @@ export const MENUS = {
     { to: "/monitoring", label: "System Monitoring", icon: Gauge },
     { to: "/audit", label: "Audit Logs", icon: History },
     { to: "/settings", label: "Settings", icon: Settings },
+    { to: "/backup", label: "Backup & Restore", icon: HardDrive },
   ],
   Pharmacist: [
     { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
