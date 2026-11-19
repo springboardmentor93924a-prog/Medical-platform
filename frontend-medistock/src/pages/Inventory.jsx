@@ -14,13 +14,6 @@ const FIELDS = [
   ["expiryDate", "Expiry date", "date"], ["price", "Price (₹)", "number"],
 ];
 
-const FormField = ({ label, error, children }) => (
-  <label className="block text-sm font-medium">
-    {label}
-    <div className="mt-1">{children}</div>
-    {error && <p role="alert" className="mt-1 text-sm font-medium text-red-600">{error}</p>}
-  </label>
-);
 
 export default function Inventory() {
   const { user } = useApp();
