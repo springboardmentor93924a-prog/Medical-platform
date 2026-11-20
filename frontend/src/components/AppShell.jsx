@@ -17,9 +17,13 @@ export default function AppShell({
 }) {
   const [open, setOpen] = useState(false);
 
-  const canUseAssistant = ["admin", "pharmacist"].includes(
-    String(role || "").toLowerCase()
-  );
+  const canUseAssistant = [
+  "admin",
+  "pharmacist",
+  "staff",
+  "supplier",
+].includes(String(role || "").trim().toLowerCase());
+
 
   const select = (id) => {
     setOpen(false);

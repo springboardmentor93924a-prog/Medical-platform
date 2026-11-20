@@ -100,7 +100,7 @@ public class SecurityConfig {
 
                 // Built-in assistant (answers from local data only)
                 .requestMatchers("/api/assistant/**")
-                    .hasAnyRole("ADMIN", "PHARMACIST")
+                     .hasAnyRole("ADMIN", "PHARMACIST", "STAFF", "SUPPLIER")
 
                 // Medicine returns: suppliers submit, pharmacists decide
                 .requestMatchers(

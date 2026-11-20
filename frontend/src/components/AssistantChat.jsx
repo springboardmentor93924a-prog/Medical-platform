@@ -15,32 +15,76 @@ const DEFAULT_SUGGESTIONS = [
   "Show pending returns",
 ];
 
+
 function AnswerRows({ rows }) {
   if (!Array.isArray(rows) || rows.length === 0) {
     return null;
   }
 
   return (
-    <ul className="mt-2 space-y-1 rounded-xl bg-slate-50 p-2 text-xs dark:bg-slate-800/60">
+    <ul className="mt-2 space-y-2 rounded-xl bg-slate-50 p-2 text-xs dark:bg-slate-800/60">
       {rows.map((row, index) => (
         <li
-          key={index}
-          className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-slate-600 dark:text-slate-300"
+          key={row.reportId ?? row.returnId ?? row.inventoryId ?? index}
+          className="space-y-1 text-slate-600 dark:text-slate-300"
         >
-          <span className="font-semibold text-slate-800 dark:text-white">
-            {row.medicine || `Return #${row.returnId}`}
-          </span>
-          {row.batch ? <span>· {row.batch}</span> : null}
-          {row.quantity != null ? <span>· qty {row.quantity}</span> : null}
-          {row.expiryDate ? (
-            <span>· exp {String(row.expiryDate).slice(0, 10)}</span>
-          ) : null}
-          {row.action ? <span>· {row.action}</span> : null}
+          {/* Stock-check reports */}
+          {row.reportId != null ? (
+            <>
+              <p className="font-semibold text-slate-800 dark:text-white">
+                Stock Check Report #{row.reportId}
+              </p>
+              <p>Inventory ID: {row.inventoryId ?? "N/A"}</p>
+              <p>System quantity: {row.systemQuantity ?? "N/A"}</p>
+              <p>Physical quantity: {row.physicalQuantity ?? "N/A"}</p>
+              <p>Difference: {row.difference ?? "N/A"}</p>
+              <p>Status: {row.status ?? "N/A"}</p>
+              {row.remarks && <p>Remarks: {row.remarks}</p>}
+              {row.reviewRemarks && (
+                <p>Review remarks: {row.reviewRemarks}</p>
+              )}
+              {row.reportedAt && (
+                <p>
+                  Reported: {String(row.reportedAt).replace("T", " ").slice(0, 16)}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Existing medicine and return responses */}
+              <p className="font-semibold text-slate-800 dark:text-white">
+                {row.medicine ||
+                  (row.purchaseOrderId != null
+                    ? `Purchase Order #${row.purchaseOrderId}`
+                    : row.returnId != null
+                      ? `Return #${row.returnId}`
+                      : row.inventoryId != null
+                        ? `Inventory #${row.inventoryId}`
+                        : "Inventory record")}
+              </p>
+
+              {row.batch && <span>· {row.batch}</span>}
+              {row.quantity != null && <span> · qty {row.quantity}</span>}
+              {row.expiryDate && (
+                <span> · exp {String(row.expiryDate).slice(0, 10)}</span>
+              )}
+              {row.action && <span> · {row.action}</span>}
+              {row.status && <p>Status: {row.status}</p>}
+              {row.orderDate && <p>Order date: {row.orderDate}</p>}
+              {row.totalAmount != null && (
+                <p>Amount: ₹{row.totalAmount}</p>
+              )}
+              {row.reason && <p>Reason: {row.reason}</p>}
+              {row.remarks && <p>Remarks: {row.remarks}</p>}
+            </>
+          )}
         </li>
       ))}
     </ul>
   );
 }
+
+
 
 export default function AssistantChat() {
   const [open, setOpen] = useState(false);
@@ -64,7 +108,7 @@ export default function AssistantChat() {
           setSuggestions(items);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     return () => {
       active = false;
@@ -157,11 +201,10 @@ export default function AssistantChat() {
                 className={
                   message.role === "user"
                     ? "ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-blue-600 px-3 py-2 text-sm text-white"
-                    : `mr-auto max-w-[90%] rounded-2xl rounded-bl-sm px-3 py-2 text-sm ${
-                        message.error
-                          ? "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
-                          : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200"
-                      }`
+                    : `mr-auto max-w-[90%] rounded-2xl rounded-bl-sm px-3 py-2 text-sm ${message.error
+                      ? "bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
+                      : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                    }`
                 }
               >
                 <p className="whitespace-pre-line leading-5">{message.text}</p>
