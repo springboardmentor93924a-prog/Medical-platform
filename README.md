@@ -74,8 +74,11 @@ Frontend API base URL: `VITE_API_URL` env at build time
 
 ## Docs
 
+- [`docs/README.md`](docs/README.md) — documentation index (start here)
+- [`docs/FRONTEND.md`](docs/FRONTEND.md) — React app structure, role routing, HTTP layer, pages, deploy
 - [`backend/README.md`](backend/README.md) — backend setup, config, structure, gotchas
 - [`backend/API.md`](backend/API.md) — full endpoint reference with roles and examples
+- [`docs/BACKUP-RESTORE.md`](docs/BACKUP-RESTORE.md) — backup format, restore rules, storage limits
 - [`docs/POSTMAN-TESTING.md`](docs/POSTMAN-TESTING.md) — Postman collection for login, RBAC and module smoke tests (49 requests)
 
 ## Hosting (live)

@@ -1,16 +1,42 @@
-# React + Vite
+# MediStock — frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React 19 + Vite 8 + Tailwind CSS v4 client for the MediStock pharmacy inventory
+API.
 
-Currently, two official plugins are available:
+```bash
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # -> dist/
+npm run lint     # oxlint
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Point the app at a different API at **build time**:
 
-## React Compiler
+```bash
+# .env.local
+VITE_API_URL=https://medistock-api-pxmy.onrender.com/api
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Default is `http://localhost:8080/api`.
 
-## Expanding the Oxlint configuration
+Full documentation — layout, role routing, HTTP layer, menus, every page, and
+deploy notes: [`../docs/FRONTEND.md`](../docs/FRONTEND.md).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Structure at a glance
+
+```
+src/
+├── App.jsx              # token/role switch (no router)
+├── services/api.js      # apiFetch, downloadFile, cold-start retry
+├── components/          # AppShell, AuthLayout, AssistantChat, WastageReport
+├── lib/theme.js         # light/dark persistence
+└── pages/
+    ├── admin/  pharmacist/  staff/  suppliers/
+```
+
+## Notes
+
+- Tokens live in **`sessionStorage`** (`medistock_token`, `medistock_role`).
+- The API wakes slowly on Render's free tier; requests retry `502/503/504`
+  responses automatically (JSON error responses are returned immediately).
+- The build warns about a >500 kB chunk (Recharts). It is expected.
