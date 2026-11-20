@@ -600,7 +600,7 @@ routes above.
 
 ## Database backups — ADMIN
 
-Full operational guide: [`../docs/BACKUP-RESTORE.md`](../docs/BACKUP-RESTORE.md).
+Full operational guide: [`BACKUP-RESTORE.md`](BACKUP-RESTORE.md).
 
 | Method | Path | Notes |
 |---|---|---|

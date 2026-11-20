@@ -9,8 +9,8 @@ repo for the first time.
 |---|---|
 | [`../README.md`](../README.md) | Project overview, module status, demo accounts, hosting |
 | [`FRONTEND.md`](FRONTEND.md) | React app: stack, layout, role routing, HTTP layer, menus, pages, build/deploy |
-| [`../backend/API.md`](../backend/API.md) | Every endpoint: roles, payloads, responses, status codes |
-| [`../backend/README.md`](../backend/README.md) | Backend setup, environment variables, auth model, gotchas |
+| [`API.md`](API.md) | Every endpoint: roles, payloads, responses, status codes |
+| [`BACKEND.md`](BACKEND.md) | Backend setup, environment variables, auth model, gotchas |
 | [`BACKUP-RESTORE.md`](BACKUP-RESTORE.md) | Database backup format, restore rules, storage limits, troubleshooting |
 | [`POSTMAN-TESTING.md`](POSTMAN-TESTING.md) | API test suite: 49 requests across auth, RBAC and modules |
 | [`../database/README.md`](../database/README.md) | Schema, seeds and migration order |
