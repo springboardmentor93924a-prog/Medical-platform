@@ -1,0 +1,555 @@
+/* ══════════════════════════════════════════════════════════════
+   MediStock AI Conversational Assistant — Claymorphism Drawer
+   ══════════════════════════════════════════════════════════════ */
+
+.msc-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+  animation: mscFadeIn 0.2s ease-out;
+}
+
+.msc-drawer {
+  width: 460px;
+  max-width: 92vw;
+  height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.16);
+  animation: mscSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-left: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+@keyframes mscFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mscSlideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Header */
+.msc-drawer__header {
+  padding: 16px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.msc-drawer__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.msc-drawer__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.12);
+}
+
+.msc-drawer__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.msc-drawer__subtitle {
+  font-size: 0.72rem;
+  color: #0d9488;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.msc-drawer__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.msc-live-voice-launch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  color: #0d9488;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.12);
+}
+
+.msc-live-voice-launch-btn:hover {
+  background: linear-gradient(135deg, #0d9488, #059669);
+  border-color: #0d9488;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
+  transform: translateY(-1px);
+}
+
+.msc-live-orb-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #06b6d4, #3b82f6, #10b981, #06b6d4);
+  box-shadow: 0 0 6px #06b6d4;
+  animation: msLiveOrbIconSpin 3s linear infinite;
+}
+
+@keyframes msLiveOrbIconSpin {
+  to { transform: rotate(360deg); }
+}
+
+.msc-drawer__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.msc-drawer__close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Body / Messages */
+.msc-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.msc-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 90%;
+}
+
+.msc-msg--user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.msc-msg--assistant {
+  align-self: flex-start;
+}
+
+.msc-msg__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0d9488, #0f766e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3);
+}
+
+.msc-msg__bubble {
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.msc-msg--user .msc-msg__bubble {
+  background: linear-gradient(135deg, #008c8c, #0d9488);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 140, 140, 0.22);
+}
+
+.msc-msg--assistant .msc-msg__bubble {
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.msc-msg__text {
+  margin: 0;
+}
+
+/* Loading Dots */
+.msc-msg__bubble--loading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 12px 18px;
+}
+
+.msc-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0d9488;
+  animation: mscBounce 1.2s infinite ease-in-out;
+}
+
+.msc-dot:nth-child(2) { animation-delay: 0.2s; }
+.msc-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes mscBounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Tool Execution Cards */
+.msc-tool-card {
+  margin-top: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.msc-tool-card__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.msc-tool-table-wrapper {
+  overflow-x: auto;
+}
+
+.msc-tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.msc-tool-table th {
+  text-align: left;
+  color: #64748b;
+  padding: 4px 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.msc-tool-table td {
+  padding: 5px 6px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.msc-badge {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.msc-badge--primary {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.msc-badge--muted {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.msc-tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.msc-tool-chip {
+  background: #ffffff;
+  border: 1px solid #fecdd3;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.msc-tool-chip__qty {
+  font-weight: 700;
+  color: #e11d48;
+}
+
+.msc-tool-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.msc-tool-stat {
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.msc-tool-stat__label {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.msc-tool-stat__val {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Suggestions */
+.msc-drawer__suggestions {
+  padding: 10px 20px;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.msc-drawer__suggestions-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.msc-drawer__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.msc-chip-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+  font-size: 0.76rem;
+  text-align: left;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msc-chip-btn:hover {
+  background: #f0fdfa;
+  border-color: #0d9488;
+  color: #0d9488;
+}
+
+/* Footer / Input Bar */
+.msc-drawer__footer {
+  padding: 14px 20px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.msc-input-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 4px 6px 4px 14px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.msc-input-box:focus-within {
+  border-color: #0d9488;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.msc-input-box input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.88rem;
+  color: #0f172a;
+}
+
+.msc-send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #008c8c;
+  border: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msc-send-btn:hover:not(:disabled) {
+  background: #0d9488;
+  transform: translateY(-1px);
+}
+
+.msc-send-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Voice Integration Styles */
+.msc-mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  color: #0d9488;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.msc-mic-btn:hover:not(:disabled) {
+  background: #0d9488;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+  transform: translateY(-1px);
+}
+
+.msc-mic-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.msc-msg__voice-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #0d9488;
+  background: #f0fdfa;
+  border: 1px solid #ccfbf1;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+.msc-msg__voice-audio {
+  margin-top: 6px;
+  width: 100%;
+  max-width: 260px;
+  height: 32px;
+}
+
+.msc-msg__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.msc-speak-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msc-speak-btn:hover {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0d9488;
+}
+
+.msc-speak-btn.active {
+  background: #0d9488;
+  border-color: #0d9488;
+  color: #ffffff;
+}
+
+/* Role Badges in Header */
+.msc-role-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.msc-role-badge--staff {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+.msc-role-badge--supplier {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+.msc-role-badge--pharmacist {
+  background: #ccfbf1;
+  color: #0f766e;
+  border: 1px solid #99f6e4;
+}
+.msc-role-badge--admin {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+
+
+
+

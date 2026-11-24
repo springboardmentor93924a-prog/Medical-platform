@@ -1,0 +1,190 @@
+/* ===================================================================
+   MediStock Clinical Authentication Branding Panel
+   Faithful recreation of the official MediStock design reference:
+   - Soft healthcare gradient background
+   - Dark navy headers & teal typography
+   - Three feature icon bubbles with vertical dividers
+   - Clean pharmacy flat-lay photo with medicines & stethoscope
+   - Bottom left curved teal wave accent
+   =================================================================== */
+
+.auth-branding-panel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #e4f5f3 0%, #f7fcfb 50%, #dff2f0 100%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Decorative Organic Corner Elements matching reference */
+.auth-corner-wave-top-left {
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 168, 150, 0.15) 0%, rgba(0, 168, 150, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-corner-wave-bottom-left {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 140px;
+  height: 100px;
+  background: linear-gradient(135deg, #006d77 0%, #009688 100%);
+  border-top-right-radius: 120px 90px;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 2px -4px 12px rgba(0, 109, 119, 0.2);
+}
+
+/* Branding Content Grid */
+.auth-branding-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: clamp(2rem, 3.5vw, 3rem) clamp(2rem, 4vw, 3.5rem) 0;
+  box-sizing: border-box;
+}
+
+/* Brand Header */
+.auth-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-brand-logo-cross {
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 168, 150, 0.25));
+}
+
+.auth-brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-brand-name {
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #0d2b3e;
+  line-height: 1.1;
+}
+
+.auth-brand-category {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #526b7a;
+  letter-spacing: 0.1px;
+  margin-top: 3px;
+}
+
+/* Hero Messaging */
+.auth-hero-messaging {
+  margin: 1.25rem 0 1rem;
+  max-width: 500px;
+}
+
+.auth-hero-headline {
+  font-size: clamp(2rem, 2.7vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: #0d2b3e;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.auth-hero-description {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #007a78;
+  line-height: 1.45;
+  margin-bottom: 1.5rem;
+}
+
+/* Three Feature Circles Row */
+.auth-features-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.auth-feature-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.feature-circle-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #00a896;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 168, 150, 0.32);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-circle-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 168, 150, 0.4);
+}
+
+.feature-circle-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+}
+
+.feature-divider-line {
+  height: 44px;
+  width: 1.5px;
+  background: rgba(0, 168, 150, 0.28);
+}
+
+/* Pharmacy Supplies Flat-lay Display */
+.auth-pharmacy-visual-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 250px;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+  margin-top: auto;
+  box-shadow: 0 8px 24px rgba(0, 70, 70, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: none;
+}
+
+.auth-pharmacy-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom left;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 960px) {
+  .auth-branding-panel {
+    display: none;
+  }
+}

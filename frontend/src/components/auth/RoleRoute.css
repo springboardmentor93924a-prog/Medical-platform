@@ -1,0 +1,82 @@
+/* Access Denied / Role Guard styling */
+.access-denied-container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.access-denied-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface-card);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.access-denied-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto var(--space-4);
+  border-radius: 50%;
+  background: var(--color-danger-50);
+  color: var(--color-danger-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.access-denied-card h2 {
+  font-size: var(--font-2xl);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--space-2);
+}
+
+.access-denied-desc {
+  color: var(--color-neutral-600);
+  font-size: var(--font-base);
+  margin-bottom: var(--space-5);
+}
+
+.access-denied-identity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-4);
+  font-size: var(--font-sm);
+}
+
+.identity-label {
+  color: var(--color-neutral-500);
+}
+
+.identity-name {
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
+
+.access-denied-help {
+  font-size: var(--font-xs);
+  color: var(--color-neutral-500);
+  line-height: 1.5;
+  margin-bottom: var(--space-6);
+}
+
+.access-denied-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.access-denied-actions .btn {
+  width: 100%;
+  justify-content: center;
+}

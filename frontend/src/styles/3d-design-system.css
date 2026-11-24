@@ -1,0 +1,2680 @@
+/* =====================================================================
+   MediStock — 3D Design System
+   Global 3D effects, responsive utilities, and smooth animations
+   for a professional, depth-rich pharmacist interface.
+
+   Prefix: .ms3d-*   (explicit opt-in classes)
+   Also targets existing page patterns via [class*="..."] selectors.
+   ===================================================================== */
+
+/* ---------- 3D Design Tokens ---------- */
+:root {
+  /* Core palette */
+  --ms3d-primary-dark: #004D57;
+  --ms3d-primary: #008C8C;
+  --ms3d-accent: #2A9D8F;
+  --ms3d-bg: #F2F8FB;
+  --ms3d-card-bg: #FFFFFF;
+  --ms3d-text: #16324F;
+  --ms3d-text-secondary: #64748B;
+
+  /* Shadow layers — light source top-left */
+  --ms3d-shadow-xs: 0 1px 2px rgba(0, 77, 87, 0.06);
+  --ms3d-shadow-sm: 0 2px 6px rgba(0, 77, 87, 0.08),
+                     0 1px 3px rgba(0, 77, 87, 0.05);
+  --ms3d-shadow-md: 0 4px 12px rgba(0, 77, 87, 0.10),
+                     0 2px 4px rgba(0, 77, 87, 0.06);
+  --ms3d-shadow-lg: 0 8px 24px rgba(0, 77, 87, 0.12),
+                     0 4px 8px rgba(0, 77, 87, 0.08),
+                     0 1px 3px rgba(0, 77, 87, 0.05);
+  --ms3d-shadow-xl: 0 12px 40px rgba(0, 77, 87, 0.14),
+                     0 6px 16px rgba(0, 77, 87, 0.10),
+                     0 2px 6px rgba(0, 77, 87, 0.06);
+  --ms3d-shadow-2xl: 0 20px 60px rgba(0, 77, 87, 0.16),
+                      0 10px 24px rgba(0, 77, 87, 0.12),
+                      0 4px 8px rgba(0, 77, 87, 0.08);
+
+  /* Inset shadows */
+  --ms3d-shadow-inset: inset 0 2px 4px rgba(0, 77, 87, 0.06);
+  --ms3d-shadow-inset-lg: inset 0 3px 8px rgba(0, 77, 87, 0.10);
+
+  /* Floating effect for cards */
+  --ms3d-float-shadow: 0 8px 30px rgba(0, 77, 87, 0.12),
+                        0 4px 10px rgba(0, 77, 87, 0.08);
+
+  /* Transition presets */
+  --ms3d-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --ms3d-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --ms3d-transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* =====================================================================
+   1. KEYFRAME ANIMATIONS
+   ===================================================================== */
+
+@keyframes ms3d-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ms3d-scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes ms3d-slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ms3d-slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ms3d-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes ms3d-pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(42, 157, 143, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(42, 157, 143, 0);
+  }
+}
+
+@keyframes ms3d-pressDown {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+/* Utility animation classes */
+.ms3d-fade-in {
+  animation: ms3d-fadeInUp 0.3s ease-out both;
+}
+.ms3d-scale-in {
+  animation: ms3d-scaleIn 0.3s ease-out both;
+}
+.ms3d-slide-in {
+  animation: ms3d-slideInRight 0.3s ease-out both;
+}
+.ms3d-float {
+  animation: ms3d-float 3s ease-in-out infinite;
+}
+
+/* Staggered animation delays for lists / grids */
+.ms3d-stagger-1 { animation-delay: 0.05s; }
+.ms3d-stagger-2 { animation-delay: 0.10s; }
+.ms3d-stagger-3 { animation-delay: 0.15s; }
+.ms3d-stagger-4 { animation-delay: 0.20s; }
+.ms3d-stagger-5 { animation-delay: 0.25s; }
+.ms3d-stagger-6 { animation-delay: 0.30s; }
+
+
+/* =====================================================================
+   2. 3D CARD EFFECTS — Generic floating cards
+   ===================================================================== */
+
+.ms3d-card {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-md);
+  transition: var(--ms3d-transition);
+  border: 1px solid rgba(0, 77, 87, 0.06);
+  position: relative;
+}
+
+.ms3d-card:hover {
+  box-shadow: var(--ms3d-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Any element with a card-like suffix gets base 3D card treatment */
+[class*="-card"]:not([class*="__"]):not([class*="--"]) {
+  transition: var(--ms3d-transition);
+}
+
+
+/* =====================================================================
+   3. 3D KPI / STAT CARDS — Floating with left accent border
+   ===================================================================== */
+
+.ms3d-kpi-card,
+[class$="-kpi-card"],
+[class$="-stat-card"],
+[class*="-kpi-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"]),
+[class*="-stat-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"]) {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--ms3d-shadow-md);
+  border: 1px solid rgba(0, 77, 87, 0.08);
+  transition: var(--ms3d-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.ms3d-kpi-card::after,
+[class$="-kpi-card"]::after,
+[class$="-stat-card"]::after,
+[class*="-kpi-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"])::after,
+[class*="-stat-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"])::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0.9) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.ms3d-kpi-card:hover,
+[class$="-kpi-card"]:hover,
+[class$="-stat-card"]:hover,
+[class*="-kpi-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"]):hover,
+[class*="-stat-card"]:not([class*="__"]):not([class*="--"]):not([class*="-left"]):not([class*="-right"]):not([class*="-inner"]):hover {
+  box-shadow: var(--ms3d-shadow-lg);
+  transform: translateY(-2.5px);
+  border-color: rgba(0, 140, 140, 0.22);
+}
+
+
+/* =====================================================================
+   4. 3D BUTTONS — Press-down effect
+   ===================================================================== */
+
+/* Primary 3D button */
+.ms3d-btn-primary,
+[class*="-btn--primary"] {
+  background: linear-gradient(135deg, var(--ms3d-primary) 0%, var(--ms3d-primary-dark) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md, 7px);
+  box-shadow: 0 4px 6px rgba(0, 77, 87, 0.25),
+              0 2px 3px rgba(0, 77, 87, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: var(--ms3d-transition);
+  position: relative;
+  cursor: pointer;
+}
+
+.ms3d-btn-primary:hover,
+[class*="-btn--primary"]:hover {
+  background: linear-gradient(135deg, var(--ms3d-accent) 0%, var(--ms3d-primary) 100%);
+  box-shadow: 0 6px 12px rgba(0, 77, 87, 0.30),
+              0 3px 5px rgba(0, 77, 87, 0.18),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.ms3d-btn-primary:active,
+[class*="-btn--primary"]:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 3px rgba(0, 77, 87, 0.20),
+              inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Outline 3D button */
+.ms3d-btn-outline,
+[class*="-btn--outline"] {
+  background: var(--ms3d-card-bg);
+  border: 1.5px solid rgba(0, 140, 140, 0.3);
+  border-radius: var(--radius-md, 7px);
+  box-shadow: var(--ms3d-shadow-sm);
+  transition: var(--ms3d-transition);
+  cursor: pointer;
+  color: var(--ms3d-primary);
+}
+
+.ms3d-btn-outline:hover,
+[class*="-btn--outline"]:hover {
+  border-color: var(--ms3d-primary);
+  box-shadow: var(--ms3d-shadow-md);
+  transform: translateY(-1px);
+  background: rgba(0, 140, 140, 0.04);
+}
+
+.ms3d-btn-outline:active,
+[class*="-btn--outline"]:active {
+  transform: translateY(1px);
+  box-shadow: var(--ms3d-shadow-xs);
+}
+
+
+/* =====================================================================
+   5. 3D TABLE CONTAINERS — Raised with inset header
+   ===================================================================== */
+
+.ms3d-table,
+[class*="-table-container"],
+[class*="-table-card"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-md);
+  border: 1px solid rgba(0, 77, 87, 0.06);
+  overflow: hidden;
+  transition: var(--ms3d-transition);
+}
+
+/* Inset header row feel */
+.ms3d-table thead,
+[class*="-table-container"] thead,
+[class*="-table-card"] thead {
+  background: linear-gradient(180deg, #f7fafb 0%, #eef3f7 100%);
+  box-shadow: var(--ms3d-shadow-inset);
+}
+
+.ms3d-table thead th,
+[class*="-table-container"] thead th,
+[class*="-table-card"] thead th {
+  border-bottom: 2px solid rgba(0, 77, 87, 0.08);
+  font-weight: 600;
+  color: var(--ms3d-text);
+}
+
+/* Row hover highlight */
+.ms3d-table tbody tr:hover,
+[class*="-table-container"] tbody tr:hover,
+[class*="-table-card"] tbody tr:hover {
+  background: rgba(42, 157, 143, 0.04);
+}
+
+
+/* =====================================================================
+   6. 3D MODALS — Deep shadow + scale animation
+   ===================================================================== */
+
+.ms3d-modal,
+[class*="-modal-card"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-xl, 14px);
+  box-shadow: var(--ms3d-shadow-2xl);
+  border: 1px solid rgba(0, 77, 87, 0.08);
+  animation: ms3d-scaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top-edge highlight for glass feel */
+.ms3d-modal::before,
+[class*="-modal-card"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+/* =====================================================================
+   7. 3D SIDEBAR / RIGHT PANELS — Elevated
+   ===================================================================== */
+
+.ms3d-sidebar,
+[class*="-sidebar-card"],
+[class*="-details-card"],
+[class*="-timeline-card"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-lg);
+  border: 1px solid rgba(0, 77, 87, 0.06);
+  transition: var(--ms3d-transition);
+}
+
+[class*="-sidebar-card"]:hover,
+[class*="-details-card"]:hover,
+[class*="-timeline-card"]:hover {
+  box-shadow: var(--ms3d-shadow-xl);
+}
+
+
+/* =====================================================================
+   8. 3D TOAST NOTIFICATIONS — Floating appearance
+   ===================================================================== */
+
+.ms3d-toast,
+[class*="-toast"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-xl);
+  border: 1px solid rgba(0, 77, 87, 0.08);
+  animation: ms3d-slideInRight 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  position: relative;
+  overflow: hidden;
+}
+
+.ms3d-toast::before,
+[class*="-toast"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--ms3d-accent);
+  border-radius: 4px 0 0 4px;
+}
+
+
+/* =====================================================================
+   9. 3D STATUS BADGES — Pill with subtle depth
+   ===================================================================== */
+
+.ms3d-badge,
+[class*="-status-badge"],
+[class*="-badge--"] {
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: var(--ms3d-shadow-xs),
+              inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: var(--ms3d-transition-fast);
+  font-weight: 500;
+}
+
+.ms3d-badge:hover,
+[class*="-status-badge"]:hover,
+[class*="-badge--"]:hover {
+  box-shadow: var(--ms3d-shadow-sm),
+              inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================================
+   10. 3D FILTER BAR — Slightly raised toolbar
+   ===================================================================== */
+
+.ms3d-filter-bar,
+[class*="-filter-bar"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-sm);
+  border: 1px solid rgba(0, 77, 87, 0.06);
+  transition: var(--ms3d-transition);
+}
+
+[class*="-filter-bar"]:focus-within {
+  box-shadow: var(--ms3d-shadow-md);
+  border-color: rgba(0, 140, 140, 0.15);
+}
+
+
+/* =====================================================================
+   11. 3D HEADER ICONS — Circle with depth
+   ===================================================================== */
+
+.ms3d-header-icon,
+[class*="-header-icon"] {
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: var(--ms3d-shadow-sm),
+              inset 0 -1px 2px rgba(0, 0, 0, 0.05);
+  transition: var(--ms3d-transition);
+}
+
+.ms3d-header-icon:hover,
+[class*="-header-icon"]:hover {
+  box-shadow: var(--ms3d-shadow-md);
+  transform: translateY(-1px) scale(1.05);
+}
+
+
+/* =====================================================================
+   12. 3D ACTION ICON BUTTONS — Micro 3D
+   ===================================================================== */
+
+.ms3d-action-icon,
+[class*="-action-icon-btn"] {
+  border-radius: var(--radius-md, 7px);
+  box-shadow: var(--ms3d-shadow-xs);
+  transition: var(--ms3d-transition-fast);
+  cursor: pointer;
+}
+
+.ms3d-action-icon:hover,
+[class*="-action-icon-btn"]:hover {
+  box-shadow: var(--ms3d-shadow-sm);
+  transform: translateY(-1px);
+  background: rgba(42, 157, 143, 0.06);
+}
+
+.ms3d-action-icon:active,
+[class*="-action-icon-btn"]:active {
+  transform: translateY(1px);
+  box-shadow: var(--ms3d-shadow-xs);
+}
+
+
+/* =====================================================================
+   13. 3D PAGINATION — Active page indicator
+   ===================================================================== */
+
+[class*="-page-btn--active"] {
+  background: linear-gradient(135deg, var(--ms3d-primary) 0%, var(--ms3d-primary-dark) 100%);
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(0, 77, 87, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md, 7px);
+  transform: scale(1.05);
+}
+
+
+/* =====================================================================
+   14. 3D HERO / PROFILE CARD — Gradient overlay
+   ===================================================================== */
+
+.ms3d-hero,
+[class*="-hero-card"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-xl, 14px);
+  box-shadow: var(--ms3d-shadow-lg);
+  overflow: hidden;
+  position: relative;
+  transition: var(--ms3d-transition);
+}
+
+[class*="-hero-card"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(135deg, var(--ms3d-primary-dark) 0%, var(--ms3d-accent) 100%);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+[class*="-hero-card"]:hover {
+  box-shadow: var(--ms3d-shadow-xl);
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================================
+   15. 3D TABS — Tabbed container with depth
+   ===================================================================== */
+
+.ms3d-tabs,
+[class*="-tabs-card"],
+[class*="-tab-nav"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-sm);
+  border: 1px solid rgba(0, 77, 87, 0.06);
+  transition: var(--ms3d-transition);
+}
+
+
+/* =====================================================================
+   16. 3D CHART CONTAINERS — Shadow wrapper
+   ===================================================================== */
+
+.ms3d-chart,
+[class*="-chart-card"] {
+  background: var(--ms3d-card-bg);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: var(--ms3d-shadow-md);
+  border: 1px solid rgba(0, 77, 87, 0.05);
+  transition: var(--ms3d-transition);
+}
+
+[class*="-chart-card"]:hover {
+  box-shadow: var(--ms3d-shadow-lg);
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================================
+   17. NOTIFICATION ITEM — Unread highlight
+   ===================================================================== */
+
+[class*="-item--unread"] {
+  border-left: 3px solid var(--ms3d-accent);
+  background: linear-gradient(90deg, rgba(42, 157, 143, 0.06) 0%, transparent 40%);
+  box-shadow: var(--ms3d-shadow-sm);
+}
+
+
+/* =====================================================================
+   18. 3D AVATARS — Circular with border ring
+   ===================================================================== */
+
+.ms3d-avatar,
+[class*="-avatar"] {
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: 0 2px 8px rgba(0, 77, 87, 0.12),
+              0 0 0 2px rgba(255, 255, 255, 0.8);
+  transition: var(--ms3d-transition);
+}
+
+.ms3d-avatar:hover,
+[class*="-avatar"]:hover {
+  box-shadow: 0 4px 12px rgba(0, 77, 87, 0.18),
+              0 0 0 3px rgba(42, 157, 143, 0.2);
+  transform: scale(1.06);
+}
+
+/* Online / status dot */
+[class*="-avatar-dot"] {
+  box-shadow: 0 0 0 2px var(--ms3d-card-bg),
+              0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =====================================================================
+   19. GLOBAL SMOOTH TRANSITIONS — All interactive elements
+   ===================================================================== */
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex] {
+  transition: var(--ms3d-transition-fast);
+}
+
+/* Focus ring with 3D depth */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--ms3d-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.15);
+}
+
+/* Input fields — subtle inset */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  box-shadow: var(--ms3d-shadow-inset);
+  border: 1px solid rgba(0, 77, 87, 0.12);
+  border-radius: var(--radius-md, 7px);
+  transition: var(--ms3d-transition);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  box-shadow: var(--ms3d-shadow-sm),
+              0 0 0 3px rgba(42, 157, 143, 0.1);
+  border-color: var(--ms3d-accent);
+}
+
+
+/* =====================================================================
+   20. RESPONSIVE GRID SYSTEM
+   ===================================================================== */
+
+/* --- Desktop: > 1400px — Full layout, all spacing --- */
+/* (Default styles above apply at this breakpoint) */
+
+/* --- Laptop: 1024–1400px — Slightly reduced spacing --- */
+@media (max-width: 1400px) {
+  :root {
+    --space-5: 14px;
+    --space-6: 18px;
+    --space-7: 22px;
+    --space-8: 26px;
+  }
+
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-chart-card"]:not([class*="__"]):not([class*="--"]) {
+    box-shadow: var(--ms3d-shadow-sm);
+  }
+}
+
+/* --- Tablet: 768–1024px — Two-col → single-col, sidebar stacks --- */
+@media (max-width: 1024px) {
+  /* KPI / stat grids: collapse to 2 per row */
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]) {
+    min-width: calc(50% - 8px);
+  }
+
+  /* Sidebar / right-col stacks cleanly below main content on tablet */
+  [class*="-right-col"] {
+    width: 100% !important;
+    position: static !important;
+    order: 10;
+    margin-top: 16px;
+  }
+
+  /* Reduce shadow depth on tablet for performance */
+  .ms3d-card,
+  [class*="-table-container"]:not([class*="__"]):not([class*="--"]),
+  [class*="-table-card"]:not([class*="__"]):not([class*="--"]) {
+    box-shadow: var(--ms3d-shadow-sm);
+  }
+
+  [class*="-modal-card"]:not([class*="__"]):not([class*="--"]) {
+    max-width: 90vw;
+  }
+}
+
+/* --- Mobile: < 768px — Single column, full-width elements --- */
+@media (max-width: 768px) {
+  :root {
+    --space-5: 12px;
+    --space-6: 14px;
+    --space-7: 18px;
+    --space-8: 22px;
+  }
+
+  /* Stack KPI cards */
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]) {
+    min-width: 100%;
+  }
+
+  /* Full-width filter bar */
+  [class*="-filter-bar"] {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* Reduce card border-radius */
+  .ms3d-card,
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-table-container"]:not([class*="__"]):not([class*="--"]),
+  [class*="-table-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-chart-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-sidebar-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-details-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-hero-card"]:not([class*="__"]):not([class*="--"]) {
+    border-radius: var(--radius-md, 7px);
+  }
+
+  /* Modal full-width */
+  [class*="-modal-card"]:not([class*="__"]):not([class*="--"]) {
+    max-width: 95vw;
+    margin: 16px auto;
+    border-radius: var(--radius-lg, 10px);
+  }
+
+  /* Tables scroll horizontally */
+  [class*="-table-container"]:not([class*="__"]):not([class*="--"]),
+  [class*="-table-card"]:not([class*="__"]):not([class*="--"]) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Lighten shadows for mobile */
+  .ms3d-card,
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]),
+  [class*="-chart-card"]:not([class*="__"]):not([class*="--"]) {
+    box-shadow: var(--ms3d-shadow-xs);
+  }
+
+  /* Reduce hover lift on touch devices */
+  .ms3d-card:hover,
+  [class*="-kpi-card"]:not([class*="__"]):not([class*="--"]):hover,
+  [class*="-stat-card"]:not([class*="__"]):not([class*="--"]):hover,
+  [class*="-chart-card"]:not([class*="__"]):not([class*="--"]):hover {
+    transform: none;
+  }
+}
+
+/* --- Small Mobile: < 480px — Minimal padding, everything stacked --- */
+@media (max-width: 480px) {
+  :root {
+    --space-3: 8px;
+    --space-4: 10px;
+    --space-5: 10px;
+    --space-6: 12px;
+    --space-7: 14px;
+  }
+
+  [class*="-hero-card"] {
+    border-radius: var(--radius-sm, 5px);
+  }
+
+  [class*="-modal-card"] {
+    max-width: 100vw;
+    margin: 8px;
+    border-radius: var(--radius-md, 7px);
+  }
+
+  /* Remove transforms entirely on small screens */
+  .ms3d-btn-primary:hover,
+  [class*="-btn--primary"]:hover,
+  .ms3d-btn-outline:hover,
+  [class*="-btn--outline"]:hover {
+    transform: none;
+  }
+
+  /* Full-width buttons */
+  .ms3d-btn-primary,
+  [class*="-btn--primary"],
+  .ms3d-btn-outline,
+  [class*="-btn--outline"] {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Compact badges */
+  [class*="-status-badge"],
+  [class*="-badge--"] {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+}
+
+
+/* =====================================================================
+   21. PRINT STYLES — Remove all shadows and 3D effects
+   ===================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .ms3d-card,
+  [class*="-kpi-card"]:not([class*="__"]),
+  [class*="-stat-card"]:not([class*="__"]),
+  [class*="-table-container"]:not([class*="__"]),
+  [class*="-table-card"]:not([class*="__"]),
+  [class*="-modal-card"]:not([class*="__"]),
+  [class*="-chart-card"]:not([class*="__"]),
+  [class*="-hero-card"]:not([class*="__"]),
+  [class*="-sidebar-card"]:not([class*="__"]),
+  [class*="-details-card"]:not([class*="__"]),
+  [class*="-toast"] {
+    border: 1px solid #ccc !important;
+  }
+
+  /* Hide toasts, floating elements */
+  [class*="-toast"] {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
+
+/* =====================================================================
+   22. PREFERS-REDUCED-MOTION — Respect user accessibility settings
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =====================================================================
+   23. MEDISTOCK UNIFIED CLAYMORPHISM DESIGN SYSTEM
+   Comprehensive, production-grade Claymorphism across the entire app:
+   - Soft 3D inflated/raised surfaces with dual outer and inner bevel shadows
+   - Generous rounded corners (20px-24px for cards, 12px for controls, 9999px for pills)
+   - Pill-shaped status badges, search bars, filter chips, and quick actions
+   - Elevated floating action buttons with press states
+   - Cohesive healthcare palette: teal primary, soft blue, lavender/light blue pastel background
+   ===================================================================== */
+
+:root {
+  /* Clay Palette */
+  --clay-teal-dark: #004d57;
+  --clay-teal-primary: #008c8c;
+  --clay-teal-hover: #09b4bc;
+  --clay-teal-active: #007a82;
+  --clay-teal-subtle: #e0f5f5;
+  --clay-blue-accent: #2a9d8f;
+  --clay-navy-text: #102e59;
+  --clay-muted-text: #64748b;
+  --clay-border-subtle: rgba(212, 227, 241, 0.85);
+
+  /* Background mesh gradient with soft lavender & cyan ambiance */
+  --clay-bg: #f0f6fa;
+  --clay-bg-gradient: radial-gradient(ellipse at 88% 12%, rgba(198, 237, 241, 0.5) 0%, transparent 60%),
+                      radial-gradient(ellipse at 12% 88%, rgba(224, 233, 253, 0.45) 0%, transparent 55%),
+                      radial-gradient(circle at 50% 50%, rgba(243, 248, 252, 0.6) 0%, transparent 80%),
+                      linear-gradient(160deg, #f2f7fb 0%, #ebf3f9 100%);
+  --clay-surface-card: #ffffff;
+  --clay-surface-pastel: #f9fcfe;
+
+  /* Clay Shadows */
+  --clay-shadow-card: 0 12px 28px -6px rgba(7, 141, 145, 0.09),
+                      0 4px 10px -2px rgba(16, 46, 89, 0.04),
+                      inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.95),
+                      inset 0 -2px 5px 0 rgba(7, 141, 145, 0.03);
+
+  --clay-shadow-card-hover: 0 18px 38px -8px rgba(7, 141, 145, 0.14),
+                            0 8px 16px -4px rgba(16, 46, 89, 0.06),
+                            inset 0 1.5px 2px 0 #ffffff;
+
+  --clay-shadow-btn-primary: 0 8px 20px rgba(0, 122, 130, 0.28),
+                             inset 0 1.5px 2px rgba(255, 255, 255, 0.45),
+                             inset 0 -2px 4px rgba(0, 77, 87, 0.25);
+
+  --clay-shadow-btn-hover: 0 12px 26px rgba(0, 122, 130, 0.35),
+                           inset 0 1.5px 2px rgba(255, 255, 255, 0.55),
+                           inset 0 -2px 4px rgba(0, 77, 87, 0.28);
+
+  --clay-shadow-btn-active: 0 2px 6px rgba(0, 122, 130, 0.22),
+                            inset 0 2px 5px rgba(0, 50, 58, 0.3);
+
+  --clay-shadow-input: inset 0 2px 4px rgba(16, 46, 89, 0.04),
+                       inset 0 1px 2px rgba(16, 46, 89, 0.03),
+                       0 1px 2px rgba(255, 255, 255, 0.85);
+
+  --clay-shadow-badge: inset 0 1px 1.5px rgba(255, 255, 255, 0.9),
+                       0 2px 6px rgba(7, 141, 145, 0.07);
+
+  --clay-radius-card: 20px;
+  --clay-radius-card-lg: 24px;
+  --clay-radius-btn: 12px;
+  --clay-radius-pill: 9999px;
+  --clay-radius-input: 12px;
+}
+
+/* Background Application */
+body {
+  background: var(--clay-bg) !important;
+  background-image: var(--clay-bg-gradient) !important;
+  background-attachment: fixed !important;
+  color: var(--clay-navy-text) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.dashboard-layout,
+.dashboard-layout__main,
+.dashboard-layout__content {
+  background: transparent !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.1 UNIVERSAL CLAY CARDS & SURFACES
+   ───────────────────────────────────────────────────────────────────── */
+.stat-card,
+[class*="-stat-card"]:not([class*="__"]),
+[class*="-kpi-card"]:not([class*="__"]),
+[class*="-summary-card"]:not([class*="__"]),
+[class*="-table-card"]:not([class*="__"]),
+[class*="-table-container"]:not([class*="__"]),
+[class*="-chart-card"]:not([class*="__"]),
+[class*="-activity-card"]:not([class*="__"]),
+[class*="-details-card"]:not([class*="__"]),
+[class*="-timeline-card"]:not([class*="__"]),
+[class*="-hero-card"]:not([class*="__"]),
+[class*="-filter-card"]:not([class*="__"]),
+[class*="-filter-bar"]:not([class*="__"]),
+.data-table-wrapper,
+.admin-card,
+.admin-summary-card,
+.admin-dash__stat-card,
+.admin-dash__chart-card,
+.admin-dash__alerts-card,
+.admin-table-container,
+.admin-filter-bar,
+.staff-kpi-card,
+.staff-table-card,
+.staff-filter-card,
+.staff-card,
+.pharmacist-card,
+.supplier-card,
+.pharm-card,
+.pharm-stat-card,
+.pharm-chart-card,
+.pharm-recent-card,
+.pharm-activity-card,
+.meds-stat-card,
+.meds-card,
+.meds-table-container,
+.meds-filter-bar,
+.cat-card,
+.cat-stat-card,
+.stock-card,
+.stock-stat-card,
+.exp-card,
+.exp-stat-card,
+.po-card,
+.po-stat-card,
+.sup-kpi-card,
+.sup-card,
+.sup-table-container,
+.sup-details-card,
+.rep-card,
+.rep-stat-card,
+.notif-card,
+.prof-hero-card,
+.prof-details-card,
+.access-denied-card,
+.state-screen,
+.medistock-auth-card,
+.ms-form-box,
+.auth-card,
+.pending-card-clean {
+  border-radius: var(--clay-radius-card) !important;
+  background: var(--clay-surface-card) !important;
+  box-shadow: var(--clay-shadow-card) !important;
+  border: 1px solid var(--clay-border-subtle) !important;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.22s ease !important;
+  position: relative !important;
+}
+
+/* Hover Lift on Interactive Cards */
+.stat-card:hover,
+[class*="-stat-card"]:not([class*="__"]):hover,
+[class*="-kpi-card"]:not([class*="__"]):hover,
+.admin-summary-card:hover,
+.admin-dash__stat-card:hover,
+.staff-kpi-card:hover,
+.pharm-stat-card:hover,
+.meds-stat-card:hover,
+.sup-kpi-card:hover,
+.cat-stat-card:hover,
+.stock-stat-card:hover,
+.exp-stat-card:hover,
+.po-stat-card:hover,
+.rep-stat-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--clay-shadow-card-hover) !important;
+  border-color: rgba(7, 157, 163, 0.25) !important;
+}
+
+/* Card Top Light Bevel */
+.stat-card::after,
+.admin-card::after,
+.admin-summary-card::after,
+.staff-table-card::after,
+.data-table-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.95) 25%, rgba(255, 255, 255, 0.95) 75%, transparent 100%);
+  pointer-events: none;
+  border-radius: var(--clay-radius-card) var(--clay-radius-card) 0 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.2 CLAY PRIMARY BUTTONS
+   ───────────────────────────────────────────────────────────────────── */
+button.btn--primary,
+.admin-btn--primary,
+.admin-btn-primary,
+.staff-btn--primary,
+.staff-btn-primary,
+.pharmacist-btn-primary,
+.supplier-btn-primary,
+.sup-btn--primary,
+.sup-btn-primary,
+.meds-btn-primary,
+.po-btn-primary,
+.stock-btn-primary,
+.medistock-auth-btn-primary,
+.ms-submit,
+.state-screen__btn,
+.topbar__search button,
+.modal-actions button[type="submit"],
+.admin-modal-actions button[type="submit"],
+.staff-modal-footer button[type="submit"],
+[class*="-btn--primary"] {
+  background: linear-gradient(135deg, #079da3 0%, #007a82 100%) !important;
+  color: #ffffff !important;
+  border-radius: var(--clay-radius-btn) !important;
+  border: none !important;
+  box-shadow: var(--clay-shadow-btn-primary) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+button.btn--primary:hover,
+.admin-btn--primary:hover,
+.admin-btn-primary:hover,
+.staff-btn--primary:hover,
+.staff-btn-primary:hover,
+.pharmacist-btn-primary:hover,
+.supplier-btn-primary:hover,
+.sup-btn--primary:hover,
+.sup-btn-primary:hover,
+.meds-btn-primary:hover,
+.po-btn-primary:hover,
+.stock-btn-primary:hover,
+.medistock-auth-btn-primary:hover,
+.ms-submit:hover,
+.state-screen__btn:hover,
+.topbar__search button:hover,
+.modal-actions button[type="submit"]:hover,
+.admin-modal-actions button[type="submit"]:hover,
+.staff-modal-footer button[type="submit"]:hover,
+[class*="-btn--primary"]:hover {
+  background: linear-gradient(135deg, #09b4bc 0%, #008790 100%) !important;
+  box-shadow: var(--clay-shadow-btn-hover) !important;
+  transform: translateY(-2px) !important;
+  color: #ffffff !important;
+}
+
+button.btn--primary:active,
+.admin-btn--primary:active,
+.admin-btn-primary:active,
+.staff-btn--primary:active,
+.staff-btn-primary:active,
+.pharmacist-btn-primary:active,
+.supplier-btn-primary:active,
+.sup-btn--primary:active,
+.sup-btn-primary:active,
+.meds-btn-primary:active,
+.po-btn-primary:active,
+.stock-btn-primary:active,
+.medistock-auth-btn-primary:active,
+.ms-submit:active,
+.state-screen__btn:active,
+[class*="-btn--primary"]:active {
+  transform: translateY(1px) !important;
+  box-shadow: var(--clay-shadow-btn-active) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.3 CLAY SECONDARY & OUTLINE BUTTONS
+   ───────────────────────────────────────────────────────────────────── */
+button.btn--secondary,
+.admin-btn--outline,
+.admin-btn--secondary,
+.admin-btn-secondary,
+.staff-btn--outline,
+.staff-btn--secondary,
+.staff-btn-secondary,
+.pharmacist-btn-secondary,
+.supplier-btn-secondary,
+.sup-btn--outline,
+.sup-btn--secondary,
+.sup-btn-clear-filters,
+.meds-btn-outline,
+.admin-btn--sm,
+.medistock-auth-btn-secondary,
+.auth-state-actions .btn,
+[class*="-btn--secondary"],
+[class*="-btn--outline"] {
+  background: linear-gradient(135deg, #ffffff 0%, #f6fbfb 100%) !important;
+  color: var(--clay-navy-text) !important;
+  border: 1.5px solid #d4e3f1 !important;
+  border-radius: var(--clay-radius-btn) !important;
+  box-shadow: 0 4px 12px rgba(16, 46, 89, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.95) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+button.btn--secondary:hover,
+.admin-btn--outline:hover,
+.admin-btn--secondary:hover,
+.admin-btn-secondary:hover,
+.staff-btn--outline:hover,
+.staff-btn--secondary:hover,
+.staff-btn-secondary:hover,
+.pharmacist-btn-secondary:hover,
+.supplier-btn-secondary:hover,
+.sup-btn--outline:hover,
+.sup-btn--secondary:hover,
+.sup-btn-clear-filters:hover,
+.meds-btn-outline:hover,
+.admin-btn--sm:hover,
+.medistock-auth-btn-secondary:hover,
+[class*="-btn--secondary"]:hover,
+[class*="-btn--outline"]:hover {
+  background: #ffffff !important;
+  border-color: #079da3 !important;
+  color: #007a82 !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 16px rgba(7, 141, 145, 0.12), inset 0 1.5px 2px #ffffff !important;
+}
+
+button.btn--secondary:active,
+.admin-btn--outline:active,
+.admin-btn--secondary:active,
+.staff-btn--outline:active,
+.staff-btn--secondary:active,
+[class*="-btn--secondary"]:active,
+[class*="-btn--outline"]:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 1px 3px rgba(16, 46, 89, 0.08) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.4 CLAY DANGER & SUCCESS BUTTONS
+   ───────────────────────────────────────────────────────────────────── */
+button.btn--danger,
+.admin-btn--danger,
+.staff-btn--danger,
+[class*="-btn--danger"] {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--clay-radius-btn) !important;
+  box-shadow: 0 8px 18px rgba(220, 38, 38, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(153, 27, 27, 0.25) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+button.btn--danger:hover,
+.admin-btn--danger:hover,
+.staff-btn--danger:hover,
+[class*="-btn--danger"]:hover {
+  background: linear-gradient(135deg, #f87171 0%, #dc2626 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 24px rgba(220, 38, 38, 0.32), inset 0 1.5px 2px rgba(255, 255, 255, 0.5) !important;
+}
+
+.admin-btn--success,
+.staff-btn--success,
+[class*="-btn--success"] {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: var(--clay-radius-btn) !important;
+  box-shadow: 0 8px 18px rgba(5, 150, 105, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.4), inset 0 -2px 4px rgba(4, 120, 87, 0.25) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.admin-btn--success:hover,
+.staff-btn--success:hover,
+[class*="-btn--success"]:hover {
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 24px rgba(5, 150, 105, 0.32), inset 0 1.5px 2px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.5 CLAY ACTION ICON BUTTONS (TABLES & CARDS)
+   ───────────────────────────────────────────────────────────────────── */
+.admin-action-btn,
+.staff-action-btn,
+.sup-action-icon,
+.meds-action-btn,
+[class*="-action-icon-btn"],
+[class*="-action-btn"] {
+  border-radius: 10px !important;
+  border: 1px solid transparent !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+}
+
+.admin-action-btn:hover,
+.staff-action-btn:hover,
+.sup-action-icon:hover,
+.meds-action-btn:hover,
+[class*="-action-icon-btn"]:hover,
+[class*="-action-btn"]:hover {
+  background: rgba(7, 157, 163, 0.08) !important;
+  border-color: rgba(7, 157, 163, 0.18) !important;
+  transform: translateY(-1.5px) scale(1.04) !important;
+  box-shadow: 0 3px 8px rgba(7, 141, 145, 0.12), inset 0 1px 1px #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.6 CLAY FORM CONTROLS & RECESSED INPUTS
+   ───────────────────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="search"],
+input[type="date"],
+select,
+textarea,
+.admin-form-input,
+.admin-form-select,
+.admin-form-textarea,
+.admin-select,
+.admin-search-input input,
+.staff-search-input,
+.staff-select,
+.sup-search-input,
+.sup-filter-select,
+.data-table__search input,
+.data-table__filter select,
+.ms-input-wrap input,
+.ms-input-wrap select,
+.auth-input-wrapper input {
+  border-radius: var(--clay-radius-input) !important;
+  border: 1.5px solid #d4e3f1 !important;
+  background-color: #fafdff !important;
+  box-shadow: var(--clay-shadow-input) !important;
+  color: var(--clay-navy-text) !important;
+  transition: all 0.2s ease !important;
+  outline: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.admin-form-input:focus,
+.admin-form-select:focus,
+.admin-form-textarea:focus,
+.admin-search-input input:focus,
+.staff-search-input:focus,
+.staff-select:focus,
+.sup-search-input:focus,
+.sup-filter-select:focus,
+.data-table__search input:focus,
+.data-table__filter select:focus {
+  border-color: #079da3 !important;
+  box-shadow: 0 0 0 3px rgba(7, 157, 163, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+  background-color: #ffffff !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.7 CLAY STATUS BADGES & PILLS
+   ───────────────────────────────────────────────────────────────────── */
+.status-badge,
+[class*="-status-badge"],
+[class*="--badge"],
+.badge,
+.staff-badge,
+.admin-badge,
+.sup-status-pill,
+.admin-dash__system-pill,
+.staff-header-online-status,
+.topbar__ws-status {
+  border-radius: var(--clay-radius-pill) !important;
+  box-shadow: var(--clay-shadow-badge) !important;
+  padding: 4px 12px !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  letter-spacing: 0.2px !important;
+}
+
+/* Semantic Badge Variants */
+.status-badge--success,
+[class*="-badge--success"],
+[class*="-badge--active"] {
+  background: #e6f7f0 !important;
+  color: #047857 !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.status-badge--warning,
+[class*="-badge--warning"],
+[class*="-badge--low"] {
+  background: #fffbeb !important;
+  color: #b45309 !important;
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.status-badge--danger,
+[class*="-badge--danger"],
+[class*="-badge--expired"],
+[class*="-badge--out"] {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.status-badge--info,
+[class*="-badge--info"],
+[class*="-badge--pending"] {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.status-badge--neutral,
+[class*="-badge--neutral"] {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.8 CLAY TABLES & HEADERS
+   ───────────────────────────────────────────────────────────────────── */
+.data-table-wrapper,
+.admin-table-container,
+.staff-table-card,
+.sup-table-container {
+  border-radius: var(--clay-radius-card) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--clay-border-subtle) !important;
+  box-shadow: var(--clay-shadow-card) !important;
+  background: #ffffff !important;
+}
+
+.data-table thead th,
+.admin-table thead th,
+.staff-data-table thead th,
+.sup-table thead th,
+[class*="-table"] thead th {
+  background: linear-gradient(180deg, #f4f8fb 0%, #edf3f8 100%) !important;
+  color: var(--clay-navy-text) !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.35px !important;
+  text-transform: uppercase !important;
+  border-bottom: 2px solid #e2edf6 !important;
+  padding: 13px 18px !important;
+}
+
+.data-table tbody tr,
+.admin-table tbody tr,
+.staff-data-table tbody tr,
+.sup-table tbody tr,
+[class*="-table"] tbody tr {
+  transition: background-color 0.18s ease, transform 0.18s ease !important;
+}
+
+.data-table tbody tr:hover,
+.admin-table tbody tr:hover,
+.staff-data-table tbody tr:hover,
+.sup-table tbody tr:hover,
+[class*="-table"] tbody tr:hover {
+  background: #f7fbfd !important;
+}
+
+.data-table td,
+.admin-table td,
+.staff-data-table td,
+.sup-table td,
+[class*="-table"] td {
+  border-bottom: 1px solid #eef3f7 !important;
+  padding: 14px 18px !important;
+  color: #334155 !important;
+  vertical-align: middle !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.9 CLAY MODALS & DIALOGS
+   ───────────────────────────────────────────────────────────────────── */
+.modal-overlay,
+.admin-modal-overlay,
+.staff-modal-backdrop,
+[class*="-modal-overlay"],
+[class*="-modal-backdrop"] {
+  background: rgba(10, 35, 55, 0.45) !important;
+  backdrop-filter: blur(6px) !important;
+  z-index: 250 !important;
+}
+
+.modal-content,
+.admin-modal,
+.admin-modal-card,
+.staff-modal-card,
+[class*="-modal-card"],
+[class*="-modal-container"] {
+  border-radius: var(--clay-radius-card-lg) !important;
+  background: #ffffff !important;
+  box-shadow: 0 24px 60px -12px rgba(7, 85, 95, 0.22),
+              0 12px 24px -6px rgba(16, 46, 89, 0.1),
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  overflow: hidden !important;
+}
+
+.admin-modal__header,
+.admin-modal-header,
+.staff-modal-header {
+  background: linear-gradient(180deg, #f7fafc 0%, #f0f5f9 100%) !important;
+  border-bottom: 1px solid #e4edf5 !important;
+  padding: 18px 24px !important;
+}
+
+.admin-modal__footer,
+.admin-modal-actions,
+.staff-modal-footer {
+  background: linear-gradient(180deg, #f9fbfd 0%, #f2f7fb 100%) !important;
+  border-top: 1px solid #e4edf5 !important;
+  padding: 16px 24px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.10 CLAY NAVIGATION SHELL (TOPBAR & SIDEBAR)
+   ───────────────────────────────────────────────────────────────────── */
+.topbar {
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid #e4edf5 !important;
+  box-shadow: 0 4px 16px rgba(7, 141, 145, 0.04) !important;
+}
+
+.topbar__search input {
+  border-radius: var(--clay-radius-pill) !important;
+  background: #f1f7fb !important;
+  box-shadow: var(--clay-shadow-input) !important;
+  border: 1.5px solid #dce8f2 !important;
+}
+
+.topbar__search input:focus {
+  background: #ffffff !important;
+  border-color: #079da3 !important;
+  box-shadow: 0 0 0 3px rgba(7, 157, 163, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f7fafe 60%, #edf5fc 100%) !important;
+  border-right: 1px solid rgba(212, 227, 241, 0.85) !important;
+  box-shadow: 4px 0 24px rgba(16, 46, 89, 0.04) !important;
+}
+
+.sidebar__title {
+  color: #102E59 !important;
+}
+
+.sidebar__brand-sub {
+  color: #64748B !important;
+}
+
+.sidebar__link {
+  color: #475569 !important;
+}
+
+.sidebar__link:hover {
+  background: #f0f7fb !important;
+  color: #007a82 !important;
+}
+
+.sidebar__link--active {
+  background: linear-gradient(135deg, #dcfce7 0%, #c4eee3 100%) !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(7, 157, 163, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(7, 157, 163, 0.15), inset 0 1.5px 2px #ffffff !important;
+  color: #007a82 !important;
+}
+
+.sidebar__link--active .sidebar__link-icon {
+  color: #007a82 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.11 CLAY TABS, PILL CHIPS & QUICK ACTIONS
+   ───────────────────────────────────────────────────────────────────── */
+.admin-tab-group,
+.staff-tab-group,
+[class*="-tab-nav"] {
+  background: #eef4f8 !important;
+  border-radius: 14px !important;
+  padding: 4px !important;
+  border: 1px solid #d8e5ef !important;
+}
+
+.admin-tab-btn--active,
+.staff-tab-btn--active,
+[class*="-tab-btn--active"],
+[class*="-tab--active"] {
+  background: #ffffff !important;
+  color: #007a82 !important;
+  box-shadow: 0 4px 10px rgba(0, 122, 130, 0.12), inset 0 1px 1px #ffffff !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+}
+
+/* Circular & Squircle Icon Pills */
+.admin-dash__header-icon,
+.staff-header-icon-badge,
+.sup-header-icon,
+.meds-header__icon-circle,
+.auth-card-avatar-bubble,
+.pending-avatar-container,
+[class*="-header-icon"],
+[class*="-icon-pill"] {
+  box-shadow: 0 4px 14px rgba(0, 140, 140, 0.22), inset 0 1.5px 2px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.12 RESPONSIVE CLAYMORPHISM ADAPTATIONS
+   ───────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  :root {
+    --clay-radius-card: 16px;
+  }
+  .stat-card,
+  [class*="-stat-card"]:not([class*="__"]),
+  [class*="-kpi-card"]:not([class*="__"]) {
+    padding: 14px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --clay-radius-card: 14px;
+    --clay-radius-card-lg: 18px;
+    --clay-radius-btn: 10px;
+  }
+  .stat-card:hover,
+  [class*="-stat-card"]:not([class*="__"]):hover,
+  [class*="-kpi-card"]:not([class*="__"]):hover {
+    transform: none !important;
+  }
+  button.btn--primary:hover,
+  [class*="-btn--primary"]:hover {
+    transform: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.13 UNIVERSAL CLAY PAGE HEADERS & HERO BANNERS
+   ───────────────────────────────────────────────────────────────────── */
+.pharm-page-header,
+.admin-dash__header-row,
+.admin-page-header,
+.staff-header-row,
+.meds-header,
+.cat-header,
+.stock-header,
+.exp-header,
+.po-header,
+.rep-header,
+.notif-header,
+.sup-page-header,
+.prof-page-header {
+  padding: 20px 26px !important;
+  background: linear-gradient(135deg, #eaf2fb 0%, #eef5fc 50%, #f6f5fe 100%) !important;
+  border-radius: var(--clay-radius-card-lg, 22px) !important;
+  border: 1px solid rgba(212, 227, 241, 0.95) !important;
+  box-shadow: 0 8px 24px rgba(16, 46, 89, 0.05), inset 0 2px 3px rgba(255, 255, 255, 0.95) !important;
+  margin-bottom: 22px !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   23.14 SPECIALIZED CLAYMORPHISM REFERENCE STYLES (01 & 02 DESIGNS)
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Clay Welcome Banner Card */
+.clay-welcome-banner {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e0f2fe 50%, #d1fae5 100%) !important;
+  border-radius: 26px !important;
+  padding: 28px 36px !important;
+  box-shadow: 0 16px 36px -10px rgba(147, 197, 253, 0.35),
+              0 6px 16px -4px rgba(167, 243, 208, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.95),
+              inset 0 -2px 4px rgba(192, 132, 252, 0.15) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  overflow: hidden !important;
+  margin-bottom: 24px !important;
+}
+
+.clay-welcome-title {
+  font-size: 2.1rem !important;
+  font-weight: 800 !important;
+  color: #1e1b4b !important;
+  letter-spacing: -0.5px !important;
+  margin: 0 0 6px 0 !important;
+  line-height: 1.2 !important;
+}
+
+.clay-welcome-subtitle {
+  font-size: 1.05rem !important;
+  color: #475569 !important;
+  font-weight: 500 !important;
+  margin: 0 !important;
+}
+
+/* 3D Bottle Graphics Container */
+.clay-bottles-graphic {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.clay-bottle {
+  border-radius: 18px 18px 14px 14px;
+  position: relative;
+  box-shadow: 0 12px 24px rgba(16, 46, 89, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.clay-bottle--teal {
+  width: 44px;
+  height: 72px;
+  background: linear-gradient(180deg, #a7f3d0 0%, #34d399 50%, #059669 100%);
+}
+
+.clay-bottle--amber {
+  width: 52px;
+  height: 84px;
+  background: linear-gradient(180deg, #fef3c7 0%, #f59e0b 50%, #d97706 100%);
+}
+
+.clay-bottle--lavender {
+  width: 40px;
+  height: 60px;
+  background: linear-gradient(180deg, #ede9fe 0%, #a78bfa 50%, #7c3aed 100%);
+}
+
+.clay-bottle-cap {
+  width: 70%;
+  height: 14px;
+  background: #ffffff;
+  border-radius: 6px 6px 2px 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), inset 0 1px 1px #ffffff;
+  margin-top: -8px;
+}
+
+/* Clay Stat Tile (Matching 01 & 02 references) */
+.clay-stat-tile {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  padding: 16px 20px !important;
+  box-shadow: 0 10px 24px -4px rgba(166, 185, 207, 0.35),
+              0 2px 6px rgba(16, 46, 89, 0.04),
+              inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+              inset 0 -1.5px 2px rgba(166, 185, 207, 0.15) !important;
+  border: 1px solid rgba(226, 238, 248, 0.9) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.clay-stat-tile:hover {
+  transform: translateY(-3px) scale(1.01) !important;
+  box-shadow: 0 16px 32px -6px rgba(166, 185, 207, 0.45),
+              inset 0 2px 3px #ffffff !important;
+  border-color: rgba(7, 157, 163, 0.3) !important;
+}
+
+.clay-stat-tile__label {
+  font-size: 0.8rem !important;
+  color: #64748b !important;
+  font-weight: 600 !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+}
+
+.clay-stat-tile__value-row {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 8px !important;
+}
+
+.clay-stat-tile__value {
+  font-size: 1.55rem !important;
+  font-weight: 800 !important;
+  color: #102e59 !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1 !important;
+}
+
+.clay-stat-tile__badge {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 2px 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+}
+
+.clay-stat-tile__badge--green {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.clay-stat-tile__badge--amber {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+.clay-stat-tile__badge--coral {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+/* Clay Pastel Action Buttons */
+.clay-btn-pastel {
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 10px 22px !important;
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  text-decoration: none !important;
+}
+
+.clay-btn-pastel--mint {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+  color: #065f46 !important;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25), inset 0 1.5px 2px #ffffff, inset 0 -2px 3px rgba(5, 150, 105, 0.2) !important;
+}
+
+.clay-btn-pastel--mint:hover {
+  background: linear-gradient(135deg, #bbf7d0 0%, #86efac 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 22px rgba(16, 185, 129, 0.35), inset 0 1.5px 2px #ffffff !important;
+}
+
+.clay-btn-pastel--blue {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%) !important;
+  color: #0369a1 !important;
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.25), inset 0 1.5px 2px #ffffff, inset 0 -2px 3px rgba(2, 132, 199, 0.2) !important;
+}
+
+.clay-btn-pastel--blue:hover {
+  background: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 22px rgba(14, 165, 233, 0.35), inset 0 1.5px 2px #ffffff !important;
+}
+
+.clay-btn-pastel--coral {
+  background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%) !important;
+  color: #be123c !important;
+  box-shadow: 0 6px 16px rgba(244, 63, 94, 0.25), inset 0 1.5px 2px #ffffff, inset 0 -2px 3px rgba(225, 29, 72, 0.2) !important;
+}
+
+.clay-btn-pastel--coral:hover {
+  background: linear-gradient(135deg, #fecdd3 0%, #fda4af 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 22px rgba(244, 63, 94, 0.35), inset 0 1.5px 2px #ffffff !important;
+}
+
+.clay-btn-pastel--lavender {
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%) !important;
+  color: #6d28d9 !important;
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.25), inset 0 1.5px 2px #ffffff, inset 0 -2px 3px rgba(124, 58, 237, 0.2) !important;
+}
+
+.clay-btn-pastel--lavender:hover {
+  background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 22px rgba(139, 92, 246, 0.35), inset 0 1.5px 2px #ffffff !important;
+}
+
+/* Clay Timeline Nodes & Activity Chips */
+.clay-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  padding-left: 28px;
+}
+
+.clay-timeline::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 8px;
+  width: 2px;
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.clay-timeline-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.clay-timeline-dot {
+  position: absolute;
+  left: -28px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3.5px solid #008c8c;
+  box-shadow: 0 2px 6px rgba(0, 140, 140, 0.25);
+  z-index: 2;
+}
+
+.clay-timeline-dot--teal { border-color: #008c8c; }
+.clay-timeline-dot--blue { border-color: #0284c7; }
+.clay-timeline-dot--purple { border-color: #8b5cf6; }
+.clay-timeline-dot--amber { border-color: #f59e0b; }
+
+.clay-timeline-chip {
+  width: 100%;
+  padding: 12px 18px;
+  background: #f1f7fb;
+  border-radius: 14px;
+  box-shadow: inset 1px 1.5px 3px rgba(166, 185, 207, 0.35),
+              inset -1px -1px 2px #ffffff,
+              0 2px 4px rgba(16, 46, 89, 0.02);
+  border: 1px solid rgba(220, 233, 245, 0.7);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.2s ease;
+}
+
+.clay-timeline-chip:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 46, 89, 0.06), inset 0 1px 1px #ffffff;
+  transform: translateX(2px);
+}
+
+/* Clay Inset Pill Filter Bar */
+.clay-filter-bar,
+.admin-filter-bar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  padding: 14px 18px !important;
+  background: #ffffff !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+              0 4px 14px rgba(16, 46, 89, 0.04) !important;
+  border: 1px solid rgba(220, 233, 245, 0.8) !important;
+  margin-bottom: 20px !important;
+  flex-wrap: wrap !important;
+}
+
+/* Search container & wrapper */
+.clay-search-pill:not(input),
+.admin-search-wrapper,
+.admin-search-input,
+.clay-search-wrapper,
+.cats-search-box,
+.expiry-search-box,
+.pharm-search-box {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 1 280px !important;
+  min-width: 240px !important;
+  box-sizing: border-box !important;
+}
+
+/* Search icons inside containers */
+.clay-search-pill svg,
+.admin-search-wrapper svg,
+.admin-search-input svg,
+.clay-search-wrapper svg,
+.cats-search-box svg,
+.cats-search-icon,
+.admin-search-icon,
+.clay-search-icon {
+  position: absolute !important;
+  left: 16px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #94a3b8 !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+}
+
+/* Clay Inset Search Inputs (matching both container inputs and direct inputs) */
+.clay-search-pill input,
+.admin-search-wrapper input,
+.admin-search-input input,
+.clay-search-wrapper input,
+.cats-search-box input,
+.expiry-search-box input,
+input.clay-search-pill,
+.clay-filter-bar input[type="text"],
+.admin-filter-bar input[type="text"],
+.cats-filter-bar input[type="text"] {
+  width: 100% !important;
+  height: 42px !important;
+  padding: 0 18px 0 48px !important;
+  background: #edf3f9 !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(212, 227, 241, 0.75) !important;
+  box-shadow: inset 2.5px 2.5px 5px rgba(166, 185, 207, 0.38),
+              inset -2px -2px 4px rgba(255, 255, 255, 0.9) !important;
+  font-size: 0.85rem !important;
+  color: #102e59 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: all 0.2s ease !important;
+}
+
+.clay-search-pill input:focus,
+.admin-search-wrapper input:focus,
+.admin-search-input input:focus,
+.clay-search-wrapper input:focus,
+.cats-search-box input:focus,
+.expiry-search-box input:focus,
+input.clay-search-pill:focus,
+.clay-filter-bar input[type="text"]:focus,
+.admin-filter-bar input[type="text"]:focus,
+.cats-filter-bar input[type="text"]:focus {
+  background: #ffffff !important;
+  border-color: #079da3 !important;
+  box-shadow: 0 0 0 3px rgba(7, 157, 163, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Modal form inputs reset if they don't have search icons */
+.admin-modal-body input.clay-search-pill:not(.has-search-icon),
+.admin-modal-body textarea.clay-search-pill,
+.clay-modal-body input.clay-search-pill:not(.has-search-icon),
+.clay-modal-body textarea.clay-search-pill {
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+}
+.admin-modal-body textarea.clay-search-pill,
+.clay-modal-body textarea.clay-search-pill {
+  padding: 10px 14px !important;
+}
+
+.clay-select-pill,
+.admin-select {
+  height: 42px !important;
+  padding: 0 32px 0 16px !important;
+  background: #f1f7fb !important;
+  border-radius: 9999px !important;
+  border: 1.5px solid #d4e3f1 !important;
+  box-shadow: 0 2px 6px rgba(16, 46, 89, 0.03), inset 0 1.5px 2px #ffffff !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  color: #102e59 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  appearance: auto !important;
+}
+
+.clay-select-pill:focus,
+.admin-select:focus {
+  border-color: #008c8c !important;
+  background: #ffffff !important;
+}
+
+/* Clay Centered Pagination (|< < 1 > >|) */
+.clay-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 20px;
+}
+
+.clay-page-btn {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #dce8f2;
+  box-shadow: 0 3px 8px rgba(16, 46, 89, 0.05), inset 0 1px 1px #ffffff;
+  color: #334155;
+  font-size: 0.84rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clay-page-btn:hover:not(:disabled) {
+  border-color: #008c8c;
+  color: #008c8c;
+  transform: translateY(-1.5px);
+  box-shadow: 0 5px 12px rgba(0, 140, 140, 0.15), inset 0 1px 1px #ffffff;
+}
+
+.clay-page-btn--active {
+  background: #008c8c !important;
+  color: #ffffff !important;
+  border-color: #008c8c !important;
+  box-shadow: 0 4px 12px rgba(0, 140, 140, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+.clay-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Clay Round Checkbox */
+.clay-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 19px;
+  height: 19px;
+  border-radius: 6px;
+  background: #edf3f9;
+  border: 1.5px solid #cbd5e1;
+  box-shadow: inset 1px 1.5px 3px rgba(166, 185, 207, 0.35), inset -1px -1px 2px #ffffff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  transition: all 0.15s ease;
+  vertical-align: middle;
+}
+
+.clay-checkbox:checked {
+  background: #008c8c;
+  border-color: #008c8c;
+  box-shadow: 0 2px 6px rgba(0, 140, 140, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.clay-checkbox:checked::before {
+  content: "✓";
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* =====================================================================
+   20. CLAY CARD SYSTEM & SPLIT LAYOUT (Screens 03-09 Reference Standards)
+   ===================================================================== */
+
+/* 4-Stat Grid */
+.clay-stat-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 1100px) {
+  .clay-stat-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .clay-stat-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Clay Stat Card with 3D Squircle Icon */
+.clay-stat-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 18px 20px;
+  border: 1px solid rgba(226, 236, 246, 0.95);
+  box-shadow: 0 10px 24px -4px rgba(7, 141, 145, 0.08), 0 4px 8px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clay-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -4px rgba(7, 141, 145, 0.12), inset 0 1.5px 2px #ffffff;
+}
+
+.clay-stat-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.clay-stat-card__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.01em;
+}
+
+.clay-stat-card__value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #16324f;
+  line-height: 1.15;
+}
+
+.clay-stat-card__sub {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.clay-stat-card__icon-squircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 18px rgba(16, 46, 89, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 0.85);
+  font-size: 1.45rem;
+}
+
+/* Icon Squircle Color Variants */
+.clay-squircle--teal {
+  background: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+  color: #0f766e;
+}
+.clay-squircle--blue {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1d4ed8;
+}
+.clay-squircle--amber {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #b45309;
+}
+.clay-squircle--coral {
+  background: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+  color: #e11d48;
+}
+.clay-squircle--purple {
+  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+  color: #7e22ce;
+}
+.clay-squircle--mint {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #047857;
+}
+
+/* Split Layout: 70% Table/Content + 30% Side Widget */
+.clay-split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1150px) {
+  .clay-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Clay Elevated Table Card Container */
+.clay-card-table {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid rgba(226, 236, 246, 0.95);
+  box-shadow: 0 12px 28px -6px rgba(7, 141, 145, 0.08), 0 4px 10px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+  overflow: hidden;
+}
+
+.clay-card-table__header {
+  padding: 18px 24px;
+  border-bottom: 1px solid #eef3f8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.clay-card-table__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #16324f;
+}
+
+/* Clay Side Widget Card */
+.clay-side-widget {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 22px;
+  border: 1px solid rgba(226, 236, 246, 0.95);
+  box-shadow: 0 12px 28px -6px rgba(7, 141, 145, 0.08), 0 4px 10px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.clay-side-widget__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #16324f;
+}
+
+/* Clay Category 3-Column Card Grid */
+.clay-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.clay-category-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 20px 22px;
+  border: 1px solid rgba(226, 236, 246, 0.95);
+  box-shadow: 0 10px 24px -4px rgba(7, 141, 145, 0.08), inset 0 1.5px 2px #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clay-category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -6px rgba(7, 141, 145, 0.14), inset 0 1.5px 2px #ffffff;
+}
+
+/* Action Pill Buttons (for text buttons, tabs, and action pills) */
+.clay-action-pill-btn,
+.clay-filter-pill-btn,
+.expiry-pill-btn,
+.clay-tab-pill-btn {
+  width: auto !important;
+  min-width: fit-content !important;
+  max-width: none !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 18px !important;
+  border-radius: 9999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  border: 1.5px solid #dce8f2 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+  box-shadow: 0 2px 6px rgba(16, 46, 89, 0.04), inset 0 1px 1px #ffffff !important;
+  transition: all 0.18s ease !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+.clay-action-pill-btn:hover,
+.clay-filter-pill-btn:hover,
+.expiry-pill-btn:hover,
+.clay-tab-pill-btn:hover {
+  transform: translateY(-1.5px) !important;
+  border-color: #008c8c !important;
+  color: #008c8c !important;
+  box-shadow: 0 4px 12px rgba(0, 140, 140, 0.15), inset 0 1px 1px #ffffff !important;
+}
+
+.clay-action-pill-btn--primary,
+.clay-action-pill-btn--active,
+.clay-filter-pill-btn--active,
+.expiry-pill-btn--active {
+  background: linear-gradient(135deg, #008c8c 0%, #007070 100%) !important;
+  color: #ffffff !important;
+  border-color: #008c8c !important;
+  box-shadow: 0 4px 14px rgba(0, 140, 140, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.35) !important;
+}
+.clay-action-pill-btn--primary:hover,
+.clay-action-pill-btn--active:hover,
+.clay-filter-pill-btn--active:hover,
+.expiry-pill-btn--active:hover {
+  background: #007a78 !important;
+  color: #ffffff !important;
+}
+
+.clay-action-pill-btn--secondary {
+  background: #ffffff !important;
+  color: #334155 !important;
+  border-color: #dce8f2 !important;
+}
+
+.clay-action-pill-btn--danger {
+  color: #ef4444 !important;
+  border-color: #fecaca !important;
+}
+.clay-action-pill-btn--danger:hover {
+  background: #fef2f2 !important;
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Small icon-only buttons in table action cells (Strictly exclude all pill/tab buttons) */
+.admin-table td .clay-action-pill-btn:not([style*="padding: 7px"]):not([style*="padding: 6px"]):not([style*="padding: 8px"]):not(.clay-filter-pill-btn):not(.expiry-pill-btn),
+.clay-card-table td .clay-action-pill-btn:not([style*="padding: 7px"]):not([style*="padding: 6px"]):not([style*="padding: 8px"]):not(.clay-filter-pill-btn):not(.expiry-pill-btn),
+.clay-icon-btn {
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-grid !important;
+  place-items: center !important;
+}
+
+/* =====================================================================
+   PHARMACIST, STAFF & SUPPLIER PORTALS — UNIFIED CLAYMORPHISM SYSTEM
+   ===================================================================== */
+
+/* ── 1. Pharmacist Portal Claymorphism ── */
+.pharm-stat-card,
+.pharmacist-stat-card,
+.pharm-kpi-card,
+.po-stat-card,
+.meds-stat-card,
+.stock-stat-card,
+.expiry-stat-card,
+.cats-stat-card,
+.supp-stat-card,
+.rep-stat-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 10px 24px -4px rgba(7, 141, 145, 0.08), 0 4px 8px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+.pharm-stat-card:hover,
+.pharmacist-stat-card:hover,
+.pharm-kpi-card:hover,
+.po-stat-card:hover,
+.meds-stat-card:hover,
+.stock-stat-card:hover,
+.expiry-stat-card:hover,
+.cats-stat-card:hover,
+.supp-stat-card:hover,
+.rep-stat-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 30px -4px rgba(7, 141, 145, 0.12), inset 0 1.5px 2px #ffffff !important;
+  border-color: rgba(0, 140, 140, 0.3) !important;
+}
+
+.pharm-stat-card__icon,
+.po-header__icon-circle,
+.meds-stat-card__icon,
+.stock-stat-card__icon,
+.expiry-stat-card__icon,
+.cats-stat-card__icon,
+.supp-stat-card__icon,
+.rep-stat-card__icon {
+  border-radius: 16px !important;
+  box-shadow: 0 6px 14px rgba(16, 46, 89, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 0.85) !important;
+}
+
+.pharm-card,
+.pharm-table-card,
+.pharmacist-card,
+.pharm-content-card,
+.pharm-section-card,
+.po-card,
+.meds-card,
+.stock-card,
+.expiry-card,
+.cats-card,
+.supp-card,
+.rep-card {
+  background: #ffffff !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 12px 28px -6px rgba(7, 141, 145, 0.08), 0 4px 10px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  overflow: hidden;
+}
+
+.pharm-page-header,
+.pharmacist-header,
+.po-header,
+.meds-page-header,
+.stock-header,
+.expiry-header,
+.cats-header,
+.supp-header,
+.rep-header {
+  background: linear-gradient(135deg, #eaf2fb 0%, #eef5fc 50%, #f6f5fe 100%) !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(212, 227, 241, 0.95) !important;
+  box-shadow: 0 8px 24px rgba(16, 46, 89, 0.05), inset 0 2px 3px rgba(255, 255, 255, 0.95) !important;
+  padding: 20px 26px !important;
+}
+
+.pharm-btn--primary,
+.pharmacist-btn--primary,
+.po-btn--primary,
+.meds-btn--primary,
+.stock-btn--primary,
+.expiry-btn--primary {
+  background: linear-gradient(135deg, #008c8c 0%, #007070 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 140, 140, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.pharm-btn--primary:hover,
+.pharmacist-btn--primary:hover,
+.po-btn--primary:hover,
+.meds-btn--primary:hover,
+.stock-btn--primary:hover,
+.expiry-btn--primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(0, 140, 140, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ── 2. Staff Portal Claymorphism ── */
+.staff-kpi-card,
+.staff-stat-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 10px 24px -4px rgba(7, 141, 145, 0.08), 0 4px 8px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+.staff-kpi-card:hover,
+.staff-stat-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 30px -4px rgba(7, 141, 145, 0.12), inset 0 1.5px 2px #ffffff !important;
+  border-color: rgba(0, 140, 140, 0.3) !important;
+}
+
+.staff-kpi-icon-box {
+  border-radius: 14px !important;
+  box-shadow: 0 4px 12px rgba(16, 46, 89, 0.08), inset 0 1.5px 2px rgba(255, 255, 255, 0.85) !important;
+}
+
+.staff-portal-card,
+.staff-table-card,
+.staff-card,
+.staff-panel {
+  background: #ffffff !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 12px 28px -6px rgba(7, 141, 145, 0.08), 0 4px 10px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  overflow: hidden;
+}
+
+.staff-header-row {
+  background: linear-gradient(135deg, #eaf2fb 0%, #eef5fc 50%, #f6f5fe 100%) !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(212, 227, 241, 0.95) !important;
+  box-shadow: 0 8px 24px rgba(16, 46, 89, 0.05), inset 0 2px 3px rgba(255, 255, 255, 0.95) !important;
+}
+
+.staff-header-icon-badge {
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #0f4a47 0%, #008c8c 100%) !important;
+  box-shadow: 0 6px 16px rgba(15, 74, 71, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.3) !important;
+}
+
+.staff-btn-primary,
+.staff-primary-btn {
+  background: linear-gradient(135deg, #008c8c 0%, #007070 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 140, 140, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.staff-btn-primary:hover,
+.staff-primary-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(0, 140, 140, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ── 3. Supplier Portal Claymorphism ── */
+.supplier-header {
+  background: linear-gradient(135deg, #eaf2fb 0%, #eef5fc 50%, #f6f5fe 100%) !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(212, 227, 241, 0.95) !important;
+  box-shadow: 0 8px 24px rgba(16, 46, 89, 0.05), inset 0 2px 3px rgba(255, 255, 255, 0.95) !important;
+}
+
+.supplier-kpi-card,
+.supplier-stat-card {
+  background: #ffffff !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 10px 24px -4px rgba(7, 141, 145, 0.08), 0 4px 8px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+}
+
+.supplier-kpi-card:hover,
+.supplier-stat-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 30px -4px rgba(7, 141, 145, 0.12), inset 0 1.5px 2px #ffffff !important;
+}
+
+.supplier-card,
+.supplier-table-card,
+.supplier-section-card {
+  background: #ffffff !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(226, 236, 246, 0.95) !important;
+  box-shadow: 0 12px 28px -6px rgba(7, 141, 145, 0.08), 0 4px 10px -2px rgba(16, 46, 89, 0.04), inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
+  overflow: hidden;
+}
+
+.supplier-btn-primary {
+  background: linear-gradient(135deg, #008c8c 0%, #007070 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 140, 140, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.supplier-btn-primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 18px rgba(0, 140, 140, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ── Universal Recessed Inset Inputs for All Roles ── */
+.pharm-search-input,
+.staff-search-input,
+.supplier-search-input,
+.pharm-select-pill,
+.staff-select-pill,
+.supplier-select-pill,
+.staff-field-input,
+.supplier-field-input {
+  border-radius: 14px !important;
+  background: #fbfdff !important;
+  border: 1.5px solid #d4e3f1 !important;
+  box-shadow: inset 0 2px 4px rgba(16, 46, 89, 0.04) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.pharm-search-input:focus,
+.staff-search-input:focus,
+.supplier-search-input:focus,
+.pharm-select-pill:focus,
+.staff-select-pill:focus,
+.supplier-select-pill:focus,
+.staff-field-input:focus,
+.supplier-field-input:focus {
+  border-color: #008c8c !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(0, 140, 140, 0.12), inset 0 1px 2px rgba(16, 46, 89, 0.04) !important;
+  outline: none !important;
+}
+
+
+

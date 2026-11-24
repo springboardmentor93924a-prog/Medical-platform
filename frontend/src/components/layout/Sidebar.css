@@ -1,0 +1,247 @@
+/* ===================================================================
+   Sidebar Styles — Premium Claymorphism Design System
+   Matches uploaded MediStock Dashboard reference images
+   =================================================================== */
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 46, 89, 0.35);
+  z-index: 90;
+  backdrop-filter: blur(4px);
+}
+
+.sidebar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  bottom: 16px;
+  width: var(--sidebar-width, 250px);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: transform var(--transition-base, 250ms ease);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 28px;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 12px 18px 36px -8px rgba(166, 185, 207, 0.42),
+              -6px -6px 20px rgba(255, 255, 255, 0.95),
+              inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.98);
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(203, 213, 225, 0.6);
+  border-radius: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.8);
+}
+
+/* ---- Brand ---- */
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.sidebar__logo {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 16px rgba(13, 148, 136, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.55);
+}
+
+.sidebar__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.sidebar__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #102e59;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.sidebar__brand-sub {
+  font-size: 0.74rem;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.sidebar__close {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+}
+.sidebar__close:hover {
+  color: #102e59;
+  background: rgba(16, 46, 89, 0.05);
+}
+
+/* ---- Nav ---- */
+.sidebar__nav {
+  flex: 1;
+  padding: 8px 14px;
+  position: relative;
+  z-index: 2;
+}
+
+.sidebar__nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 11px 16px;
+  border-radius: 16px;
+  color: #475569;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.sidebar__link-icon {
+  color: #475569;
+  flex-shrink: 0;
+  transition: color 0.18s ease;
+}
+
+.sidebar__link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar__link:hover {
+  background: #f0f7fb;
+  color: #0f766e;
+  transform: translateX(2px);
+}
+
+.sidebar__link:hover .sidebar__link-icon {
+  color: #0f766e;
+}
+
+.sidebar__link--active {
+  background: #baf3e6 !important;
+  color: #094b42 !important;
+  border-radius: 16px !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(13, 148, 136, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2), inset 0 1.5px 2px #ffffff !important;
+}
+
+.sidebar__link--active .sidebar__link-icon {
+  color: #094b42 !important;
+}
+
+/* Notification badge */
+.sidebar__badge {
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(239, 68, 68, 0.35);
+}
+
+/* ---- Footer with Clay Logout Button ---- */
+.sidebar__footer {
+  padding: 16px 16px 20px;
+  position: relative;
+  z-index: 3;
+}
+
+.sidebar__logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  background: #ffffff;
+  color: #102E59;
+  border: 1.5px solid #d4e3f1;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(16, 46, 89, 0.04), inset 0 1px 1px #ffffff;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar__logout-btn:hover {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.12), inset 0 1px 1px #ffffff;
+}
+
+.sidebar__logout-btn:active {
+  transform: translateY(1px);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+    width: 260px;
+    z-index: 1000;
+  }
+  .sidebar--open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+  }
+  .sidebar__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

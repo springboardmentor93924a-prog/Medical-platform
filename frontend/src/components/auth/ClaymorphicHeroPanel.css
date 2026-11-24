@@ -1,0 +1,239 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * MediStock Claymorphic Hero Panel — Pure Light Green & Mint Palette
+ * ────────────────────────────────────────────────────────────────────────── */
+
+.clay-hero-panel {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 620px;
+  min-height: 100%;
+  background: linear-gradient(165deg, #FFFFFF 0%, #F0FDF4 50%, #ECFDF5 100%);
+  border-radius: 36px;
+  padding: 36px 36px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    0 24px 48px -12px rgba(16, 185, 129, 0.18),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 6px rgba(16, 185, 129, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* Floating ambient background crosses */
+.clay-bg-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.clay-cross {
+  position: absolute;
+  color: rgba(52, 211, 153, 0.35);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 800;
+  line-height: 1;
+  animation: floatCross 6s ease-in-out infinite alternate;
+}
+
+.cross-1 { top: 75px; left: 24px; font-size: 28px; animation-duration: 5s; }
+.cross-2 { top: 110px; left: 45px; font-size: 20px; animation-duration: 7s; }
+.cross-3 { top: 140px; right: 28px; font-size: 24px; animation-duration: 6s; }
+.cross-4 { top: 80px; right: 40px; font-size: 32px; animation-duration: 8s; }
+.cross-5 { top: 165px; left: 20px; font-size: 26px; animation-duration: 6.5s; }
+.cross-6 { top: 40px; right: 85px; font-size: 22px; animation-duration: 5.5s; }
+
+@keyframes floatCross {
+  0% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+  100% { transform: translateY(-8px) rotate(8deg); opacity: 0.6; }
+}
+
+/* Brand Header */
+.clay-brand-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 24px;
+}
+
+.clay-brand-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.clay-3d-capsule-badge {
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.clay-3d-capsule-badge:hover {
+  transform: scale(1.08) rotate(4deg);
+}
+
+.clay-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.clay-brand-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #064E3B; /* Deep emerald */
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.clay-brand-tagline {
+  font-size: 13px;
+  font-weight: 500;
+  color: #059669;
+  margin: 3px 0 0;
+  line-height: 1.3;
+}
+
+/* Hero Titles */
+.clay-hero-titles {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 12px;
+}
+
+.clay-main-heading {
+  font-size: 34px;
+  font-weight: 900;
+  color: #064E3B;
+  margin: 0 0 6px;
+  letter-spacing: -0.7px;
+  line-height: 1.15;
+}
+
+.clay-sub-heading {
+  font-size: 14px;
+  color: #047857;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 3D Stage */
+.clay-3d-art-stage {
+  position: relative;
+  z-index: 2;
+  margin: 10px 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clay-art-svg {
+  overflow: visible;
+  filter: drop-shadow(0 15px 25px rgba(5, 150, 105, 0.15));
+}
+
+/* Bottom Features Grid */
+.clay-features-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.clay-feature-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(16, 185, 129, 0.18);
+  border-radius: 18px;
+  padding: 14px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 
+    0 8px 16px -4px rgba(16, 185, 129, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.clay-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 24px -4px rgba(16, 185, 129, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95);
+  border-color: #10B981;
+}
+
+.clay-feature-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.clay-feature-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.feat-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #064E3B;
+  line-height: 1.2;
+}
+
+.feat-subtitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #059669;
+  line-height: 1.2;
+}
+
+/* Handwritten Bottom Script */
+.clay-bottom-script {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.script-text {
+  font-family: 'Brush Script MT', 'Dancing Script', 'Caveat', cursive, sans-serif;
+  font-size: 26px;
+  color: #059669;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+  display: inline-block;
+  transform: rotate(-1.5deg);
+}
+
+/* Responsive adjustment */
+@media (max-width: 900px) {
+  .clay-hero-panel {
+    max-width: 100%;
+    border-radius: 28px;
+    padding: 30px 20px 24px;
+  }
+  .clay-main-heading {
+    font-size: 28px;
+  }
+  .clay-features-grid {
+    gap: 8px;
+  }
+}
+

@@ -1,0 +1,1040 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * MediStock Sign Up Page — Pure Light Green & Mint Claymorphism Palette
+ * ────────────────────────────────────────────────────────────────────────── */
+
+.clay-auth-page-wrapper {
+  min-height: 100vh;
+  width: 100vw;
+  background: radial-gradient(circle at 10% 20%, #F0FDF4 0%, #ECFDF5 40%, #E6F7F0 75%, #F0FDF4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Background Soft Ambient Light Green Glow Orbs */
+.clay-ambient-glow {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  filter: blur(110px);
+  pointer-events: none;
+  opacity: 0.65;
+  z-index: 0;
+}
+
+.glow-top-left {
+  top: -150px;
+  left: -150px;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.45) 0%, rgba(16, 185, 129, 0.12) 70%, transparent 100%);
+}
+
+.glow-bottom-right {
+  bottom: -150px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, rgba(5, 150, 105, 0.12) 70%, transparent 100%);
+}
+
+/* Dual-Card Container — Full Window Expansive Layout */
+.clay-dual-card-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 24px;
+  max-width: 1380px;
+  width: 100%;
+  min-height: calc(100vh - 32px);
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * RIGHT CARD: Form Panel
+ * ────────────────────────────────────────────────────────────────────────── */
+
+.clay-form-panel {
+  flex: 1.15;
+  max-width: 680px;
+  min-height: 100%;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 36px 40px 32px;
+  box-shadow: 
+    0 10px 25px -5px rgba(15, 23, 42, 0.04),
+    0 8px 10px -6px rgba(15, 23, 42, 0.02);
+  border: 1px solid #E2E8F0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Top Segmented Control Switcher */
+.clay-pill-switcher {
+  display: inline-flex;
+  background: #F1F5F9;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  align-self: flex-end;
+  margin-bottom: 22px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.pill-btn-inactive {
+  color: #64748B;
+  background: transparent;
+}
+
+.pill-btn-inactive:hover {
+  color: #0F172A;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.pill-btn-active {
+  background: #FFFFFF;
+  color: #065F46;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* Form Title Header */
+.clay-form-header {
+  margin-bottom: 22px;
+}
+
+.clay-form-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 4px;
+  letter-spacing: -0.4px;
+  line-height: 1.25;
+}
+
+.clay-form-subtitle {
+  font-size: 13.5px;
+  color: #64748B;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Alerts */
+.clay-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  animation: slideInDown 0.3s ease;
+}
+
+.clay-alert-error {
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FCA5A5;
+}
+
+.clay-alert-success {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Form Groups & Inputs */
+.clay-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.clay-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clay-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #064E3B;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.req-star {
+  color: #EF4444;
+}
+
+/* Verified Pill Badge */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #ECFDF5;
+  color: #059669;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  border: 1px solid #A7F3D0;
+}
+
+/* OTP Action Trigger Button */
+.clay-otp-action-btn {
+  background: transparent;
+  color: #059669;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.clay-otp-action-btn:hover:not(:disabled) {
+  color: #047857;
+  text-decoration: underline;
+}
+
+.clay-otp-action-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Clean Human-Designed Input Container
+ * ────────────────────────────────────────────────────────────────────────── */
+.clay-input-box {
+  display: flex;
+  align-items: center;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  padding: 0 16px;
+  height: 48px;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.clay-input-box:focus-within {
+  border-color: #10B981;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.input-box-verified {
+  border-color: #A7F3D0;
+  background: #F0FDF4;
+}
+
+.input-icon {
+  color: #94A3B8;
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.clay-input-box:focus-within .input-icon {
+  color: #10B981;
+}
+
+/* Explicitly strip and remove ALL inside borders, background, inset-shadows from child input elements */
+.clay-auth-page-wrapper input,
+.clay-auth-page-wrapper input[type="text"],
+.clay-auth-page-wrapper input[type="email"],
+.clay-auth-page-wrapper input[type="password"],
+.clay-auth-page-wrapper input[type="tel"],
+.clay-auth-page-wrapper input[type="number"],
+.clay-input-box input,
+.clay-input-box input[type="text"],
+.clay-input-box input[type="email"],
+.clay-input-box input[type="password"],
+.clay-input-box input[type="tel"] {
+  flex: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 14.5px !important;
+  color: #1E293B !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.clay-auth-page-wrapper input:focus,
+.clay-auth-page-wrapper input[type="text"]:focus,
+.clay-auth-page-wrapper input[type="email"]:focus,
+.clay-auth-page-wrapper input[type="password"]:focus,
+.clay-auth-page-wrapper input[type="tel"]:focus,
+.clay-input-box input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.clay-input-box input::placeholder {
+  color: #94A3B8 !important;
+  font-weight: 400 !important;
+}
+
+.input-eye-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 8px;
+  transition: color 0.2s ease;
+}
+
+.input-eye-btn:hover {
+  color: #059669;
+}
+
+/* Inline OTP Verification Container */
+.clay-otp-inline-box {
+  background: #F0FDF4;
+  border: 1.5px dashed #34D399;
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.otp-inline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #064E3B;
+}
+
+.dev-otp-pill {
+  background: #DCFCE7;
+  color: #15803D;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 11.5px;
+}
+
+.otp-inline-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.otp-code-input {
+  flex: 1;
+  height: 42px;
+  background: #FFFFFF;
+  border: 1.5px solid #A7F3D0;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-align: center;
+  color: #064E3B;
+  outline: none;
+}
+
+.otp-code-input:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.clay-otp-confirm-btn {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 12px;
+  padding: 0 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clay-otp-confirm-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.clay-otp-confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Password Strength Meter in Light Green */
+.clay-password-meter {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.meter-caption {
+  color: #64748B;
+  font-weight: 600;
+}
+
+.meter-status {
+  font-weight: 700;
+}
+
+.strength-weak { color: #EF4444; }
+.strength-medium { color: #F59E0B; }
+.strength-strong { color: #10B981; }
+
+.meter-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.meter-bar-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  border-radius: 9999px;
+}
+
+.meter-bar-fill.strength-weak { background: #EF4444; }
+.meter-bar-fill.strength-medium { background: #F59E0B; }
+.meter-bar-fill.strength-strong { background: linear-gradient(90deg, #34D399, #10B981); }
+
+.criteria-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.crit-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94A3B8;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.crit-tag.crit-pass {
+  color: #064E3B;
+  background: #ECFDF5;
+  border-color: #6EE7B7;
+}
+
+/* Confirm Password Status */
+.confirm-match-status {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.match-pass {
+  color: #059669;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.match-fail {
+  color: #EF4444;
+}
+
+/* Role Dropdown */
+.clay-select-wrapper {
+  position: relative;
+}
+
+.clay-select-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 0 16px;
+  height: 48px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.clay-select-box:hover {
+  border-color: #10B981;
+}
+
+.select-val strong {
+  color: #064E3B;
+  font-size: 14px;
+}
+
+.select-val small {
+  color: #64748B;
+  font-size: 13px;
+}
+
+.chevron-icon {
+  color: #64748B;
+  transition: transform 0.25s ease;
+}
+
+.chevron-icon.open {
+  transform: rotate(180deg);
+}
+
+.clay-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 1.5px solid #A7F3D0;
+  border-radius: 18px;
+  box-shadow: 0 16px 32px rgba(16, 185, 129, 0.15);
+  z-index: 50;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+}
+
+.clay-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.clay-dropdown-item:hover {
+  background: #F0FDF4;
+}
+
+.clay-dropdown-item.selected {
+  background: #ECFDF5;
+}
+
+.item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #064E3B;
+}
+
+.item-sub {
+  font-size: 12px;
+  color: #059669;
+}
+
+.check-icon {
+  color: #10B981;
+}
+
+/* Checkbox */
+.clay-checkbox-group {
+  margin: 4px 0 6px;
+}
+
+.clay-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.clay-checkbox-label input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #CBD5E1;
+  border-radius: 6px;
+  background: #FFFFFF;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.clay-checkbox-label input:checked ~ .checkbox-custom {
+  background: #10B981;
+  border-color: #10B981;
+}
+
+.clay-checkbox-label input:checked ~ .checkbox-custom::after {
+  content: '✓';
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox-text {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.legal-link {
+  color: #059669;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Submit Button — Modern Clinical Emerald */
+.clay-submit-pill-btn {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border: none;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.clay-submit-pill-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+}
+
+.clay-submit-pill-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.clay-submit-pill-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Social & Organization (.org) SSO Buttons and Divider
+ * ────────────────────────────────────────────────────────────────────────── */
+.clay-or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 12px 0 8px;
+  position: relative;
+}
+
+.clay-or-divider::before,
+.clay-or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.clay-or-divider span {
+  padding: 0 12px;
+  color: #94A3B8;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clay-sso-buttons-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.clay-sso-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 44px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.clay-sso-btn:hover {
+  background: #F8FAFC;
+  border-color: #10B981;
+  color: #065F46;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.12);
+}
+
+.clay-sso-btn:active {
+  transform: translateY(0);
+}
+
+.clay-sso-btn svg {
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Dual-Channel Verification Screen (Step 2)
+ * ────────────────────────────────────────────────────────────────────────── */
+.dual-otp-verification-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+.otp-step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F1F5F9;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.step-badge {
+  background: #059669;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.step-rule-text {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.otp-channel-card {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.otp-channel-card.channel-verified {
+  background: #F0FDF4;
+  border-color: #A7F3D0;
+}
+
+.channel-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.channel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-icon-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.channel-icon-pill.email {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.channel-icon-pill.phone {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.channel-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.channel-target {
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 500;
+  font-family: monospace;
+}
+
+.channel-status-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.channel-status-badge.pending {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.channel-status-badge.verified {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.channel-input-action-row {
+  display: flex;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+
+.otp-code-input {
+  flex: 1;
+  height: 44px !important;
+  border: 1.5px solid #CBD5E1 !important;
+  border-radius: 10px !important;
+  background: #FFFFFF !important;
+  text-align: center;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  letter-spacing: 6px;
+  color: #0F172A !important;
+  outline: none !important;
+}
+
+.otp-code-input:focus {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+}
+
+.channel-verify-btn {
+  background: #059669;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 0 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.channel-verify-btn:hover:not(:disabled) {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.channel-verify-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.channel-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+}
+
+.otp-expiry-hint {
+  color: #94A3B8;
+}
+
+.resend-link-btn {
+  background: transparent;
+  border: none;
+  color: #059669;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resend-link-btn:hover:not(:disabled) {
+  text-decoration: underline;
+  color: #047857;
+}
+
+.resend-link-btn:disabled {
+  color: #94A3B8;
+  cursor: not-allowed;
+}
+
+.activation-action-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.clay-submit-pill-btn.activate-btn {
+  margin-top: 4px;
+}
+
+.back-to-edit-btn {
+  background: transparent;
+  border: none;
+  color: #64748B;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  padding: 6px;
+  transition: color 0.2s ease;
+}
+
+.back-to-edit-btn:hover {
+  color: #0F172A;
+  text-decoration: underline;
+}
+
+/* Footer Prompt */
+.clay-footer-prompt {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 14px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.login-link {
+  color: #059669;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: color 0.2s ease;
+}
+
+.login-link:hover {
+  color: #047857;
+  text-decoration: underline;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .clay-dual-card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .clay-form-panel {
+    max-width: 100%;
+    border-radius: 28px;
+    padding: 28px 20px;
+  }
+}

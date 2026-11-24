@@ -1,0 +1,73 @@
+/* ===================================================================
+   Shared state screens  (Empty / Error / Loading)
+   =================================================================== */
+
+.state-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  min-height: 320px;
+  background: #ffffff;
+  border-radius: var(--clay-radius-card, 20px);
+  box-shadow: var(--clay-shadow-card, 0 12px 28px -6px rgba(7, 141, 145, 0.09));
+  border: 1px solid rgba(212, 227, 241, 0.85);
+}
+
+.state-screen__icon {
+  width: 80px;
+  height: 80px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  margin-bottom: var(--space-5);
+  box-shadow: 0 8px 20px rgba(0, 140, 140, 0.12), inset 0 1.5px 2px rgba(255, 255, 255, 0.8);
+}
+
+.state-screen__icon--empty {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-400);
+}
+
+.state-screen__icon--error {
+  background: var(--color-danger-50);
+  color: var(--color-danger-500);
+}
+
+.state-screen__title {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-neutral-800);
+  margin-bottom: var(--space-2);
+}
+
+.state-screen__message {
+  max-width: 360px;
+  font-size: var(--font-base);
+  color: var(--color-neutral-500);
+  line-height: 1.6;
+}
+
+.state-screen__action {
+  margin-top: var(--space-5);
+}
+
+.state-screen__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-600);
+  color: #fff;
+  font-size: var(--font-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.state-screen__btn:hover {
+  background: var(--color-primary-700);
+}

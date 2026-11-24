@@ -1,0 +1,166 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * MediStock Pagination Bar Styles — Human-Crafted Clinical OS Design
+ * ────────────────────────────────────────────────────────────────────────── */
+
+.medistock-pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.medistock-pagination-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.medistock-pagination-info strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.medistock-pagination-size {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.medistock-pagination-size select {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.medistock-pagination-size select:hover {
+  border-color: #0d9488;
+  background: #ffffff;
+}
+
+.medistock-pagination-size select:focus {
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+  background: #ffffff;
+}
+
+.medistock-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Nav Button (Prev / Next) */
+.medistock-page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.medistock-page-nav-btn:hover:not(:disabled) {
+  border-color: #0d9488;
+  color: #0d9488;
+  background: #f0fdfa;
+}
+
+.medistock-page-nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+  color: #94a3b8;
+  background: #f8fafc;
+}
+
+/* Numbered Page Buttons Group */
+.medistock-page-numbers-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.medistock-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.medistock-page-btn:hover:not(.active) {
+  border-color: #0d9488;
+  color: #0d9488;
+  background: #f0fdfa;
+}
+
+.medistock-page-btn.active {
+  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%) !important;
+  color: #ffffff !important;
+  border-color: #0d9488 !important;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(13, 148, 136, 0.28);
+}
+
+.medistock-pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 34px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 640px) {
+  .medistock-pagination-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .medistock-pagination-controls {
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-label-text {
+    display: none;
+  }
+}
+

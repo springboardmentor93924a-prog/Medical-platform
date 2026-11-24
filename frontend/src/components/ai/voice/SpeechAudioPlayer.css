@@ -1,0 +1,149 @@
+/* ══════════════════════════════════════════════════════════════
+   MediStock Text-to-Speech Player — Claymorphism Acoustic Widget
+   ══════════════════════════════════════════════════════════════ */
+
+.ms-tts-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(226, 232, 240, 0.7);
+  transition: all 0.2s ease;
+}
+
+.ms-tts-player--active {
+  background: rgba(240, 253, 250, 0.6);
+  padding: 4px 8px;
+  border-radius: 8px;
+  border-top-color: #99f6e4;
+}
+
+/* Primary Listen / Pause Button */
+.ms-tts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.ms-tts-btn:hover:not(:disabled) {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0d9488;
+  transform: translateY(-1px);
+}
+
+.ms-tts-btn:active {
+  transform: translateY(1px);
+}
+
+.ms-tts-btn.active {
+  background: linear-gradient(135deg, #0d9488, #059669);
+  border-color: #0d9488;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
+}
+
+.ms-tts-pause-icon {
+  font-size: 0.65rem;
+  letter-spacing: -1px;
+}
+
+/* Animated Soundwave Oscillators */
+.ms-tts-waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 14px;
+}
+
+.ms-tts-bar {
+  width: 3px;
+  background: #0d9488;
+  border-radius: 2px;
+  animation: msTtsOscillate 1s ease-in-out infinite;
+}
+
+.ms-tts-bar--1 { height: 6px; animation-delay: 0.1s; }
+.ms-tts-bar--2 { height: 12px; animation-delay: 0.3s; }
+.ms-tts-bar--3 { height: 8px; animation-delay: 0.5s; }
+.ms-tts-bar--4 { height: 14px; animation-delay: 0.2s; }
+
+@keyframes msTtsOscillate {
+  0%, 100% { transform: scaleY(0.4); }
+  50% { transform: scaleY(1.0); }
+}
+
+/* Auxiliary Controls */
+.ms-tts-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ms-tts-aux-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ms-tts-aux-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.ms-tts-aux-btn--stop:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+.ms-tts-speed-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.ms-tts-speed-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Loading Spinner */
+.ms-tts-spinner {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #99f6e4;
+  border-top-color: #0d9488;
+  border-radius: 50%;
+  animation: msTtsSpin 0.6s linear infinite;
+}
+
+@keyframes msTtsSpin {
+  to { transform: rotate(360deg); }
+}
+

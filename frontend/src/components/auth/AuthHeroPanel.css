@@ -1,0 +1,344 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Human-Crafted Auth Hero Panel — Clinical Healthcare Operations Styling
+ * ────────────────────────────────────────────────────────────────────────── */
+
+.auth-hero-panel {
+  flex: 1.05;
+  max-width: 620px;
+  min-height: 100%;
+  background: linear-gradient(165deg, #FFFFFF 0%, #F8FAFC 55%, #F0FDF4 100%);
+  border: 1px solid #E2E8F0;
+  border-radius: 24px;
+  padding: 36px 36px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    0 10px 25px -5px rgba(15, 23, 42, 0.04),
+    0 8px 10px -6px rgba(15, 23, 42, 0.02);
+  box-sizing: border-box;
+}
+
+/* Brand Bar */
+.hero-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0F172A;
+  letter-spacing: -0.4px;
+  line-height: 1.1;
+}
+
+.brand-tagline {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.system-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #065F46;
+}
+
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  animation: pulseBeacon 2s infinite ease-in-out;
+}
+
+@keyframes pulseBeacon {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* Header Copy */
+.hero-header-copy {
+  margin-bottom: 24px;
+}
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-size: 27px;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.25;
+  letter-spacing: -0.6px;
+  margin: 0 0 10px;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Real-world Clinical Telemetry Card */
+.clinical-telemetry-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 
+    0 12px 24px -6px rgba(15, 23, 42, 0.05),
+    0 4px 8px -4px rgba(15, 23, 42, 0.03);
+  margin-bottom: 24px;
+}
+
+.telemetry-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+  margin-bottom: 14px;
+}
+
+.telemetry-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.telemetry-icon {
+  color: #10B981;
+}
+
+.telemetry-node {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.batch-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.batch-sku-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #F1F5F9;
+  color: #475569;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.batch-drug-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+  line-height: 1.25;
+}
+
+.batch-specs {
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.fefo-alert-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stock-progress-container {
+  margin-bottom: 16px;
+}
+
+.stock-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.stock-progress-labels strong {
+  color: #0F172A;
+}
+
+.stock-percentage {
+  font-weight: 700;
+  color: #059669;
+}
+
+.stock-progress-track {
+  width: 100%;
+  height: 7px;
+  background: #E2E8F0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.stock-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #34D399 0%, #10B981 100%);
+  border-radius: 9999px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.telemetry-chips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.telemetry-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.chip-icon.temp {
+  color: #0284C7;
+}
+
+.chip-icon.verified {
+  color: #059669;
+}
+
+.chip-label {
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.chip-value {
+  font-size: 12px;
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Trust Pillars Grid */
+.clinical-pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.pillar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pillar-icon {
+  color: #059669;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pillar-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar-text strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1E293B;
+  line-height: 1.3;
+}
+
+.pillar-text span {
+  font-size: 11.5px;
+  color: #64748B;
+  line-height: 1.35;
+}
+
+/* Institutional Footer */
+.hero-institutional-footer {
+  padding-top: 14px;
+  border-top: 1px solid #E2E8F0;
+}
+
+.hero-institutional-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+@media (max-width: 960px) {
+  .auth-hero-panel {
+    max-width: 100%;
+    border-radius: 20px;
+    padding: 24px 20px;
+  }
+}
+

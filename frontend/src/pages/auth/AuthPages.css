@@ -1,0 +1,267 @@
+/* ===================================================================
+   MediStock Authentication Flow Extended Pages Styles
+   (Forgot Password, Reset Password, Pending Approval, Deactivated)
+   =================================================================== */
+
+.auth-state-box {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.auth-state-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.auth-state-icon--success {
+  background: #ecfdf5;
+  color: #10b981;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+}
+
+.auth-state-box h3 {
+  font-size: 1.25rem;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.auth-state-description {
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+
+.auth-state-actions {
+  margin-top: 1.5rem;
+}
+
+.link-btn-wrap {
+  text-decoration: none;
+}
+
+.auth-redirect-loading {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Clean Pending Approval Right-Side Card */
+.pending-card-clean {
+  text-align: center;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pending-avatar-container {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0, 109, 119, 0.18), inset 0 2px 4px rgba(255, 255, 255, 0.95);
+  border: 2px solid #d4e3f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.pending-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pending-thank-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.pending-thank-subtitle {
+  font-size: 0.9375rem;
+  color: #64748b;
+  margin-bottom: 2rem;
+}
+
+.pending-action-box {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* Status Hero (Pending Approval & Deactivated) */
+.auth-status-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-status-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.auth-status-icon-box--pending {
+  background: #f0fdfa;
+  color: #0d9488;
+  border: 2px solid #ccfbf1;
+}
+
+.auth-status-icon-box--deactivated {
+  background: #fef2f2;
+  color: #ef4444;
+  border: 2px solid #fee2e2;
+}
+
+/* Verification Timeline */
+.verification-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.timeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.step-node {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.timeline-step--done .step-node {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.timeline-step--current .step-node {
+  background: #006d77;
+  color: #ffffff;
+}
+
+.timeline-step--upcoming .step-node {
+  background: #e2e8f0;
+  color: #94a3b8;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-content strong {
+  font-size: 0.84rem;
+  color: #1e293b;
+}
+
+.step-content span {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Assistance / Contact Cards */
+.approval-contact-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.8125rem;
+  margin-bottom: 1rem;
+}
+
+.contact-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #006d77;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.approval-contact-card p {
+  color: #64748b;
+  font-size: 0.775rem;
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.contact-mini-row {
+  display: flex;
+  gap: 16px;
+  font-size: 0.775rem;
+  color: #334155;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.deactivated-info-box {
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 1.25rem;
+}
+
+.info-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b45309;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.deactivated-info-box p {
+  font-size: 0.775rem;
+  color: #92400e;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #006d77;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.back-link:hover {
+  color: #2a9d8f;
+  text-decoration: underline;
+}

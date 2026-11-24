@@ -1,0 +1,401 @@
+/* ══════════════════════════════════════════════════════════════
+   MediStock Voice Note Recorder — Claymorphism Acoustic Dock
+   ══════════════════════════════════════════════════════════════ */
+
+.ms-voice-dock {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 16px;
+  margin: 8px 12px 14px 12px;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.15),
+              0 8px 10px -6px rgba(0, 0, 0, 0.05),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  animation: msVoiceSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes msVoiceSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ms-voice-dock__error {
+  padding: 10px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-size: 0.82rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ── STAGE 1: RECORDING ── */
+
+.ms-voice-recording {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.ms-voice-recording__visualizer {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+/* Concentric Acoustic Waves (Screenshot 3 Reference) */
+.ms-voice-pulse-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(13, 148, 136, 0.4);
+  pointer-events: none;
+}
+
+.ms-voice-pulse-ring--1 {
+  width: 58px;
+  height: 58px;
+  animation: msPulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.ms-voice-pulse-ring--2 {
+  width: 72px;
+  height: 72px;
+  animation: msPulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.4s;
+}
+
+.ms-voice-pulse-ring--3 {
+  width: 86px;
+  height: 86px;
+  animation: msPulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  animation-delay: 0.8s;
+}
+
+.ms-voice-pulse-ring.paused {
+  animation-play-state: paused;
+  opacity: 0.2;
+}
+
+@keyframes msPulseRing {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.ms-voice-mic-badge {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #f0fdfa;
+  border: 2px solid #99f6e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.25),
+              inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  z-index: 2;
+}
+
+/* Frequency Waveform Bars */
+.ms-voice-wave-bars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 28px;
+  width: 140px;
+}
+
+.ms-voice-wave-bar {
+  flex: 1;
+  background: linear-gradient(180deg, #14b8a6, #0d9488);
+  border-radius: 4px;
+  min-height: 4px;
+  transition: height 0.08s ease, opacity 0.15s ease;
+}
+
+.ms-voice-recording__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ms-voice-timer {
+  font-family: 'SF Mono', 'Roboto Mono', Menlo, monospace;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.05em;
+}
+
+.ms-voice-status {
+  font-size: 0.78rem;
+  color: #0d9488;
+  font-weight: 600;
+}
+
+.ms-voice-live-text {
+  max-width: 90%;
+  font-size: 0.82rem;
+  color: #475569;
+  font-style: italic;
+  text-align: center;
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Action Controls */
+.ms-voice-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.ms-voice-action-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 700;
+}
+
+.ms-voice-action-btn:active {
+  transform: scale(0.92);
+}
+
+.ms-voice-action-btn--cancel {
+  background: #f1f5f9;
+  color: #64748b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.ms-voice-action-btn--cancel:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.ms-voice-action-btn--pause {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.ms-voice-action-btn--pause:hover {
+  background: #e2e8f0;
+}
+
+.ms-voice-action-btn--done {
+  background: linear-gradient(135deg, #0d9488, #059669);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+}
+
+.ms-voice-action-btn--done:hover {
+  background: linear-gradient(135deg, #0f766e, #047857);
+  box-shadow: 0 6px 18px rgba(13, 148, 136, 0.45);
+}
+
+/* ── STAGE 2: TRANSCRIBING ── */
+
+.ms-voice-transcribing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+  gap: 12px;
+}
+
+.ms-voice-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #ccfbf1;
+  border-top-color: #0d9488;
+  border-radius: 50%;
+  animation: msVoiceSpin 0.7s linear infinite;
+}
+
+@keyframes msVoiceSpin {
+  to { transform: rotate(360deg); }
+}
+
+.ms-voice-transcribing__text {
+  font-size: 0.88rem;
+  color: #0d9488;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── STAGE 3: REVIEW & EDIT ── */
+
+.ms-voice-review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ms-voice-review__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ms-voice-review__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.ms-voice-review__hint {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.ms-voice-audio-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.ms-voice-audio-element {
+  width: 100%;
+  height: 34px;
+}
+
+.ms-voice-review__warning {
+  padding: 6px 10px;
+  background: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #b45309;
+  font-size: 0.76rem;
+  border-radius: 8px;
+}
+
+.ms-voice-input-wrapper {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 10px;
+  transition: all 0.15s ease;
+}
+
+.ms-voice-input-wrapper:focus-within {
+  background: #ffffff;
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+.ms-voice-review-textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.ms-voice-review-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.ms-voice-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ms-voice-btn:active {
+  transform: translateY(1px);
+}
+
+.ms-voice-btn--cancel {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.ms-voice-btn--cancel:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.ms-voice-btn--secondary {
+  background: #f0fdfa;
+  border: 1px solid #99f6e4;
+  color: #0d9488;
+}
+
+.ms-voice-btn--secondary:hover {
+  background: #ccfbf1;
+}
+
+.ms-voice-btn--primary {
+  background: linear-gradient(135deg, #0d9488, #059669);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+}
+
+.ms-voice-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0f766e, #047857);
+}
+
+.ms-voice-btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
