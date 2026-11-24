@@ -12,6 +12,8 @@
 **/dist/
 **/dist-ssr/
 *.local
+*local.properties
+application-local.properties
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
